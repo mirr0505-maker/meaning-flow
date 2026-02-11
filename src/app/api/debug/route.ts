@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // Debug endpoint removed - use app UI and Supabase client instead.
 import { NextResponse } from 'next/server'
 
