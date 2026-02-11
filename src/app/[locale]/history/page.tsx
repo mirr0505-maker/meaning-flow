@@ -1,5 +1,7 @@
 'use client';
 
+export const runtime = 'edge';
+
 import React from 'react';
 import Header from '@/components/Header';
 import { CheckCircle2, Circle } from 'lucide-react';
