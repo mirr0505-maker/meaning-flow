@@ -46,11 +46,11 @@ export default function HistoryPage() {
         </div>
       </div>
 
-      {/* 페이지 하단 광고 */}
-      <div className="mt-12 w-full h-24 bg-gray-50/50 border border-dashed border-gray-200 rounded-[2rem] flex items-center justify-center">
-        <span className="text-[9px] font-bold text-gray-300 tracking-[0.3em] uppercase">Advertisement Area</span>
+      {/* Google Ads Area */}
+      <div className="w-full h-24 bg-gray-50 flex items-center justify-center my-8 rounded-xl border border-dashed border-gray-200">
+        <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">Google Ads</span>
       </div>
-      
+
       <p className="text-center text-[10px] text-gray-200 mt-6 uppercase tracking-widest pb-10">
         Meaning Flow © 2026
       </p>
