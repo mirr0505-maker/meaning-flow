@@ -1,0 +1,9 @@
+{
+  "Night": {
+    "question": "What was the warmest moment of your day?",
+    "voice_hint": "Please speak with your beautiful voice",
+    "placeholder": "Please tell me your beautiful reflection...",
+    "tomorrow_title": "3 things to do as soon as you wake up tomorrow",
+    "button": "Save as tomorrow morning's tasks"
+  }
+}
