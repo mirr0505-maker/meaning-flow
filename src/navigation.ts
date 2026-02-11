@@ -1,12 +1,12 @@
 import { createNavigation } from 'next-intl/navigation';
 import { defineRouting } from 'next-intl/routing';
 
-export const locales = ['ko', 'en'] as const;
+export const locales = ['en', 'ko'] as const;
 
 // 1. 라우팅 설정 정의
 export const routing = defineRouting({
   locales,
-  defaultLocale: 'ko',
+  defaultLocale: 'en',
   localePrefix: 'always'
 });
 

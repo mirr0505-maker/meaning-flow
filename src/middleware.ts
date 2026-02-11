@@ -1,9 +1,12 @@
 import createMiddleware from 'next-intl/middleware';
 import {routing} from './navigation';
 
-export default createMiddleware(routing);
+export default createMiddleware({
+  ...routing,
+  localeDetection: false
+});
 
 export const config = {
   // Match only internationalized pathnames
-  matcher: ['/', '/(ko|en)/:path*']
+  matcher: ['/', '/(en|ko)/:path*']
 };

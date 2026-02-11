@@ -1,0 +1,11 @@
+@import "tailwindcss"; /* V4의 표준 임포트 방식입니다 */
+
+:root {
+  --background: #FFFBF5;
+  --foreground: #4A3F35;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
