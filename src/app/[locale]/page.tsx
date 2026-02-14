@@ -5,7 +5,7 @@ export const runtime = 'edge';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import Header from '@/components/Header';
-import { Plus, Circle, Lock, Mic, Sparkles, X, Zap, Heart, Anchor } from 'lucide-react';
+import { Plus, Circle, Lock, Mic, Sparkles, X, Zap, Heart, Anchor, ArrowRightCircle } from 'lucide-react';
 
 interface FocusTask {
   id: string;
@@ -29,8 +29,10 @@ export default function Page() {
   const [timerSeconds, setTimerSeconds] = useState(225); 
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [microSteps, setMicroSteps] = useState(['', '', '']);
+  
+  // 🚀 [추가] 아침 즉시 할 일 상태
+  const [immediateTasks, setImmediateTasks] = useState(['', '', '']);
 
-  // 🚀 팝업 시 배경 스크롤 차단
   useEffect(() => {
     if (showInput) {
       document.body.style.overflow = 'hidden';
@@ -48,13 +50,31 @@ export default function Page() {
       const { data: tasks } = await supabase.from('focus_tasks').select('*').eq('target_date', today);
       if (tasks) setFocusTasks(tasks as FocusTask[]);
       const { data: log } = await supabase.from('daily_logs').select('*').eq('target_date', today).maybeSingle();
-      if (log) setMorningIdentity(log.morning_identity || '');
+      if (log) {
+        setMorningIdentity(log.morning_identity || '');
+        // DB에 저장된 아침 할 일이 있다면 불러오기 (예시 컬럼명)
+        if (log.immediate_tasks) setImmediateTasks(log.immediate_tasks);
+      }
     } catch (error) {
       console.error("Data loading failed:", error);
     }
   }, []);
 
   useEffect(() => { loadTodayData(); }, [loadTodayData]);
+
+  // 🚀 [기능] 나이트 리스트를 내일 아침으로 전송
+  const sendToTomorrowMorning = async () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toLocaleDateString('en-CA');
+
+    const { error } = await supabase.from('daily_logs').upsert({
+      target_date: tomorrowStr,
+      immediate_tasks: microSteps // 밤에 적은 3가지 계획을 내일 아침 즉시 할 일로 복사
+    });
+
+    if (!error) alert("내일 아침 즉시 할 일로 전송되었습니다! 🚀");
+  };
 
   const handleAddTask = async () => {
     if (!newTask.trim()) return;
@@ -69,7 +89,6 @@ export default function Page() {
     }
   };
 
-  // 타이머 로직 복구
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
     if (isTimerActive && timerSeconds > 0) {
@@ -89,18 +108,41 @@ export default function Page() {
       <Header isNight={isNight} />
       
       <main className="px-8 pt-10 space-y-16">
-        {/* 🌅 1. 아침 영역 */}
-        <section className="space-y-6">
-          <h1 className="text-3xl font-bold leading-tight text-[#0D0D0D]">Who do I want to be<br />when this day ends?</h1>
-          <div className="relative">
-            <input value={morningIdentity} readOnly placeholder="My Polaris" className="w-full p-6 bg-white rounded-full shadow-sm border-none text-lg italic text-[#0D0D0D] outline-none" />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#E0F7FA] rounded-full flex items-center justify-center text-[#2CC2E4]"><Sparkles size={20} /></div>
+        {/* 🌅 1. 아침 영역 (북극성 + Immediate Tasks) */}
+        <section className="space-y-10">
+          <div className="space-y-6">
+            <h1 className="text-3xl font-bold leading-tight text-[#0D0D0D]">Who do I want to be<br />when this day ends?</h1>
+            <div className="relative">
+              <input value={morningIdentity} readOnly placeholder="My Polaris Today" className="w-full p-6 bg-white rounded-full shadow-sm border-none text-lg italic text-[#0D0D0D] outline-none font-sans" />
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#E0F7FA] rounded-full flex items-center justify-center text-[#2CC2E4]"><Sparkles size={20} /></div>
+            </div>
+          </div>
+
+          <div className="space-y-6 px-2">
+            <p className="text-[16px] font-bold text-gray-400 uppercase tracking-[0.3em] font-sans">Don't think, just move your body</p>
+            <div className="space-y-3">
+              {immediateTasks.map((task, idx) => (
+                <div key={idx} className="flex items-center p-5 bg-white rounded-[2rem] border border-gray-100 shadow-sm gap-5 transition-all">
+                  <Circle className="text-gray-200" size={24} />
+                  <input 
+                    value={task} 
+                    onChange={(e) => {
+                      const newTasks = [...immediateTasks];
+                      newTasks[idx] = e.target.value;
+                      setImmediateTasks(newTasks);
+                    }}
+                    placeholder={`Things to do immediately ${idx + 1}`} 
+                    className="bg-transparent border-none focus:ring-0 text-base text-[#4A3F35] w-full outline-none font-sans" 
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
         {/* 🎯 2. 낮 영역 (할 일 리스트) */}
         <section className="space-y-10">
-          <div className="relative text-center"><span className="text-[10px] font-bold text-gray-400 tracking-[0.4em] uppercase italic font-sans">Day Focus</span></div>
+          <div className="relative text-center"><span className="text-[30px] font-bold text-gray-400 tracking-[0.4em] uppercase italic font-sans">Day Focus Task</span></div>
           <div className="space-y-6">
             {focusTasks.map(task => (
               <div key={task.id} className="bg-white p-8 rounded-[2.5rem] shadow-sm space-y-4 border border-gray-50 text-left">
@@ -115,21 +157,19 @@ export default function Page() {
           </div>
         </section>
 
-        {/* 🌙 3. 밤 영역 (나이트 3종 완벽 복구) */}
+        {/* 🌙 3. 밤 영역 (나이트 3종) */}
         <div className="pt-10 space-y-24">
           <div className="text-center space-y-4">
             <div className="flex justify-center"><div className="w-14 h-14 bg-[#1A1625] rounded-full flex items-center justify-center text-3xl shadow-lg">🌙</div></div>
             <h2 className="text-4xl font-serif italic font-bold text-[#0D0D0D] tracking-tight text-center font-sans">Brain Off-boarding</h2>
           </div>
 
-          {/* [나이트 1] Thought Vault */}
           <section className="bg-[#1A1625] rounded-[3.5rem] p-10 border border-white/5 shadow-2xl space-y-10 text-left">
             <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-4 font-sans">Step 1. Thought Vault</p>
             <textarea value={vaultText} onChange={(e) => setVaultText(e.target.value)} disabled={isVaultLocked} placeholder="A brain dump of all my worries..." className="w-full h-32 bg-transparent border-none text-sm italic text-gray-400 resize-none outline-none font-sans" />
             <button onClick={() => setIsVaultLocked(!isVaultLocked)} className={`w-full py-6 rounded-[2rem] font-bold flex items-center justify-center gap-4 transition-all ${isVaultLocked ? 'bg-gray-800 text-gray-500' : 'bg-[#12101A] border border-white/10 text-white shadow-xl'}`}><Lock size={18} /> {isVaultLocked ? 'LOCKED' : 'LOCK IN CHEST'}</button>
           </section>
 
-          {/* [나이트 2] Ni Timer Boundary */}
           <section className="bg-[#1A1625] rounded-[3.5rem] p-12 border border-white/5 text-center shadow-2xl space-y-10">
             <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest text-left ml-4 font-sans">Step 2. Ni Timer Boundary</p>
             <div className="relative w-44 h-44 mx-auto flex items-center justify-center">
@@ -144,11 +184,19 @@ export default function Page() {
             </button>
           </section>
 
-          {/* [나이트 3] Micro-Start */}
+          {/* 🚀 [나이트 Step 3 수정] 내일 아침으로 전송 기능 추가 */}
           <section className="space-y-16 pb-20 text-center">
             <h3 className="text-3xl font-serif italic text-[#0D0D0D] leading-tight font-bold font-sans">When was your most<br/>authentic moment today?</h3>
             <div className="space-y-10 px-2">
-              <h4 className="text-xl font-bold text-[#0D0D0D] tracking-tight font-sans">3 things to do tomorrow</h4>
+              <div className="flex items-center justify-between px-2">
+                <h4 className="text-xl font-bold text-[#0D0D0D] tracking-tight font-sans">3 things to do tomorrow</h4>
+                <button 
+                  onClick={sendToTomorrowMorning}
+                  className="flex items-center gap-2 text-[#2CC2E4] font-bold text-xs bg-[#E0F7FA] px-4 py-2 rounded-full hover:scale-105 active:scale-95 transition-all"
+                >
+                  <ArrowRightCircle size={14} /> Send to Morning
+                </button>
+              </div>
               <div className="space-y-4 text-left">
                 {microSteps.map((step, idx) => (
                   <div key={idx} className="flex items-center p-6 bg-[#1A1625] rounded-3xl border border-white/5 gap-5 shadow-sm">
@@ -160,28 +208,30 @@ export default function Page() {
             </div>
           </section>
         </div>
+
+        {/* 광고 및 카피라이트 */}
+        <div className="w-full h-24 bg-gray-50 flex items-center justify-center my-8 rounded-xl border border-dashed border-gray-200">
+          <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">Google Ads</span>
+        </div>
+        <p className="text-center text-[10px] text-gray-200 mt-6 uppercase tracking-widest pb-10">Meaning Flow © 2026</p>
       </main>
 
-      {/* 🚀 글자 크기 20% 확대 Identity Anchor 팝업 */}
+      {/* 🚀 Identity Anchor 팝업 (디자인 유지) */}
       {showInput && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-[10000]" onClick={() => setShowInput(false)}>
           <div className="bg-white w-[92%] max-w-sm rounded-[2.5rem] p-8 space-y-8 shadow-2xl relative animate-in zoom-in-95 duration-200" onClick={(e) => e.stopPropagation()}>
-            <div className="w-12 h-1 bg-gray-200 rounded-full mx-auto -mt-2 opacity-50" />
-            
             <div className="text-center space-y-2">
               <h3 className="text-2xl font-bold text-[#2D2D2D]">Create New Focus Task</h3>
-              <p className="text-[#2CC2E4] text-[15px] font-bold">Add two 2-minute tasks you can do right now</p>
+              <p className="text-[#2CC2E4] text-[15px] font-bold font-sans">Add two 2-minute tasks you can do right now</p>
             </div>
-
             <div className="space-y-8">
               <div className="space-y-3">
-                <label className="text-[12px] font-bold text-gray-400 tracking-widest uppercase ml-3">Identity Anchor / Core Task</label>
+                <label className="text-[12px] font-bold text-gray-400 tracking-widest uppercase ml-3 font-sans">Identity Anchor / Core Task</label>
                 <div className="relative">
                   <input autoFocus value={newTask} onChange={(e) => setNewTask(e.target.value)} placeholder="What's on your mind?" className="w-full p-5 bg-white rounded-[2rem] border-2 border-[#E0F7FA] focus:border-[#2CC2E4] outline-none text-[#4A3F35] text-lg font-bold transition-all font-sans" />
                   <Anchor className="absolute right-6 top-1/2 -translate-y-1/2 text-[#2CC2E4] opacity-50" size={22} />
                 </div>
               </div>
-
               <div className="relative pl-10 space-y-6 before:absolute before:left-4 before:top-2 before:bottom-2 before:w-[1px] before:border-l-2 before:border-dashed before:border-[#E0F7FA]">
                 <div className="space-y-2">
                   <span className="text-[11px] font-bold text-gray-400 ml-1 italic font-sans">2-minute sub-action</span>
@@ -199,14 +249,9 @@ export default function Page() {
                 </div>
               </div>
             </div>
-
             <div className="space-y-6 text-center">
-              <button onClick={handleAddTask} className="w-full py-5.5 bg-[#2CC2E4] text-white rounded-[2.2rem] font-bold text-xl shadow-lg shadow-cyan-100 active:scale-95 transition-all font-sans">
-                Add to My Day ⚓._🌿RK
-              </button>
-              <p className="text-gray-500 text-[12px] font-medium italic font-sans">Take it easy, one step at a time.</p>
+              <button onClick={handleAddTask} className="w-full py-5.5 bg-[#2CC2E4] text-white rounded-[2.2rem] font-bold text-xl shadow-lg active:scale-95 transition-all font-sans">Add to My Day ⚓._🌿RK</button>
             </div>
-            
             <button onClick={() => setShowInput(false)} className="absolute top-6 right-6 text-gray-300"><X size={24} /></button>
           </div>
         </div>
