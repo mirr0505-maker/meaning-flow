@@ -2,7 +2,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import "@/globals.css";
-import Navigation from "./Navigation";
+// import Navigation from "./Navigation"; // 🚀 삭제
 
 export default async function RootLayout({
   children,
@@ -18,13 +18,9 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className="antialiased select-none bg-[#FFFBF5]">
         <NextIntlClientProvider messages={messages}>
-          <div className="relative min-h-screen pb-24"> {/* 네비바 높이만큼 여백 확보 */}
+          {/* 🚀 중복 레이아웃 구조를 도려내고 children만 깔끔하게 렌더링합니다. */}
+          <div className="relative min-h-screen">
             {children}
-            
-            {/* 네비바를 하단에 고정 (광고 영역 삭제) */}
-            <div className="fixed bottom-0 left-0 right-0 z-50 max-w-md mx-auto bg-white/80 backdrop-blur-md border-t border-gray-100">
-              <Navigation />
-            </div>
           </div>
         </NextIntlClientProvider>
       </body>
