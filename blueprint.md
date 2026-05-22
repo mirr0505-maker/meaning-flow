@@ -386,9 +386,14 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 
 ---
 
-## 11. 현재 진척 상태 (2026-05-21 갱신)
+## 11. 현재 진척 상태 (2026-05-22 갱신)
 
-**핵심 메시지**: **Phase 1 전체 완료 + GitHub push 완료** (2026-05-22). Expo SDK 54 + NativeWind v4 + Supabase (10 테이블 + RLS 16 + GRANT) + supabase-js + i18n (한·영·일 3언어, 모바일 ko/en/ja 3-cycle 토글) + Anonymous Auth + Onboarding (두 자아 + 6 조합 닉네임) + 🌅 점화·☀️ 실행 화면 (tasks CRUD + 2분 마이크로 변환 + 70% 우대) + 🌆 통합(dusk 그레이)·🌙 착륙(다크) 모드 분리 + 모바일(iPhone Expo Go) 검증 통과. 일본어는 Phase 5에서 Phase 1으로 격상 — 1차 초안 작성, native 검수는 Phase 4 베타 전 출시 게이트. **GitHub**: https://github.com/mirr0505-maker/meaning-flow (Private).
+**핵심 메시지**: **Phase 1 + 2 + 3 (게시·피드·공명·번역·신고/위기자원) 완료**. 다음은 STEP 3-F (작성 시점 자해 키워드 모달 + 전 화면 면책) → 3-G (알림) → Phase 4 (베타). Expo SDK 54 + NativeWind v4 + Supabase (10 테이블 + 2 신규 마이그레이션 + RLS + RPC 4 + trigger 1 + VIEW 1) + Anonymous Auth + Onboarding (두 자아 + 6 조합) + 4 모드 (🌅 점화·☀️ 실행·🌆 통합/🌿 공명방·🌙 착륙) + i18n ko/en/ja. **GitHub**: https://github.com/mirr0505-maker/meaning-flow (Private) — 최신 커밋 `ef32297`. **EAS project**: meaning-flow (`99e22e91-76e8-450d-ba79-5764f4a7be91`).
+
+**Phase 3 외부 의존 상태**:
+- ✅ OpenAI Moderation API key 발급 + Supabase secret + Edge Function `resonance_publish` deploy + 실 검증 (5 시나리오 통과, 2026-05-22)
+- ⏳ DeepL Free + Google Translate key 미발급 (사용자 밤에 진행 예정) — 현재 mock 모드 동작
+- ⏸ Sentry / PostHog / Expo Push Cert — Phase 4 직전
 
 **Phase 2 완료 (2026-05-22)**: STEP 2-A~2-F 텍스트 기반 통합·착륙 모드 실구현 + 빌드 검증 (tsc 0 · npm test 9/9 · expo export 475 모듈, +14 from Phase 1). 공명방 토글은 `shared_to_resonance` 컬럼 저장만 (실 게시는 Phase 3). 영감 타이머는 텍스트 5분 (PRD 원안). **음성 2분 스피치 (구 STEP 2-G) 는 출시 이후로 보류** — 2026-05-22 사용자 결정, Phase 5+ 베타 피드백 후 재검토.
 
