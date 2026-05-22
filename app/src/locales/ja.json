@@ -1,0 +1,83 @@
+{
+  "_status": "draft, needs native review (2026-05-22) — PRD M2/M5 정서 결 검증 미완. Phase 4 베타 전 일본 native 검수 필수",
+  "app": {
+    "name": "Meaning Flow",
+    "subtitle": "STEP 1-A トークン · 1-B Supabase · 1-C i18n · 1-D オンボーディング · 1-E フロー"
+  },
+  "health": {
+    "ok": "Supabase 接続正常",
+    "error": "Supabase 接続失敗",
+    "checking": "Supabase 接続を確認中",
+    "okDetail": "prompt_templates {{count}}件 · URL · キー · RLS · ネットワークすべてOK",
+    "checkingDetail": "prompt_templates を照会中..."
+  },
+  "modes": {
+    "morning": { "label": "🌅 点火  06–10", "name": "点火" },
+    "day":     { "label": "☀️ 実行  10–18", "name": "実行" },
+    "evening": { "label": "🌆 統合  18–22", "name": "統合" },
+    "night":   { "label": "🌙 着陸  22–02", "name": "着陸" }
+  },
+  "footer": { "tokenSource": "トークン出典: src/tokens.css → app/tailwind.config.js" },
+  "lang":   { "ko": "한국어", "en": "English", "ja": "日本語" },
+  "onboarding": {
+    "brand": "MEANING FLOW",
+    "intro": {
+      "title": "あなたは怠けているわけではありません。\nただ、違う燃料で\n動くエンジンなだけです。",
+      "body": "このアプリは、あなたをもっと勤勉にするものではありません。\n二つのことだけを問いかけ、ゆっくり始めます。",
+      "row1": { "title": "ひとりでいる時の自分", "desc": "扉を閉めているときの姿" },
+      "row2": { "title": "誰かといる時の自分", "desc": "人の中での役割" },
+      "row3": { "title": "あなたの組み合わせ",  "desc": "このアプリがあなたを呼ぶ名前" }
+    },
+    "pickSolo":  { "title": "扉を閉めてひとりでいる時、", "subtitle": "あなたはどんな姿ですか？",         "tag": "ひとりの時の自分 · Solo" },
+    "pickSocial":{ "title": "人々の中にいる時、",         "subtitle": "どんな役割で存在しますか？",     "tag": "誰かといる時の自分 · Social" },
+    "actions": { "start": "はじめます", "next": "次の自分へ", "done": "私の組み合わせを見る", "back": "戻る", "unknown": "MBTIがよくわかりません" },
+    "result":  { "tag": "あなたの組み合わせ", "lead": "あなたは、", "enter": "流れに入る", "saving": "保存しています...", "saveError": "プロフィールの保存に失敗しました" }
+  },
+  "mbti": {
+    "infp": { "titleSolo": "深い意味を追いかける", "titleSocial": "静かに共感する",     "desc": "感覚と価値が先、言葉は後" },
+    "infj": { "titleSolo": "遠くを見つめる",       "titleSocial": "人を読み取る",       "desc": "表に出さないが、深く見ている" },
+    "intp": { "titleSolo": "問いに立ち止まる",     "titleSocial": "観察し、分解する",   "desc": "なぜ？から、また別のなぜ？へ" },
+    "intj": { "titleSolo": "構造を組み立てる",     "titleSocial": "計画を導く",         "desc": "頭の中にすでに完成した絵がある" }
+  },
+  "combos": {
+    "infpIntj": "価値を抱く戦略家",   "infpIntp": "探求する詩人",       "infpInfj": "共鳴する理想主義者",
+    "intpIntj": "体系を築く思索家",   "intpInfj": "通察する分析家",     "intjInfj": "ビジョンを持つ建築家",
+    "sameInfp": "深い意味の同行者",   "sameInfj": "沈黙の中の洞察者",
+    "sameIntp": "終わりなき問いの航海者", "sameIntj": "黙々と築く設計者",
+    "unknown":  "あなた独自の組み合わせ"
+  },
+  "flow": {
+    "devToggle": "モード（開発用）",
+    "loading": "少々お待ちを...",
+    "loadError": "読み込みに失敗しました",
+    "morning": {
+      "lead": "昨夜、あなたが予約した",
+      "headline": "今日の最初のひと押し",
+      "start": "始める",
+      "skip": "今日はスキップします",
+      "emptyLead": "昨夜予約した最初のひと押しはありません",
+      "emptyBody": "大丈夫です。夕方モードで、明日の最初のひと押しを予約することになります。",
+      "identityLead": "今日、",
+      "identityTail": "として流れます"
+    },
+    "day": {
+      "lead": "今、たったひとつ",
+      "addPlaceholder": "やることをひとつ書いてみてください",
+      "add": "これを始めます",
+      "microTitle": "ちょっと待って、これを2分以内に始められますか？",
+      "microBody": "もっと小さな単位に分けると、脳がシミュレーションをスキップして、体が先に動きます。",
+      "microOpt1": "2分だけやってみる",
+      "microOpt2": "道具を一つ取り出す",
+      "microOpt3": "場所まで行って座る",
+      "microUse": "この手順で始めます",
+      "microSkip": "そのまま始めます",
+      "done70": "70% 完了",
+      "done100": "完全に完了",
+      "done70Hint": "今日はここまでで十分です",
+      "doneCelebrate": "よくできました。今日はこれで十分です。",
+      "addAnother": "別のひとつを書いてみる"
+    },
+    "evening": { "title": "🌆 統合 (Integration)", "body": "Phase 2 で、意味の日記と共鳴の庭が開きます。" },
+    "night":   { "title": "🌙 着陸 (Landing)",     "body": "Phase 2 で、思考の保管庫とふとんの感触モードが開きます。" }
+  }
+}

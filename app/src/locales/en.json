@@ -1,0 +1,82 @@
+{
+  "app": {
+    "name": "Meaning Flow",
+    "subtitle": "STEP 1-A tokens · 1-B Supabase · 1-C i18n · 1-D onboarding · 1-E flow"
+  },
+  "health": {
+    "ok": "Supabase connected",
+    "error": "Supabase connection failed",
+    "checking": "Checking Supabase…",
+    "okDetail": "prompt_templates {{count}} rows · URL · key · RLS · network all OK",
+    "checkingDetail": "Querying prompt_templates…"
+  },
+  "modes": {
+    "morning": { "label": "🌅 Ignition  06–10",    "name": "Ignition" },
+    "day":     { "label": "☀️ Action  10–18",      "name": "Action" },
+    "evening": { "label": "🌆 Integration  18–22", "name": "Integration" },
+    "night":   { "label": "🌙 Landing  22–02",     "name": "Landing" }
+  },
+  "footer": { "tokenSource": "Tokens: src/tokens.css → app/tailwind.config.js" },
+  "lang":   { "ko": "한국어", "en": "English", "ja": "日本語" },
+  "onboarding": {
+    "brand": "MEANING FLOW",
+    "intro": {
+      "title": "You're not lazy.\nJust an engine\nthat runs on different fuel.",
+      "body": "This app won't make you more productive.\nInstead it asks two things, and starts slowly.",
+      "row1": { "title": "You when alone", "desc": "How you are with the door closed" },
+      "row2": { "title": "You with others","desc": "Your role among people" },
+      "row3": { "title": "Your combination","desc": "The name this app calls you" }
+    },
+    "pickSolo":  { "title": "With the door closed and alone,", "subtitle": "who are you?",                "tag": "Alone · Solo" },
+    "pickSocial":{ "title": "Among people,",                   "subtitle": "what role do you play?",    "tag": "With others · Social" },
+    "actions": { "start": "Let's start", "next": "Next self", "done": "See my combination", "back": "Back", "unknown": "Not sure about my MBTI" },
+    "result":  { "tag": "Your combination", "lead": "You are,", "enter": "Enter the flow", "saving": "Saving…", "saveError": "Failed to save profile" }
+  },
+  "mbti": {
+    "infp": { "titleSolo": "Following deep meaning",  "titleSocial": "Quietly empathising",      "desc": "Feeling and value first, words second" },
+    "infj": { "titleSolo": "Gazing afar",             "titleSocial": "Reading people",           "desc": "Doesn't show much, but sees deeply" },
+    "intp": { "titleSolo": "Pausing at questions",    "titleSocial": "Observing and dissecting", "desc": "From 'why' to another 'why'" },
+    "intj": { "titleSolo": "Building structure",      "titleSocial": "Driving plans forward",    "desc": "A complete picture already in mind" }
+  },
+  "combos": {
+    "infpIntj": "Strategist Holding Values", "infpIntp": "Wandering Poet",       "infpInfj": "Resonant Idealist",
+    "intpIntj": "Architect of Frameworks",  "intpInfj": "Insightful Analyst",   "intjInfj": "Visionary Architect",
+    "sameInfp": "Companion of Deep Meaning","sameInfj": "Quiet Insight",
+    "sameIntp": "Endless Questioning Voyager","sameIntj": "Silent Architect",
+    "unknown":  "A combination of your own"
+  },
+  "flow": {
+    "devToggle": "Mode (dev)",
+    "loading": "Just a moment…",
+    "loadError": "Failed to load",
+    "morning": {
+      "lead": "What you scheduled last night —",
+      "headline": "Today's first button",
+      "start": "Start",
+      "skip": "Skip for today",
+      "emptyLead": "No first button scheduled from last night",
+      "emptyBody": "That's okay. You'll schedule tomorrow's in evening mode.",
+      "identityLead": "Today, flow as ",
+      "identityTail": ""
+    },
+    "day": {
+      "lead": "Just one thing now",
+      "addPlaceholder": "Write one thing to do",
+      "add": "Start this",
+      "microTitle": "Wait — can you start this in 2 minutes?",
+      "microBody": "Breaking it into a smaller step lets your body move before your brain simulates.",
+      "microOpt1": "Just 2 minutes",
+      "microOpt2": "Pick up one thing",
+      "microOpt3": "Just sit down at the spot",
+      "microUse": "Start with this step",
+      "microSkip": "Start as is",
+      "done70": "70% done",
+      "done100": "Fully done",
+      "done70Hint": "That's enough for today",
+      "doneCelebrate": "Well done. That's enough for today.",
+      "addAnother": "Write another one"
+    },
+    "evening": { "title": "🌆 Integration", "body": "Reflection and Resonance Garden open in Phase 2." },
+    "night":   { "title": "🌙 Landing",     "body": "Thought Vault and Blanket mode open in Phase 2." }
+  }
+}

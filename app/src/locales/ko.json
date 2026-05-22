@@ -1,0 +1,88 @@
+{
+  "app": {
+    "name": "Meaning Flow",
+    "subtitle": "STEP 1-A 토큰 · 1-B Supabase · 1-C i18n · 1-D 온보딩 · 1-E 흐름"
+  },
+  "health": {
+    "ok": "Supabase 연결 정상",
+    "error": "Supabase 연결 실패",
+    "checking": "Supabase 연결 확인 중",
+    "okDetail": "prompt_templates {{count}}건 · URL · 키 · RLS · 네트워크 모두 OK",
+    "checkingDetail": "prompt_templates 조회 중..."
+  },
+  "modes": {
+    "morning": { "label": "🌅 점화  06–10", "name": "점화" },
+    "day":     { "label": "☀️ 실행  10–18", "name": "실행" },
+    "evening": { "label": "🌆 통합  18–22", "name": "통합" },
+    "night":   { "label": "🌙 착륙  22–02", "name": "착륙" }
+  },
+  "footer": {
+    "tokenSource": "토큰 출처: src/tokens.css → app/tailwind.config.js"
+  },
+  "lang": {
+    "ko": "한국어",
+    "en": "English",
+    "ja": "日本語"
+  },
+  "onboarding": {
+    "brand": "MEANING FLOW",
+    "intro": {
+      "title": "당신은 게으른 게 아니에요.\n다른 연료로\n움직이는 엔진일 뿐.",
+      "body": "이 앱은 당신을 더 부지런하게 만들지 않습니다.\n대신 두 가지를 묻고, 천천히 시작합니다.",
+      "row1": { "title": "혼자 있을 때의 나", "desc": "방문을 닫고 있을 때의 모습" },
+      "row2": { "title": "함께 있을 때의 나", "desc": "사람들 사이에서의 역할" },
+      "row3": { "title": "당신의 조합 닉네임", "desc": "앱이 당신을 부르는 이름" }
+    },
+    "pickSolo":  { "title": "방문을 닫고 혼자 있을 때,",  "subtitle": "당신은 어떤 모습인가요?",        "tag": "혼자일 때의 나 · Solo" },
+    "pickSocial":{ "title": "사람들 사이에 있을 때,",     "subtitle": "당신은 어떤 역할로 존재하나요?", "tag": "함께일 때의 나 · Social" },
+    "actions": { "start": "시작할게요", "next": "다음 자아로", "done": "나의 조합 보기", "back": "이전", "unknown": "MBTI 잘 모르겠어요" },
+    "result":  { "tag": "당신의 조합", "lead": "당신은,", "enter": "흐름으로 들어가기", "saving": "저장하고 있어요...", "saveError": "프로필 저장에 실패했어요" }
+  },
+  "mbti": {
+    "infp": { "titleSolo": "깊은 의미를 따라가는", "titleSocial": "조용히 공감하는",       "desc": "느낌과 가치가 먼저, 그 다음이 말" },
+    "infj": { "titleSolo": "먼 곳을 바라보는",     "titleSocial": "사람을 읽는",           "desc": "드러내지 않지만 깊게 본다" },
+    "intp": { "titleSolo": "질문에서 멈추는",     "titleSocial": "관찰하고 분해하는",     "desc": "왜?에서 또 다른 왜?로" },
+    "intj": { "titleSolo": "구조를 짓는",         "titleSocial": "계획을 끌고 가는",     "desc": "머릿속에 이미 완성된 그림" }
+  },
+  "combos": {
+    "infpIntj": "가치를 품은 전략가", "infpIntp": "탐험하는 시인",       "infpInfj": "공명하는 이상주의자",
+    "intpIntj": "체계를 짓는 사색가", "intpInfj": "통찰하는 분석가",     "intjInfj": "비전을 가진 건축가",
+    "sameInfp": "깊은 의미의 동행자", "sameInfj": "침묵 속의 통찰자",
+    "sameIntp": "끝없는 질문의 항해자", "sameIntj": "묵묵한 설계자",
+    "unknown":  "당신만의 조합"
+  },
+  "flow": {
+    "devToggle": "모드 (개발용)",
+    "loading": "잠깐만요...",
+    "loadError": "불러오는 데 실패했어요",
+    "morning": {
+      "lead": "어젯밤, 당신이 예약한",
+      "headline": "오늘의 첫 단추",
+      "start": "시작하기",
+      "skip": "오늘은 건너뛸게요",
+      "emptyLead": "어젯밤 예약한 첫 단추가 없어요",
+      "emptyBody": "괜찮아요. 저녁 모드에서 내일의 첫 단추를 예약하게 됩니다.",
+      "identityLead": "오늘, ",
+      "identityTail": "(으)로 흘러가요"
+    },
+    "day": {
+      "lead": "지금 할 단 하나",
+      "addPlaceholder": "할 일 한 가지를 적어보세요",
+      "add": "이걸 시작해요",
+      "microTitle": "잠깐, 이걸 2분 안에 시작할 수 있나요?",
+      "microBody": "더 작은 단위로 쪼개면, 뇌가 시뮬레이션을 건너뛰고 몸이 먼저 움직여요.",
+      "microOpt1": "2분만 해보기",
+      "microOpt2": "준비물 한 개 꺼내기",
+      "microOpt3": "장소로 가서 앉기",
+      "microUse": "이 단계로 시작할게요",
+      "microSkip": "그대로 시작할게요",
+      "done70": "70% 완료",
+      "done100": "완벽 완료",
+      "done70Hint": "오늘은 여기까지로 충분해요",
+      "doneCelebrate": "잘했어요. 오늘은 이걸로 충분해요.",
+      "addAnother": "다른 한 가지 적어보기"
+    },
+    "evening": { "title": "🌆 통합 (Integration)", "body": "Phase 2에서 의미 일기와 공명방이 열려요." },
+    "night":   { "title": "🌙 착륙 (Landing)",    "body": "Phase 2에서 생각 보관함과 이불 모드가 열려요." }
+  }
+}

@@ -1,0 +1,115 @@
+/* Meaning Flow — design tokens & base */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+:root {
+  /* surfaces */
+  --cream:        #F4EFE6;
+  --cream-deep:   #ECE5D6;
+  --paper:        #FBF8F1;
+  --paper-warm:   #F8F3E9;
+
+  /* text */
+  --ink:          #1A1A1F;
+  --ink-soft:     #5C5A53;
+  --mute:         #9A9486;
+  --mute-light:   #B8B1A2;
+
+  /* hairlines */
+  --hair:         #DDD5C5;
+  --hair-soft:    #E8E1D2;
+
+  /* time accents */
+  --morning:      #D8A06A;
+  --morning-soft: #F0DDC4;
+  --day:          #7FA37F;
+  --day-soft:     #C9D9C2;
+  --evening:      #B8829C;
+  --evening-soft: #E6CFD8;
+  --night:        #8F88B0;
+  --night-soft:   #C9C5DE;
+
+  /* night mode surfaces */
+  --night-bg:     #14151C;
+  --night-bg-2:   #1C1D26;
+  --night-bg-3:   #262732;
+  --night-ink:    #E8E6E0;
+  --night-soft-tx:#7E7E92;
+  --night-hair:   #2D2E3A;
+
+  /* semantic */
+  --leaf:         #7FA37F;
+  --leaf-soft:    #BFD2B4;
+
+  --r-card:       18px;
+  --r-pill:       999px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  font-family: 'Pretendard', -apple-system, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background: #1a1a1f;
+  color: var(--ink);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background:
+    radial-gradient(ellipse at 30% 0%, #2a2a32 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 100%, #232228 0%, transparent 50%),
+    #18181d;
+}
+
+/* utility classes used inside screens */
+.mf-serif { font-family: 'Noto Serif KR', serif; font-weight: 400; }
+.mf-mono  { font-family: 'JetBrains Mono', ui-monospace, monospace; font-feature-settings: 'tnum'; }
+
+/* scrollbar hidden inside the phone */
+.mf-screen::-webkit-scrollbar { display: none; }
+.mf-screen { scrollbar-width: none; }
+
+/* subtle press */
+.mf-press { transition: transform .15s ease, opacity .15s ease; }
+.mf-press:active { transform: scale(0.97); opacity: 0.85; }
+
+/* leaf icon transition */
+.leaf-pulse {
+  animation: leafPulse .4s ease-out;
+}
+@keyframes leafPulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* gentle fade for screen transitions — disabled to avoid restart-on-rerender flicker */
+.mf-fade { opacity: 1; }
+@keyframes mfFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* slow ambient breathing for blanket mode */
+.mf-breath { animation: mfBreath 6s ease-in-out infinite; }
+@keyframes mfBreath {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
+/* lock click animation for thought vault */
+@keyframes lockSnap {
+  0%   { transform: rotate(0deg); }
+  20%  { transform: rotate(-8deg); }
+  60%  { transform: rotate(2deg); }
+  100% { transform: rotate(0deg); }
+}
+.lock-snap { animation: lockSnap .45s ease-out; }
