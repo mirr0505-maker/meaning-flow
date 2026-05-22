@@ -34,6 +34,11 @@ yarn-error.*
 .env
 .env*.local
 
+# EAS secrets — 절대 커밋 금지 (App Store · Play Store 자격증명)
+google-service-account.json
+AuthKey_*.p8
+.eas/credentials.json
+
 # typescript
 *.tsbuildinfo
 

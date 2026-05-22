@@ -1,4 +1,8 @@
 {
+  "_status": "draft",
+  "_reviewedBy": null,
+  "_reviewedAt": null,
+  "_reviewNotes": "1차 작성자 = 한국어 모국어. 베타(Phase 4) 사용자 피드백 수집 후 native-approved 승격. docs/i18n-review-workflow.md 참조.",
   "app": {
     "name": "Meaning Flow",
     "subtitle": "STEP 1-A 토큰 · 1-B Supabase · 1-C i18n · 1-D 온보딩 · 1-E 흐름"
@@ -82,7 +86,92 @@
       "doneCelebrate": "잘했어요. 오늘은 이걸로 충분해요.",
       "addAnother": "다른 한 가지 적어보기"
     },
-    "evening": { "title": "🌆 통합 (Integration)", "body": "Phase 2에서 의미 일기와 공명방이 열려요." },
-    "night":   { "title": "🌙 착륙 (Landing)",    "body": "Phase 2에서 생각 보관함과 이불 모드가 열려요." }
+    "evening": {
+      "title": "🌆 통합 (Integration)",
+      "body": "Phase 2에서 의미 일기와 공명방이 열려요.",
+      "eyebrow": "오늘의 한 줄",
+      "attribution": "— {{combo}}에게 던지는 질문",
+      "placeholder": "오늘은 그냥 하늘만 봤다. 근데 그게 충분했다.",
+      "charHint": "한 단어여도 괜찮아요",
+      "shareLabel": "익명으로 공명방에 흘려보내기",
+      "shareDescOn": "전 세계 IN이 무언으로 공명할 수 있어요",
+      "shareDescOff": "본인만 보는 일기로 남깁니다",
+      "shareDisclaimer": "체크는 저장돼요. 실제 공명방 게시·익명 처리·모더레이션은 Phase 3에서 열려요.",
+      "submit": "오늘을 흘려보내기",
+      "saving": "흘려보내는 중...",
+      "savedShared": "한 줄이 정원으로 흘러갔어요.",
+      "savedPrivate": "오늘의 한 줄, 잘 기록되었어요.",
+      "editAgain": "다시 다듬기",
+      "question": {
+        "infpIntj": "오늘 가장 나다웠던 순간이\n1년 뒤에도 의미가 있을까요?",
+        "infpIntp": "오늘 마음에 남은 한 가지를\n누구에게 들려주고 싶나요?",
+        "infpInfj": "오늘 닿은 작은 진심은\n어디에서 시작됐을까요?",
+        "intpIntj": "오늘 풀린 매듭은\n어떤 구조 위에 놓였나요?",
+        "intpInfj": "오늘 통찰의 단서를\n누구와 나누고 싶나요?",
+        "intjInfj": "오늘 어떤 비전이\n한 걸음 가까워졌나요?",
+        "sameInfp": "오늘 의미를 만난 순간을\n어떻게 부르고 싶나요?",
+        "sameInfj": "오늘 침묵 속에서 본 것은\n무엇이었나요?",
+        "sameIntp": "오늘 가장 큰 질문은\n무엇이었나요?",
+        "sameIntj": "오늘 한 걸음의 모양은\n어땠나요?",
+        "unknown":  "오늘 가장 나다웠던 순간이\n1년 뒤에도 의미가 있을까요?"
+      }
+    },
+    "night":   {
+      "title": "🌙 착륙 (Landing)",
+      "body": "Phase 2에서 생각 보관함과 이불 모드가 열려요.",
+      "tabs": {
+        "vault":   "01 · 보관함",
+        "timer":   "02 · 5분",
+        "first":   "03 · 첫 단추",
+        "blanket": "04 · 이불"
+      },
+      "vault": {
+        "lead": "전두엽이 퇴근 중입니다.\n머릿속을 상자에 옮겨두세요.",
+        "brand": "THOUGHT VAULT",
+        "count": "{{count}}개 보관 중",
+        "empty": "아직 비어있어요. 한 단어부터 시작해도 좋아요.",
+        "placeholder": "단어 하나여도 괜찮아요",
+        "addBtn": "담기",
+        "lockBtn": "찰칵 — 잠그기",
+        "locked": "잠겼어요 — 안전합니다"
+      },
+      "timer": {
+        "lead": "아이디어가 멈추지 않을 때.\n딱 5분만 쏟아내요.",
+        "start": "5분 시작",
+        "pause": "잠시 멈춤",
+        "resume": "다시 시작",
+        "stopped": "끝났어요",
+        "reset": "처음으로",
+        "statusReady": "READY",
+        "statusPouring": "POURING OUT",
+        "statusPaused": "PAUSED",
+        "statusDone": "DONE",
+        "captureLabel": "지금 떠오른 것 — 한 줄로",
+        "capturePlaceholder": "스쳐간 생각을 적어두세요",
+        "saveBtn": "보관함에 담기",
+        "savedHint": "보관함에 담아 두었어요.",
+        "afterCopy": "여기까지. 나머지는\n내일의 당신이 더 잘 해낼 거예요.",
+        "voiceComingSoon": "음성 2분 스피치 — STEP 2-G에서 곧 만나요"
+      },
+      "first": {
+        "lead": "내일 눈 뜨자마자 할,\n2분짜리 하나를 골라요.",
+        "opt": {
+          "water":   "물 한 잔 마시기",
+          "stretch": "스트레칭 1번",
+          "vit":     "영양제 먹기",
+          "custom":  "직접 입력"
+        },
+        "customPlaceholder": "예: 창문 열기, 메일함 한 줄만",
+        "reserve": "예약 — 내일 아침에 만나요",
+        "saving": "예약하고 있어요...",
+        "doneBtn": "예약 완료",
+        "doneHint": "내일 아침 점화 모드에서 만나요."
+      },
+      "blanket": {
+        "lead": "지금 덮고 있는\n이불의 촉감에만 집중해요.",
+        "body": "길게 숨을 내쉬어요.\n당신은 충분히 잘하고 있어요.",
+        "footer": "준비됐을 때 화면을 끄세요"
+      }
+    }
   }
 }

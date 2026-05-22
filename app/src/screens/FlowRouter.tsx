@@ -1,7 +1,6 @@
 // 🚀 4시간대 자동 라우팅 + dev 모드 토글
 // 현재 시각으로 morning/day/evening/night 자동 결정.
 // 우상단에 4칩 토글 (개발/검증용 — 프로토타입의 Tweaks 패널 역할 축약).
-// evening/night 는 Phase 2 — placeholder.
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,6 +10,8 @@ import type { Profile } from "../lib/profiles";
 import { currentMode, type Mode } from "../lib/timeOfDay";
 import { MorningScreen } from "./MorningScreen";
 import { DayScreen } from "./DayScreen";
+import { EveningScreen } from "./EveningScreen";
+import { NightScreen } from "./NightScreen";
 
 const MODES: Mode[] = ["morning", "day", "evening", "night"];
 const MODE_ACCENT: Record<Mode, { bg: string; pill: string }> = {
@@ -89,27 +90,9 @@ export function FlowRouter({ profile }: { profile: Profile }) {
 
       {mode === "morning" && <MorningScreen profile={profile} dark={dark} />}
       {mode === "day"     && <DayScreen     profile={profile} dark={dark} />}
-      {mode === "evening" && <Placeholder titleKey="flow.evening.title" bodyKey="flow.evening.body" mode="evening" />}
-      {mode === "night"   && <Placeholder titleKey="flow.night.title"   bodyKey="flow.night.body"   mode="night" />}
+      {mode === "evening" && <EveningScreen profile={profile} />}
+      {mode === "night"   && <NightScreen   profile={profile} />}
     </ScrollView>
   );
 }
 
-// 🚀 Phase 2 모드 placeholder — evening=dusk(그레이), night=어두운 톤 분기
-function Placeholder({ titleKey, bodyKey, mode }: { titleKey: string; bodyKey: string; mode: "evening" | "night" }) {
-  const { t } = useTranslation();
-  // 둘 다 다크 톤 글자 사용, 카드 색만 evening=dusk.card / night=night.bg2 로 차별
-  const titleClass = "text-night-ink";
-  const bodyClass  = "text-night-soft";
-  const cardClass  = mode === "evening"
-    ? "bg-dusk-card border-night-hair"
-    : "bg-night-bg2 border-night-hair";
-  return (
-    <View className="px-6 pt-2">
-      <Text className={`text-2xl font-medium ml-1 mb-4 ${titleClass}`}>{t(titleKey)}</Text>
-      <View className={`rounded-card border p-5 ${cardClass}`}>
-        <Text className={`text-sm leading-relaxed ${bodyClass}`}>{t(bodyKey)}</Text>
-      </View>
-    </View>
-  );
-}

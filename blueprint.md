@@ -156,8 +156,16 @@ Meaning Flow는 전 세계 INTP·INTJ·INFJ·INFP 사용자의 뇌 작동 방식
 ### 4.3 🌆 통합 모드 — F-EVE-001
 의미 일기 + 두 자아 통합 질문 + '공명방에 흘려보내기' 토글.
 
-### 4.4 🌙 착륙 모드 — F-NIT-001 ~ F-NIT-003
-생각 보관함(자이가르닉 차단) + 5분 영감 타이머 + 내일의 첫 단추 + 이불 촉감 모드.
+### 4.4 🌙 착륙 모드 — F-NIT-001 ~ F-NIT-004
+생각 보관함(자이가르닉 차단) + 영감 타이머 + 내일의 첫 단추 + 이불 촉감 모드.
+
+**영감 타이머 — 텍스트 5분 / 음성 2분 듀얼 모드 (2026-05-22 결정)**
+- 기본: **텍스트 5분** — PRD 4.4·UserGuide 기능 2 원안 그대로 ("딱 5분만 쏟아내고, 강제로 닫힙니다")
+- 추가: **음성 2분 스피치** — 말은 글보다 3배 빠르므로 분량 등가. PRD "강제 닫힘" 정신 보존
+- 음성 모드는 **Phase 2-G 별도 STEP** 으로 분리 (Phase 2-D 는 텍스트 5분만 구현)
+- 음성 STT: **디바이스 STT (`react-native-voice` 또는 후속 대체)** — Whisper 비용 회피. M4 자해 키워드 검사는 transcript 변환 후 적용
+- 음성 원본 보관: **24시간 후 자동 삭제, transcript 만 영구** (M6 프라이버시 최소화)
+- 면책 카피: 마이크 권한 동의 화면에 *"녹음은 본인만 듣고, 24시간 후 자동으로 사라져요"* 명시
 
 ### 4.5 🌿 공명의 정원 — F-RES-001 ~ F-RES-005
 
@@ -233,7 +241,9 @@ Meaning Flow는 전 세계 INTP·INTJ·INFJ·INFP 사용자의 뇌 작동 방식
 | DeepL API | Pro | ~$10/월 (캐싱 효과) |
 | OpenAI Moderation | 무료 | $0 |
 | Sentry | Developer | $0 |
-| **합계** | | **약 $64/월 (~9만원)** |
+| **합계 (텍스트 MVP)** | | **약 $64/월 (~9만원)** |
+| _(선택) STEP 2-G 음성 — 디바이스 STT_ | _OS 내장_ | _+$0/월_ |
+| _(선택) STEP 2-G 음성 — Supabase Storage 24h 캐시_ | _2MB×6000회_ | _+$0.3/월_ |
 
 ---
 
@@ -279,7 +289,7 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 - 2분 마이크로 변환기
 - 70% 완료 버튼
 - 생각 보관함
-- 5분 영감 타이머
+- 영감 타이머 — **텍스트 5분** (Phase 2 기본) + **음성 2분 스피치** (Phase 2-G STEP, 디바이스 STT, 원본 24h 자동 삭제)
 - 내일의 첫 단추 + 이불 촉감 모드
 - 의미 일기
 - **익명 공명방** (게시·읽기·공명·번역·신고)
@@ -350,20 +360,42 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 | 1-D | 온보딩 (두 자아 선택 + 조합 닉네임) + anonymous auth + profiles 저장 | 3-step 진행 → 닉네임 확정 → DevDashboard 진입 | ✅ 2026-05-22 |
 | 1-E | 🌅 점화 모드 + ☀️ 실행 모드 (첫 단추 + 2분 변환기 + 70% 버튼) | tasks CRUD + 4칩 토글 + 70% 우대 + 모바일 검증 | ✅ 2026-05-22 |
 
+### 10.3 Phase 2 STEP 분해 (2026-05-22 사용자 승인)
+
+| STEP | 내용 | 검증 기준 | 상태 |
+|------|------|----------|------|
+| 2-A | 🌆 EveningScreen — 의미 일기 reflections CRUD + 200자 카운터 + 공명방 토글(기본 OFF, **이번 단계는 `shared_to_resonance` 컬럼 저장만** — 실 게시·모더레이션은 Phase 3) | reflections 1건 저장 + 200자 가드 + 토글 상태 영구 + i18n ko/en/ja | ✅ 2026-05-22 |
+| 2-B | 🌙 NightScreen 컨테이너 + 4 stage 탭(vault/timer/first/blanket) + 다크 톤 | 탭 전환 + 다크 톤 일관성 | ✅ 2026-05-22 |
+| 2-C | 🌙 NightVault — 생각 보관함 thought_vault CRUD + '찰칵 잠그기' 시각 전환 | 단어 추가/삭제 + 잠금 상태 토글 + 영구 저장 | ✅ 2026-05-22 |
+| 2-D | 🌙 NightTimer — **텍스트 5분 카운트다운** (가로 진행바 + start/pause/reset + 강제 종료 카피 + 결과물 보관함 담기) | 5:00→0:00 자동, 일시정지 정확 | ✅ 2026-05-22 |
+| 2-E | 🌙 NightFirst — 내일의 첫 단추 (4 옵션 + 직접 입력) → `tasks.scheduled_for=내일` | DB row + 다음 morning 진입 시 표시 | ✅ 2026-05-22 |
+| 2-F | 🌙 NightBlanket — 이불 모드 (Animated 호흡 4초 들숨/4초 날숨 + 정적 카피) | 시각 확인 | ✅ 2026-05-22 |
+| 2-G | 🌙 NightTimer 음성 모드 — **2분 스피치** (디바이스 STT, 마이크 권한, 원본 24h 자동 삭제, 면책 카피) | 권한 동의 → 녹음 → STT transcript 저장 → 24h 후 원본 삭제 | ⏸ **Phase 2 텍스트 완료 후 별도 STEP** |
+
 > Phase 1~6 의 외부 키(SUPABASE / DEEPL / OPENAI_MODERATION / EAS / SENTRY) 발급 체크리스트는 사용자가 별도 관리.
 
 ---
 
 ## 11. 현재 진척 상태 (2026-05-21 갱신)
 
-**핵심 메시지**: **Phase 1 전체 완료 + GitHub push 완료** (2026-05-22). Expo SDK 54 + NativeWind v4 + Supabase (10 테이블 + RLS 16 + GRANT) + supabase-js + i18n (한·영·일 3언어, 모바일 ko/en/ja 3-cycle 토글) + Anonymous Auth + Onboarding (두 자아 + 6 조합 닉네임) + 🌅 점화·☀️ 실행 화면 (tasks CRUD + 2분 마이크로 변환 + 70% 우대) + 🌆 통합(dusk 그레이)·🌙 착륙(다크) 모드 분리 + 모바일(iPhone Expo Go) 검증 통과. 일본어는 Phase 5에서 Phase 1으로 격상 — 1차 초안 작성, native 검수는 Phase 4 베타 전 출시 게이트. **GitHub**: https://github.com/mirr0505-maker/meaning-flow (Private). 다음 세션 후보: Phase 2 (통합/착륙 실제 구현 — 의미 일기 + 생각 보관함 + 5분 타이머 + 이불 모드) 또는 백로그 정리.
+**핵심 메시지**: **Phase 1 전체 완료 + GitHub push 완료** (2026-05-22). Expo SDK 54 + NativeWind v4 + Supabase (10 테이블 + RLS 16 + GRANT) + supabase-js + i18n (한·영·일 3언어, 모바일 ko/en/ja 3-cycle 토글) + Anonymous Auth + Onboarding (두 자아 + 6 조합 닉네임) + 🌅 점화·☀️ 실행 화면 (tasks CRUD + 2분 마이크로 변환 + 70% 우대) + 🌆 통합(dusk 그레이)·🌙 착륙(다크) 모드 분리 + 모바일(iPhone Expo Go) 검증 통과. 일본어는 Phase 5에서 Phase 1으로 격상 — 1차 초안 작성, native 검수는 Phase 4 베타 전 출시 게이트. **GitHub**: https://github.com/mirr0505-maker/meaning-flow (Private).
+
+**Phase 2 완료 (2026-05-22)**: STEP 2-A~2-F 텍스트 기반 통합·착륙 모드 실구현 + 빌드 검증 (tsc 0 · npm test 9/9 · expo export 475 모듈, +14 from Phase 1). 공명방 토글은 `shared_to_resonance` 컬럼 저장만 (실 게시는 Phase 3). 영감 타이머는 텍스트 5분 (PRD 원안). 음성 2분 스피치는 별도 STEP 2-G 로 분리 — 디바이스 STT + 원본 24h 자동 삭제 + 마이크 권한 면책 카피.
+
+**백로그 정리 (2026-05-22)**:
+- B-1 NativeWind `flex-1` 조사 — 설정·버전 조합은 호환 정상. 원인 1순위 = Metro 캐시 (`--clear` 누락) ([11.0-F](#110-f-별도-트랙-2026-05-22-발견-추후-처리)).
+- B-2 영·일 native 검수 트랙 — [`docs/i18n-review-workflow.md`](docs/i18n-review-workflow.md) 신규 + ko/en/ja 의 `_status` 필드 정비 (`draft` / `null`).
+
+**EAS Build 셋업 (2026-05-22)**: `app.json` (bundleIdentifier `com.meaningflow.app` + scheme + runtimeVersion) + `eas.json` (development/preview/production 3 프로파일) + `.gitignore` secret 보강 + [`docs/eas-build-and-store-checklist.md`](docs/eas-build-and-store-checklist.md) 작성. 실 빌드는 사용자 `eas login` + `eas init` 후 명시 승인 시 진행.
 
 ### 11.0-F 별도 트랙 (2026-05-22 발견, 추후 처리)
 
 | 트랙 | 우선순위 | 내용 |
 |------|---------|------|
-| NativeWind `flex-1` 모바일 누락 원인 디버깅 | ★ | RN 빌드(Expo Go)에서 일부 `flex-1` className 이 inline style 로 컴파일 안 되는 케이스. 임시 fix — wrapper 들에 `style={{ flex: 1, ... }}` inline 보강. 근본 원인은 NativeWind 4.x + Expo SDK 54 + RN 0.81 + React 19 조합. 추후 NativeWind 버전 업이나 jsxImportSource·metro·babel preset 점검 필요 |
+| NativeWind `flex-1` 모바일 누락 원인 디버깅 | ★ | ✅ **2026-05-22 조사 완료**. 결론: **설정·버전 조합은 모두 호환 정상** — NativeWind 4.2.4 는 Expo SDK 54 (Reanimated 4.1.1 + React 19 + RN 0.81) 호환 패치 포함 (v4.2.0+ Reanimated v4 patch). `babel.config.js` `["babel-preset-expo", { jsxImportSource: "nativewind" }] + "nativewind/babel"` 및 `metro.config.js withNativeWind(..., { input: "./global.css" })` 모두 공식 권장 그대로. **실제 원인 가설 (NativeWind v4 troubleshooting 공식 문서 기준 우선순위)**: ① **Metro 캐시** (`npx expo start --clear` 미실행 시 className → style 매핑 stale) → 90% 케이스 해결, ② **동적 className 분기**(`className={"flex-1 " + (cond ? "A" : "B")}`)의 일부 케이스에서 정적 분석 누락, ③ ScrollView `contentContainerStyle` 와 `className` 의 우선순위 충돌, ④ Reanimated/Worklets 플러그인 중복 시 컴파일 누락. **권장 처치**: (a) 다음 모바일 검증 전 `--clear` 강제, (b) 동적 분기보다 `clsx`/`twMerge` 같은 유틸 고려는 보류 (의존성 추가 부담), (c) 정적 className 우선 작성. **현재 코드 영향**: `Onboarding.tsx:57` 의 inline `style={{ flex: 1, ... }}` 한 곳만 임시 보강 — 캐시 클린 후 재검증해서 inline 제거 가능. Phase 2 신규 코드는 모두 정적 className 만 사용 → 정상 동작 예상 |
 | 영어 · **일본어** 카피 native 검수 | ★★★ **출시 게이트** | 2026-05-22 사용자 결정 — native 검수 없이 출시 불가. 베타(Phase 4) 진입 전 필수. 영어는 1차 다듬기 완료, 일본어는 1차 초안(`ja.json` `_status` 필드로 표시). PRD 7.2 정서 결 + UserGuide 톤 기준. 일본어가 가장 위험 — 경어·간접·시적 톤 검증 어려움. **검수 워크플로**: ① 영어 native (또는 검수 도구) → ② 일본 native (지인·crowdsourcing·유료 서비스 중 사용자 선택) → ③ 베타 사용자 피드백 |
+| **Phase 2-G 음성 입력 STEP** | ★★ | 2026-05-22 사용자 결정 — Phase 2 텍스트 완료 후 별도 STEP. 2분 스피치, 디바이스 STT (`react-native-voice` 또는 후속 대체), 원본 24h 자동 삭제, transcript 만 영구. 마이크 권한 면책 카피 *"녹음은 본인만 듣고, 24시간 후 자동으로 사라져요"* 필수. M4 자해 검사는 transcript 변환 후 동일 흐름 적용. `thought_vault` 또는 신규 `vault_audio` 테이블 스키마 변경 필요 |
+| **PRD `.docx` 갱신** | ★★ | 2026-05-22 결정으로 blueprint.md 만 1차 반영. PRD v1.1 .docx 는 1차 소스라 별도 v1.2 리비전으로 음성 모드·24h 보관·면책 카피·STEP 2-G 등 명시 후 git commit. 사용자가 docx 편집기에서 직접 작성 또는 메인 세션이 markdown 으로 초안 작성 후 사용자 변환 |
 | 다크모드 UX 전체 검토 | ✅ 2026-05-22 | `app/src/lib/theme.ts` `modeColors(dark)` helper 추출 + MorningScreen·DayScreen 에 dark prop 전파. night 모드에서 호출 시 카드·글자·placeholder 색이 모두 다크 톤(`bg-night-bg2` / `text-night-ink` / `text-night-soft` / `text-night-muted` 등)으로 자동 전환. day-soft 같은 모드 전용 강조 카드는 라이트 유지 |
 | 데스크탑 웹 가로폭 변동 | ◐ 부분 완료 | App.tsx max-width 440px 컨테이너로 해결. 모바일에선 viewport <440 이라 자동 처리 |
 

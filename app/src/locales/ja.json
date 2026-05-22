@@ -1,5 +1,8 @@
 {
-  "_status": "draft, needs native review (2026-05-22) — PRD M2/M5 정서 결 검증 미완. Phase 4 베타 전 일본 native 검수 필수",
+  "_status": "draft",
+  "_reviewedBy": null,
+  "_reviewedAt": "2026-05-22 (1차 초안 작성일)",
+  "_reviewNotes": "메인 세션 1차 초안. 가장 위험한 영역 — 경어·간접·시적 톤. Phase 4 베타 진입 전 일본 native 검수 필수. 특히 flow.evening.question.* (6 조합 + same 4) 와 flow.night.{vault,timer,blanket} 의 정서 톤 검증 우선. docs/i18n-review-workflow.md 참조.",
   "app": {
     "name": "Meaning Flow",
     "subtitle": "STEP 1-A トークン · 1-B Supabase · 1-C i18n · 1-D オンボーディング · 1-E フロー"
@@ -77,7 +80,92 @@
       "doneCelebrate": "よくできました。今日はこれで十分です。",
       "addAnother": "別のひとつを書いてみる"
     },
-    "evening": { "title": "🌆 統合 (Integration)", "body": "Phase 2 で、意味の日記と共鳴の庭が開きます。" },
-    "night":   { "title": "🌙 着陸 (Landing)",     "body": "Phase 2 で、思考の保管庫とふとんの感触モードが開きます。" }
+    "evening": {
+      "title": "🌆 統合 (Integration)",
+      "body": "Phase 2 で、意味の日記と共鳴の庭が開きます。",
+      "eyebrow": "今日のひと言",
+      "attribution": "— {{combo}}への問い",
+      "placeholder": "今日はただ空を見ていた。それで十分だった。",
+      "charHint": "ひとことでも大丈夫",
+      "shareLabel": "匿名で共鳴の庭へ流す",
+      "shareDescOn": "世界中の IN が静かに共鳴できます",
+      "shareDescOff": "自分だけが見る日記として残します",
+      "shareDisclaimer": "選択は保存されます。実際の庭への投稿・匿名化・モデレーションは Phase 3 で開きます。",
+      "submit": "今日を流す",
+      "saving": "流しています…",
+      "savedShared": "ひと言が庭へ流れていきました。",
+      "savedPrivate": "今日のひと言、きちんと残りました。",
+      "editAgain": "もう一度整える",
+      "question": {
+        "infpIntj": "今日いちばん自分らしかった瞬間は\n1年後にも意味を持つでしょうか？",
+        "infpIntp": "今日、心に残ったひとつを\n誰に伝えたいですか？",
+        "infpInfj": "今日触れた小さな真心は\nどこから始まったのでしょう？",
+        "intpIntj": "今日ほどけた結び目は\nどんな構造の上にありましたか？",
+        "intpInfj": "今日掴んだ洞察の手がかりを\n誰と分かち合いたいですか？",
+        "intjInfj": "今日、どんなビジョンが\nひと歩近づきましたか？",
+        "sameInfp": "今日、意味と出会った瞬間を\nどう呼びたいですか？",
+        "sameInfj": "今日の沈黙の中で見たものは\n何でしたか？",
+        "sameIntp": "今日いちばん大きな問いは\n何でしたか？",
+        "sameIntj": "今日のひと歩はどんな形を\nしていましたか？",
+        "unknown":  "今日いちばん自分らしかった瞬間は\n1年後にも意味を持つでしょうか？"
+      }
+    },
+    "night":   {
+      "title": "🌙 着陸 (Landing)",
+      "body": "Phase 2 で、思考の保管庫とふとんの感触モードが開きます。",
+      "tabs": {
+        "vault":   "01 · 保管庫",
+        "timer":   "02 · 5分",
+        "first":   "03 · ひと押し",
+        "blanket": "04 · ふとん"
+      },
+      "vault": {
+        "lead": "前頭葉が退勤中です。\n頭の中を、箱に移しておきましょう。",
+        "brand": "THOUGHT VAULT",
+        "count": "{{count}}個 保管中",
+        "empty": "まだ空っぽです。ひとことから始めても大丈夫。",
+        "placeholder": "ひとことで構いません",
+        "addBtn": "入れる",
+        "lockBtn": "カチッ — 鍵をかける",
+        "locked": "鍵がかかりました — 安全です"
+      },
+      "timer": {
+        "lead": "アイデアが止まらないとき。\nたった5分だけ、吐き出しましょう。",
+        "start": "5分はじめる",
+        "pause": "いったん停止",
+        "resume": "再開",
+        "stopped": "終わりました",
+        "reset": "最初に戻す",
+        "statusReady": "READY",
+        "statusPouring": "POURING OUT",
+        "statusPaused": "PAUSED",
+        "statusDone": "DONE",
+        "captureLabel": "今、浮かんできたもの — ひと言で",
+        "capturePlaceholder": "よぎった考えを書き留めて",
+        "saveBtn": "保管庫へ入れる",
+        "savedHint": "保管庫に入れました。",
+        "afterCopy": "ここまで。残りは、\n明日のあなたが、もっとうまくやってくれます。",
+        "voiceComingSoon": "音声2分スピーチ — STEP 2-G でまもなく"
+      },
+      "first": {
+        "lead": "明日、目を開けてすぐにする\n2分のひとつを選びましょう。",
+        "opt": {
+          "water":   "水を一杯飲む",
+          "stretch": "ストレッチを1回",
+          "vit":     "サプリを飲む",
+          "custom":  "自分で入力"
+        },
+        "customPlaceholder": "例: 窓を開ける、メールを1行だけ",
+        "reserve": "予約 — 明日の朝に会いましょう",
+        "saving": "予約しています...",
+        "doneBtn": "予約完了",
+        "doneHint": "明日の朝、点火モードでお会いしましょう。"
+      },
+      "blanket": {
+        "lead": "今、かけている\nふとんの感触だけに集中しましょう。",
+        "body": "長く息を吐きましょう。\nあなたは、十分よくやっています。",
+        "footer": "準備ができたら、画面を消して大丈夫です"
+      }
+    }
   }
 }

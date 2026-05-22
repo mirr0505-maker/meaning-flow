@@ -1,4 +1,8 @@
 {
+  "_status": "draft",
+  "_reviewedBy": null,
+  "_reviewedAt": null,
+  "_reviewNotes": "Phase 1-E 까지 메인 세션 1차 다듬기 완료. Phase 3 완료 후 영어 native 검수 필수. docs/i18n-review-workflow.md 참조.",
   "app": {
     "name": "Meaning Flow",
     "subtitle": "STEP 1-A tokens · 1-B Supabase · 1-C i18n · 1-D onboarding · 1-E flow"
@@ -76,7 +80,92 @@
       "doneCelebrate": "Well done. That's enough for today.",
       "addAnother": "Write another one"
     },
-    "evening": { "title": "🌆 Integration", "body": "Reflection and Resonance Garden open in Phase 2." },
-    "night":   { "title": "🌙 Landing",     "body": "Thought Vault and Blanket mode open in Phase 2." }
+    "evening": {
+      "title": "🌆 Integration",
+      "body": "Reflection and Resonance Garden open in Phase 2.",
+      "eyebrow": "ONE LINE FOR TODAY",
+      "attribution": "— a question for the {{combo}}",
+      "placeholder": "Today I just watched the sky. And that was enough.",
+      "charHint": "Even one word is fine",
+      "shareLabel": "Drift this anonymously into the garden",
+      "shareDescOn": "Other IN minds may quietly resonate",
+      "shareDescOff": "Kept as a journal only you can see",
+      "shareDisclaimer": "Your choice is saved. Actual garden posting · anonymisation · moderation will open in Phase 3.",
+      "submit": "Let today drift",
+      "saving": "Drifting…",
+      "savedShared": "Your line drifted into the garden.",
+      "savedPrivate": "Today's one line is safely kept.",
+      "editAgain": "Edit again",
+      "question": {
+        "infpIntj": "The moment you were most yourself today —\nwill it still mean something a year from now?",
+        "infpIntp": "One thing that stayed with you today —\nwho would you want to tell it to?",
+        "infpInfj": "Where did that small honest moment\ntoday begin?",
+        "intpIntj": "The knot you untied today —\non what structure did it sit?",
+        "intpInfj": "An insight you caught today —\nwho would you want to share it with?",
+        "intjInfj": "Which vision came one step closer\ntoday?",
+        "sameInfp": "How would you name the moment\nyou met meaning today?",
+        "sameInfj": "What did you see\nin today's silence?",
+        "sameIntp": "What was today's\nbiggest question?",
+        "sameIntj": "What shape did today's\none step take?",
+        "unknown":  "The moment you were most yourself today —\nwill it still mean something a year from now?"
+      }
+    },
+    "night":   {
+      "title": "🌙 Landing",
+      "body": "Thought Vault and Blanket mode open in Phase 2.",
+      "tabs": {
+        "vault":   "01 · VAULT",
+        "timer":   "02 · 5 MIN",
+        "first":   "03 · FIRST",
+        "blanket": "04 · BLANKET"
+      },
+      "vault": {
+        "lead": "Your prefrontal cortex is clocking out.\nMove the contents of your head into a box.",
+        "brand": "THOUGHT VAULT",
+        "count": "{{count}} kept",
+        "empty": "Empty for now. Even one word is a start.",
+        "placeholder": "One word is fine",
+        "addBtn": "Add",
+        "lockBtn": "Click — lock it",
+        "locked": "Locked — you're safe"
+      },
+      "timer": {
+        "lead": "When ideas won't stop.\nJust pour them out for 5 minutes.",
+        "start": "Start 5 min",
+        "pause": "Pause",
+        "resume": "Resume",
+        "stopped": "Stopped",
+        "reset": "Reset",
+        "statusReady": "READY",
+        "statusPouring": "POURING OUT",
+        "statusPaused": "PAUSED",
+        "statusDone": "DONE",
+        "captureLabel": "What just surfaced — one line",
+        "capturePlaceholder": "Jot down a passing thought",
+        "saveBtn": "Save to vault",
+        "savedHint": "Saved to your vault.",
+        "afterCopy": "That's enough. Your tomorrow self\nwill handle the rest better.",
+        "voiceComingSoon": "2 min voice speech — coming in STEP 2-G"
+      },
+      "first": {
+        "lead": "Pick one 2-minute thing\nto do the moment you wake up.",
+        "opt": {
+          "water":   "Drink a glass of water",
+          "stretch": "One stretch",
+          "vit":     "Take a vitamin",
+          "custom":  "Type your own"
+        },
+        "customPlaceholder": "e.g. open the window, one line of inbox",
+        "reserve": "Reserve — see you tomorrow",
+        "saving": "Reserving…",
+        "doneBtn": "Reserved",
+        "doneHint": "See you in tomorrow's Ignition mode."
+      },
+      "blanket": {
+        "lead": "Focus only on the texture\nof the blanket you're under.",
+        "body": "Exhale, slowly.\nYou are doing enough.",
+        "footer": "Turn off the screen when ready"
+      }
+    }
   }
 }
