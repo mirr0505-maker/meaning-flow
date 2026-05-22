@@ -193,6 +193,52 @@
     "resonated":  "공명 중",
     "resonanceCount": "{{count}}명이 공명했어요",
     "translateComingSoon": "번역은 곧 만나요",
+    "report": {
+      "openMenu":         "더 보기 메뉴",
+      "title":            "이 글을 신고할까요?",
+      "subtitle":         "신고 사유를 골라주세요. 자해 신고는 우선 처리됩니다.",
+      "reason": {
+        "abuse_hate":  "욕설 또는 혐오 표현",
+        "spam":        "스팸 또는 광고",
+        "self_harm":   "자해 또는 위급 신호",
+        "other":       "기타"
+      },
+      "reasonDesc": {
+        "abuse_hate":  "다른 사람을 비난하거나 차별하는 표현",
+        "spam":        "광고·도배·관련 없는 외부 링크",
+        "self_harm":   "작성자가 위험에 처해 있을 가능성 — 위기 자원이 먼저 안내됩니다",
+        "other":       "위 사유에 해당하지 않는 다른 이유"
+      },
+      "submitting":       "신고를 보내고 있어요...",
+      "alreadyReported":  "이 글은 이미 신고하셨어요.",
+      "networkError":     "지금 인터넷이 어려워요. 잠시 후 다시 시도해 주세요.",
+      "authError":        "로그인 정보가 만료됐어요. 다시 시도해 주세요.",
+      "errorTitle":       "신고를 보내지 못했어요",
+      "hiddenFromYou":    "이 글은 당신의 화면에서 숨겨졌어요.",
+      "cancel":           "취소",
+      "close":            "닫기"
+    },
+    "crisis": {
+      "title":            "잠깐, 먼저 이걸 봐주세요.",
+      "intro":            "이 글을 쓴 분이 위험에 처해 있을 수도 있어요. 가능하다면 전문 기관에 연결될 수 있도록 도와주세요. 당신이 힘들 때도 같은 번호를 누를 수 있어요.",
+      "continueReport":   "신고를 마저 제출",
+      "closeOnly":        "지금은 닫기",
+      "notice_ko":        "위 번호는 모두 24시간 무료입니다. 위급한 상황이면 119로도 연락할 수 있어요.",
+      "notice_en":        "These numbers are free 24/7. In immediate danger, call your local emergency number (911 in the US).",
+      "notice_ja":        "上記の番号は無料です。すぐ命の危険があるときは、119(救急)に連絡してください。"
+    },
+    "translate": {
+      "translateBtn":     "번역",
+      "showOriginal":     "원문 보기",
+      "providerCache":    "{{provider}} · 캐시",
+      "providerFresh":    "{{provider}}",
+      "quotaExceeded":    "이번 달 번역 한도(100회)에 도달했어요. 다음 달에 다시 만나요.",
+      "providerDown":     "지금은 번역이 어려워요. 잠시 후 다시 시도해 주세요.",
+      "networkError":     "지금 인터넷이 어려워요.",
+      "unknownError":     "예상치 못한 일이 있었어요.",
+      "postNotFound":     "이 게시물을 더 이상 찾을 수 없어요.",
+      "auth":             "로그인 정보가 만료됐어요. 다시 시도해 주세요."
+    },
     "moderationBlocked":  "이 글은 다른 분께 닿기 어려울 것 같아요. 한 번 다시 봐주세요.",
     "moderationDown":     "공명의 정원은 잠시 쉬고 있어요. 잠시 후 다시 시도해 주세요.",
     "networkError":       "지금 인터넷이 어려워요. 잠시 후 다시 시도해 주세요.",

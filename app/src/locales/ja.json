@@ -187,6 +187,52 @@
     "resonated":  "共鳴中",
     "resonanceCount": "{{count}}人が共鳴しました",
     "translateComingSoon": "翻訳はまもなく",
+    "report": {
+      "openMenu":         "もっと見るメニュー",
+      "title":            "この一言を通報しますか？",
+      "subtitle":         "理由を選んでください。自傷の通報は優先して扱われます。",
+      "reason": {
+        "abuse_hate":  "暴言・差別表現",
+        "spam":        "スパム・広告",
+        "self_harm":   "自傷・救援サイン",
+        "other":       "その他"
+      },
+      "reasonDesc": {
+        "abuse_hate":  "他者を侮辱または差別する表現",
+        "spam":        "広告・連投・無関係な外部リンク",
+        "self_harm":   "書き手が危険にある可能性 — まず危機サポート情報を表示します",
+        "other":       "上記に当てはまらない理由"
+      },
+      "submitting":       "通報を送信中...",
+      "alreadyReported":  "この一言は、すでに通報済みです。",
+      "networkError":     "今、ネットワークに繋がりにくいようです。しばらくしてからお試しください。",
+      "authError":        "ログイン情報の期限が切れました。もう一度お試しください。",
+      "errorTitle":       "通報を送信できませんでした",
+      "hiddenFromYou":    "この一言は、あなたの画面では非表示になりました。",
+      "cancel":           "キャンセル",
+      "close":            "閉じる"
+    },
+    "crisis": {
+      "title":            "少しお待ちを。まず、これを見てください。",
+      "intro":            "書き手の方が危険にある可能性があります。もしできれば、専門機関につながるよう手助けをしてください。あなた自身がつらい時にも、同じ番号にかけることができます。",
+      "continueReport":   "通報をそのまま提出",
+      "closeOnly":        "今は閉じる",
+      "notice_ko":        "위 번호는 모두 24시간 무료입니다. 위급한 상황이면 119로도 연락할 수 있어요.",
+      "notice_en":        "These numbers are free 24/7. In immediate danger, call your local emergency number (911 in the US).",
+      "notice_ja":        "上記の番号は無料です。すぐ命の危険があるときは、119(救急)に連絡してください。"
+    },
+    "translate": {
+      "translateBtn":     "翻訳",
+      "showOriginal":     "原文を見る",
+      "providerCache":    "{{provider}} · キャッシュ",
+      "providerFresh":    "{{provider}}",
+      "quotaExceeded":    "今月の翻訳上限(100回)に達しました。来月またお会いしましょう。",
+      "providerDown":     "今は翻訳が難しいようです。しばらくしてからお試しください。",
+      "networkError":     "今、ネットワークに繋がりにくいようです。",
+      "unknownError":     "予期しないことが起きました。",
+      "postNotFound":     "この投稿は、もう見つかりません。",
+      "auth":             "ログイン情報の期限が切れました。もう一度お試しください。"
+    },
     "moderationBlocked":  "この一言は、他の方には届きにくいかもしれません。もう一度見てみましょう。",
     "moderationDown":     "共鳴の庭は今、少し休んでいます。しばらくしてからもう一度お試しください。",
     "networkError":       "今、ネットワークに繋がりにくいようです。しばらくしてからどうぞ。",

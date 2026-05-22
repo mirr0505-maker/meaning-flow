@@ -122,4 +122,42 @@ describe("i18n 키 무결성 — locales 정합 (스모크)", () => {
       assert.ok(evTabs && evTabs.journal && evTabs.garden, "flow.evening.tabs.{journal,garden} 누락");
     }
   });
+
+  it("ko/en/ja 모두 garden.translate.* (Phase 3-D) 키 존재", async () => {
+    const ko = await import("../src/locales/ko.json");
+    const en = await import("../src/locales/en.json");
+    const ja = await import("../src/locales/ja.json");
+    const required = [
+      "translateBtn", "showOriginal", "providerCache", "providerFresh",
+      "quotaExceeded", "providerDown", "networkError", "unknownError", "postNotFound", "auth",
+    ];
+    for (const lang of [ko, en, ja]) {
+      const tr = (lang as any).default.garden.translate;
+      assert.ok(tr, "garden.translate namespace 누락");
+      for (const k of required) {
+        assert.ok(typeof tr[k] === "string" && tr[k].length > 0, `garden.translate.${k} 누락`);
+      }
+    }
+  });
+
+  it("ko/en/ja 모두 garden.report.* + garden.crisis.* (Phase 3-E) 키 존재", async () => {
+    const ko = await import("../src/locales/ko.json");
+    const en = await import("../src/locales/en.json");
+    const ja = await import("../src/locales/ja.json");
+    const reasons = ["abuse_hate","spam","self_harm","other"];
+    for (const lang of [ko, en, ja]) {
+      const rep = (lang as any).default.garden.report;
+      assert.ok(rep, "garden.report namespace 누락");
+      assert.ok(rep.title && rep.subtitle && rep.submitting && rep.alreadyReported && rep.hiddenFromYou,
+        "garden.report 핵심 키 누락");
+      for (const r of reasons) {
+        assert.ok(typeof rep.reason[r]     === "string", `garden.report.reason.${r} 누락`);
+        assert.ok(typeof rep.reasonDesc[r] === "string", `garden.report.reasonDesc.${r} 누락`);
+      }
+      const cr = (lang as any).default.garden.crisis;
+      assert.ok(cr && cr.title && cr.intro && cr.continueReport && cr.closeOnly,
+        "garden.crisis 핵심 키 누락");
+      assert.ok(cr.notice_ko && cr.notice_en && cr.notice_ja, "garden.crisis.notice_{ko,en,ja} 누락");
+    }
+  });
 });

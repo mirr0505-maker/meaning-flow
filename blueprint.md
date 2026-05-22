@@ -365,9 +365,9 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 | 3-A | **공명방 게시** — Edge Function `resonance_publish` (OpenAI Moderation → INSERT, 키 없으면 mock pass) + client `publishToGarden` + EveningScreen 저장 후 share=true 시 게시. 차단 시 일기는 본인에게 보존 + 부드러운 안내 카피 | OpenAI key (mock 으로 동작) | ✅ 2026-05-22 |
 | 3-B | **공명방 피드 (GardenScreen)** — `resonance_feed` VIEW 시간순 20개 + 더 보기 + 필터 칩(전세계/조합/언어) + 진입 면책 카피 + 5개국 mock 데이터 | — | ✅ 2026-05-22 |
 | 3-C | **공명 액션 `🌿 공명해요`** — `toggle_resonance` RPC (optimistic UI) + `has_resonated`·`get_resonance_count` + 작성자에게는 합계만 | — | ✅ 2026-05-22 |
-| 3-D | **번역** `🌍 번역` 버튼 — Edge Function `translate_post` (캐시 우선 → DeepL → Google 폴백 → INSERT). 월 100회 한도 카운터 | DeepL + Google key | ⏸ 다음 세션 |
-| 3-E | **신고** — `reports` insert + 사유 4종 + 3회 hidden trigger (3-0 에서 미리) + 자해 우선 큐 | — | ⏸ 다음 세션 |
-| 3-F | **위기 자원 + 면책 카피** — 전 화면 면책 카피 + 자해 키워드 모달 (KR 1577-0199 / US 988 / JP 0120-279-338) | — | ⏸ 다음 세션 (출시 게이트) |
+| 3-D | **번역** `🌍 번역` 버튼 — Migration `translation_quota` + Edge Function `translate_post` (cache hit→무료 / miss→DeepL→Google→INSERT+quota++) + client `lib/translation.ts` + GardenPostCard 원문↔번역 토글. DEV mock 모드 (DEEPL+GOOGLE 둘 다 없으면 prefix 안내) | DeepL + Google key | ✅ 코드 2026-05-22 / 외부 키·deploy 사용자 측 대기 |
+| 3-E | **신고** — `lib/reports.ts` (submitReport + crisisResourcesFor) + ReportModal (사유 4종 + ⋯ 메뉴 + hiddenFromYou) + 자해 사유 시 위기 자원 모달 자동 노출 + tel: 링크 (KR 1393·1577-0199·1388 / US 988·741741 / JP 0120-279-338·0570-783-556). UNIQUE(post_id,reporter_id) 중복 신고 차단 + auto_hide trigger 활용 | — | ✅ 2026-05-22 |
+| 3-F | **위기 자원 + 면책 카피** — 전 화면 면책 카피 + 입력 시 자해 키워드 검사 모달. 신고 흐름의 위기 자원 (3-E) 와 별개로 *작성 시점* 검사 | — | ⏸ 다음 STEP |
 | 3-G | **1일 1회 합산 공명 알림** — Expo Notifications + Supabase cron | Expo Push 인증 | ⏸ Phase 4 |
 
 ### 10.3 Phase 2 STEP 분해 (2026-05-22 사용자 승인)

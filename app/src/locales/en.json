@@ -187,6 +187,52 @@
     "resonated":  "Resonating",
     "resonanceCount": "{{count}} resonated",
     "translateComingSoon": "Translation — coming soon",
+    "report": {
+      "openMenu":         "More menu",
+      "title":            "Report this line?",
+      "subtitle":         "Pick a reason. Self-harm reports are handled first.",
+      "reason": {
+        "abuse_hate":  "Abuse or hate speech",
+        "spam":        "Spam or advertising",
+        "self_harm":   "Self-harm or distress signal",
+        "other":       "Other"
+      },
+      "reasonDesc": {
+        "abuse_hate":  "Insulting or discriminatory toward others",
+        "spam":        "Ads · flooding · unrelated external links",
+        "self_harm":   "The author may be in danger — you'll see crisis resources first",
+        "other":       "A reason not listed above"
+      },
+      "submitting":       "Sending your report…",
+      "alreadyReported":  "You've already reported this line.",
+      "networkError":     "Network is unreachable. Please try again shortly.",
+      "authError":        "Your session expired. Please try again.",
+      "errorTitle":       "Couldn't send your report",
+      "hiddenFromYou":    "This line is hidden from your view.",
+      "cancel":           "Cancel",
+      "close":            "Close"
+    },
+    "crisis": {
+      "title":            "Wait — please see this first.",
+      "intro":            "The author may be in danger. If you can, please help connect them to a professional. You can also call these numbers when you are struggling yourself.",
+      "continueReport":   "Continue with the report",
+      "closeOnly":        "Just close for now",
+      "notice_ko":        "위 번호는 모두 24시간 무료입니다. 위급한 상황이면 119로도 연락할 수 있어요.",
+      "notice_en":        "These numbers are free 24/7. In immediate danger, call your local emergency number (911 in the US).",
+      "notice_ja":        "上記の番号は無料です。すぐ命の危険があるときは、119(救急)に連絡してください。"
+    },
+    "translate": {
+      "translateBtn":     "Translate",
+      "showOriginal":     "Show original",
+      "providerCache":    "{{provider}} · cached",
+      "providerFresh":    "{{provider}}",
+      "quotaExceeded":    "You've reached this month's translation limit (100). See you next month.",
+      "providerDown":     "Translation is unavailable right now. Please try again shortly.",
+      "networkError":     "Network is unreachable.",
+      "unknownError":     "Something unexpected happened.",
+      "postNotFound":     "This post is no longer available.",
+      "auth":             "Your session expired. Please try again."
+    },
     "moderationBlocked":  "This line may be hard for others to receive. Please take another look.",
     "moderationDown":     "The garden is resting for a moment. Please try again shortly.",
     "networkError":       "Network is unreachable right now. Please try again shortly.",

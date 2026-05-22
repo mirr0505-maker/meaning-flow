@@ -120,14 +120,18 @@ export function GardenScreen({ profile }: { profile: Profile }) {
       {/* 카드 리스트 */}
       {posts && posts.length > 0 && (
         <View>
-          {posts.map((p) => (
-            <GardenPostCard
-              key={p.id}
-              post={p}
-              flag={FLAG[p.language] ?? "🌍"}
-              isOwnLang={p.language === (i18n.language.split("-")[0] ?? "ko")}
-            />
-          ))}
+          {posts.map((p) => {
+            const sl = i18n.language.split("-")[0] ?? "ko";
+            return (
+              <GardenPostCard
+                key={p.id}
+                post={p}
+                flag={FLAG[p.language] ?? "🌍"}
+                isOwnLang={p.language === sl}
+                selfLang={sl}
+              />
+            );
+          })}
 
           {/* 무한 스크롤 금지 — 더 보기 버튼 (PRD 7.3) */}
           {hasMore && (
