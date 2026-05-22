@@ -1,7 +1,6 @@
 // 🚀 🌙 NightTimer — 5분 영감 타이머 (PRD 4.4 F-NIT-002)
 // "아이디어가 멈추지 않을 때 켜는 타이머. 딱 5분만 쏟아내고, 강제로 닫힙니다."
 // PRD/UserGuide 원문 그대로: 텍스트 기반 5분 카운트다운.
-// 음성 2분 스피치는 STEP 2-G — 여기서는 안내만 (마이크 아이콘 + "곧 만나요").
 // SVG ring 은 react-native-svg 추가 부담 회피 — 가로 진행 막대로 대체 (디자인 의도 보존).
 
 import { useEffect, useRef, useState } from "react";
@@ -166,12 +165,6 @@ export function NightTimer({ userId }: { userId: string }) {
         </Text>
       )}
 
-      {/* 음성 2분 스피치 — STEP 2-G 안내 자리 */}
-      <View className="mt-8 rounded-card border border-night-hair bg-night-bg2 p-3 items-center">
-        <Text className="text-night-muted text-[10px] tracking-widest">
-          🎙 {t("flow.night.timer.voiceComingSoon")}
-        </Text>
-      </View>
     </View>
   );
 }

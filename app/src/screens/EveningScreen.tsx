@@ -16,12 +16,13 @@ import {
   saveTodayReflection,
   type Reflection,
 } from "../lib/reflections";
+import { publishToGarden, type PublishResult } from "../lib/resonance";
 
 type Stage =
   | { kind: "loading" }
   | { kind: "writing"; text: string; share: boolean; prior: Reflection | null }
   | { kind: "saving" }
-  | { kind: "saved"; share: boolean }
+  | { kind: "saved"; share: boolean; publish?: PublishResult }
   | { kind: "error"; message: string };
 
 export function EveningScreen({ profile }: { profile: Profile }) {
@@ -53,15 +54,38 @@ export function EveningScreen({ profile }: { profile: Profile }) {
     const text = stage.text.trim();
     if (!text) return;
     const share = stage.share;
+    const lang = i18n.language.split("-")[0] ?? "ko";
     setStage({ kind: "saving" });
+
     try {
+      // 1. 본인 일기 보존 — 공명방 실패해도 일기는 무조건 남는다 (M4 정신)
       await saveTodayReflection({
         userId: profile.id,
         text,
-        language: i18n.language.split("-")[0] ?? "ko",
+        language: lang,
         sharedToResonance: share,
       });
-      setStage({ kind: "saved", share });
+
+      // 2. 공명방 게시 — share=true 일 때만
+      let publish: PublishResult | undefined;
+      if (share) {
+        publish = await publishToGarden({
+          content: text,
+          language: lang,
+          combo_nickname: profile.combo_nickname ?? "combos.unknown",
+        });
+        // 게시 실패 시 shared_to_resonance 컬럼은 false 로 롤백 (실제 게시 안 됐으니)
+        if (!publish.ok) {
+          await saveTodayReflection({
+            userId: profile.id,
+            text,
+            language: lang,
+            sharedToResonance: false,
+          });
+        }
+      }
+
+      setStage({ kind: "saved", share, publish });
     } catch (e) {
       setStage({ kind: "error", message: e instanceof Error ? e.message : String(e) });
     }
@@ -131,17 +155,49 @@ export function EveningScreen({ profile }: { profile: Profile }) {
       )}
 
       {stage.kind === "saved" && (
-        <View className="mt-6 items-center">
-          <Text className="text-night-soft italic text-sm text-center" style={{ lineHeight: 22 }}>
-            {stage.share ? t("flow.evening.savedShared") : t("flow.evening.savedPrivate")}
-          </Text>
-          <Pressable onPress={handleEditAgain} className="mt-4">
-            <Text className="text-night-muted text-xs underline">
-              {t("flow.evening.editAgain")}
-            </Text>
-          </Pressable>
-        </View>
+        <SavedView share={stage.share} publish={stage.publish} onEditAgain={handleEditAgain} />
       )}
+    </View>
+  );
+}
+
+// 🚀 저장 후 결과 표시 — share OFF / share ON 성공 / share ON 모더레이션 차단 분기
+function SavedView({
+  share, publish, onEditAgain,
+}: { share: boolean; publish?: PublishResult; onEditAgain: () => void }) {
+  const { t } = useTranslation();
+
+  // 결과 카피 결정
+  let headlineKey: string;
+  if (!share)                       headlineKey = "flow.evening.savedPrivate";
+  else if (publish?.ok)             headlineKey = "flow.evening.savedShared";
+  else {
+    const r = publish?.reason;
+    headlineKey =
+      r === "moderation_blocked"     ? "garden.moderationBlocked"     :
+      r === "moderation_unavailable" ? "garden.moderationDown"        :
+      r === "network"                ? "garden.networkError"          :
+      r === "auth"                   ? "garden.authError"             :
+                                       "garden.unknownError";
+  }
+
+  const blocked = share && publish && !publish.ok;
+
+  return (
+    <View className="mt-6 items-center">
+      <Text className="text-night-soft italic text-sm text-center" style={{ lineHeight: 22 }}>
+        {t(headlineKey)}
+      </Text>
+      {blocked && (
+        <Text className="text-night-muted text-[11px] text-center mt-2" style={{ lineHeight: 18 }}>
+          {t("garden.reflectionPreserved")}
+        </Text>
+      )}
+      <Pressable onPress={onEditAgain} className="mt-4">
+        <Text className="text-night-muted text-xs underline">
+          {t("flow.evening.editAgain")}
+        </Text>
+      </Pressable>
     </View>
   );
 }

@@ -83,6 +83,10 @@
     "evening": {
       "title": "🌆 Integration",
       "body": "Reflection and Resonance Garden open in Phase 2.",
+      "tabs": {
+        "journal": "TODAY'S LINE",
+        "garden":  "GARDEN"
+      },
       "eyebrow": "ONE LINE FOR TODAY",
       "attribution": "— a question for the {{combo}}",
       "placeholder": "Today I just watched the sky. And that was enough.",
@@ -144,8 +148,7 @@
         "capturePlaceholder": "Jot down a passing thought",
         "saveBtn": "Save to vault",
         "savedHint": "Saved to your vault.",
-        "afterCopy": "That's enough. Your tomorrow self\nwill handle the rest better.",
-        "voiceComingSoon": "2 min voice speech — coming in STEP 2-G"
+        "afterCopy": "That's enough. Your tomorrow self\nwill handle the rest better."
       },
       "first": {
         "lead": "Pick one 2-minute thing\nto do the moment you wake up.",
@@ -166,6 +169,38 @@
         "body": "Exhale, slowly.\nYou are doing enough.",
         "footer": "Turn off the screen when ready"
       }
+    }
+  },
+  "garden": {
+    "disclaimer": "The Resonance Garden is an anonymous space. If you're in crisis, please use the crisis resources first.",
+    "filter": {
+      "world":         "🌍 World",
+      "same_combo":    "Same combo",
+      "same_language": "Same language"
+    },
+    "empty":      "Still empty. Let your one line drift, and it will be the first.",
+    "more":       "More",
+    "loadingMore": "Loading…",
+    "endOfFeed":  "You've reached the end.",
+    "feedError":  "Couldn't load the garden.",
+    "resonate":   "Resonate",
+    "resonated":  "Resonating",
+    "resonanceCount": "{{count}} resonated",
+    "translateComingSoon": "Translation — coming soon",
+    "moderationBlocked":  "This line may be hard for others to receive. Please take another look.",
+    "moderationDown":     "The garden is resting for a moment. Please try again shortly.",
+    "networkError":       "Network is unreachable right now. Please try again shortly.",
+    "authError":          "Your session expired. Please try again.",
+    "unknownError":       "Something unexpected happened.",
+    "reflectionPreserved": "Your journal is safely kept for you.",
+    "time": {
+      "justNow":      "just now",
+      "hoursAgo":     "{{h}}h ago",
+      "today":        "today",
+      "todayEvening": "this evening",
+      "yesterday":    "yesterday",
+      "daysAgo":      "{{d}}d ago",
+      "longAgo":      "long ago"
     }
   }
 }

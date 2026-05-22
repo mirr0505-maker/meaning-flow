@@ -10,7 +10,7 @@ import type { Profile } from "../lib/profiles";
 import { currentMode, type Mode } from "../lib/timeOfDay";
 import { MorningScreen } from "./MorningScreen";
 import { DayScreen } from "./DayScreen";
-import { EveningScreen } from "./EveningScreen";
+import { EveningTabs } from "./evening/EveningTabs";
 import { NightScreen } from "./NightScreen";
 
 const MODES: Mode[] = ["morning", "day", "evening", "night"];
@@ -90,7 +90,7 @@ export function FlowRouter({ profile }: { profile: Profile }) {
 
       {mode === "morning" && <MorningScreen profile={profile} dark={dark} />}
       {mode === "day"     && <DayScreen     profile={profile} dark={dark} />}
-      {mode === "evening" && <EveningScreen profile={profile} />}
+      {mode === "evening" && <EveningTabs   profile={profile} />}
       {mode === "night"   && <NightScreen   profile={profile} />}
     </ScrollView>
   );

@@ -92,4 +92,34 @@ describe("i18n 키 무결성 — locales 정합 (스모크)", () => {
         "flow.night.{vault,timer,first,blanket}.lead 중 하나 누락");
     }
   });
+
+  it("ko/en/ja 모두 garden.* (Phase 3) + flow.evening.tabs.* 키 존재", async () => {
+    const ko = await import("../src/locales/ko.json");
+    const en = await import("../src/locales/en.json");
+    const ja = await import("../src/locales/ja.json");
+    const required = [
+      "disclaimer", "empty", "more", "loadingMore", "endOfFeed", "feedError",
+      "resonate", "resonated", "resonanceCount", "translateComingSoon",
+      "moderationBlocked", "moderationDown", "networkError", "authError",
+      "unknownError", "reflectionPreserved",
+    ];
+    const filters = ["world", "same_combo", "same_language"];
+    const timeKeys = ["justNow","hoursAgo","today","todayEvening","yesterday","daysAgo","longAgo"];
+    for (const lang of [ko, en, ja]) {
+      const g = (lang as any).default.garden;
+      assert.ok(g, "garden namespace 누락");
+      for (const k of required) {
+        assert.ok(typeof g[k] === "string" && g[k].length > 0, `garden.${k} 누락`);
+      }
+      for (const f of filters) {
+        assert.ok(typeof g.filter[f] === "string", `garden.filter.${f} 누락`);
+      }
+      for (const tk of timeKeys) {
+        assert.ok(typeof g.time[tk] === "string", `garden.time.${tk} 누락`);
+      }
+      // flow.evening.tabs (Phase 3 — EveningTabs sub-tab)
+      const evTabs = (lang as any).default.flow.evening.tabs;
+      assert.ok(evTabs && evTabs.journal && evTabs.garden, "flow.evening.tabs.{journal,garden} 누락");
+    }
+  });
 });

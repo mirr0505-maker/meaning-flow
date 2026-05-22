@@ -83,6 +83,10 @@
     "evening": {
       "title": "🌆 統合 (Integration)",
       "body": "Phase 2 で、意味の日記と共鳴の庭が開きます。",
+      "tabs": {
+        "journal": "今日のひと言",
+        "garden":  "共鳴の庭"
+      },
       "eyebrow": "今日のひと言",
       "attribution": "— {{combo}}への問い",
       "placeholder": "今日はただ空を見ていた。それで十分だった。",
@@ -144,8 +148,7 @@
         "capturePlaceholder": "よぎった考えを書き留めて",
         "saveBtn": "保管庫へ入れる",
         "savedHint": "保管庫に入れました。",
-        "afterCopy": "ここまで。残りは、\n明日のあなたが、もっとうまくやってくれます。",
-        "voiceComingSoon": "音声2分スピーチ — STEP 2-G でまもなく"
+        "afterCopy": "ここまで。残りは、\n明日のあなたが、もっとうまくやってくれます。"
       },
       "first": {
         "lead": "明日、目を開けてすぐにする\n2分のひとつを選びましょう。",
@@ -166,6 +169,38 @@
         "body": "長く息を吐きましょう。\nあなたは、十分よくやっています。",
         "footer": "準備ができたら、画面を消して大丈夫です"
       }
+    }
+  },
+  "garden": {
+    "disclaimer": "共鳴の庭は匿名の広場です。緊急のときは、本文の危機サポート資源を先に確認してください。",
+    "filter": {
+      "world":         "🌍 世界",
+      "same_combo":    "同じ組み合わせ",
+      "same_language": "同じ言語"
+    },
+    "empty":      "まだ空っぽです。今日のひと言を流せば、最初の一つになります。",
+    "more":       "もっと見る",
+    "loadingMore": "読み込み中…",
+    "endOfFeed":  "ここまで流れてきました。",
+    "feedError":  "共鳴の庭を読み込めませんでした。",
+    "resonate":   "共鳴します",
+    "resonated":  "共鳴中",
+    "resonanceCount": "{{count}}人が共鳴しました",
+    "translateComingSoon": "翻訳はまもなく",
+    "moderationBlocked":  "この一言は、他の方には届きにくいかもしれません。もう一度見てみましょう。",
+    "moderationDown":     "共鳴の庭は今、少し休んでいます。しばらくしてからもう一度お試しください。",
+    "networkError":       "今、ネットワークに繋がりにくいようです。しばらくしてからどうぞ。",
+    "authError":          "ログイン情報の期限が切れました。もう一度お試しください。",
+    "unknownError":       "予期しないことが起きました。",
+    "reflectionPreserved": "日記は、あなたのもとに、きちんと残っています。",
+    "time": {
+      "justNow":      "たった今",
+      "hoursAgo":     "{{h}}時間前",
+      "today":        "今日",
+      "todayEvening": "今日の夕方",
+      "yesterday":    "昨日",
+      "daysAgo":      "{{d}}日前",
+      "longAgo":      "ずっと前"
     }
   }
 }

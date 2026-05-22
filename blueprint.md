@@ -157,15 +157,11 @@ Meaning Flow는 전 세계 INTP·INTJ·INFJ·INFP 사용자의 뇌 작동 방식
 의미 일기 + 두 자아 통합 질문 + '공명방에 흘려보내기' 토글.
 
 ### 4.4 🌙 착륙 모드 — F-NIT-001 ~ F-NIT-004
-생각 보관함(자이가르닉 차단) + 영감 타이머 + 내일의 첫 단추 + 이불 촉감 모드.
+생각 보관함(자이가르닉 차단) + **텍스트 5분 영감 타이머** + 내일의 첫 단추 + 이불 촉감 모드.
 
-**영감 타이머 — 텍스트 5분 / 음성 2분 듀얼 모드 (2026-05-22 결정)**
-- 기본: **텍스트 5분** — PRD 4.4·UserGuide 기능 2 원안 그대로 ("딱 5분만 쏟아내고, 강제로 닫힙니다")
-- 추가: **음성 2분 스피치** — 말은 글보다 3배 빠르므로 분량 등가. PRD "강제 닫힘" 정신 보존
-- 음성 모드는 **Phase 2-G 별도 STEP** 으로 분리 (Phase 2-D 는 텍스트 5분만 구현)
-- 음성 STT: **디바이스 STT (`react-native-voice` 또는 후속 대체)** — Whisper 비용 회피. M4 자해 키워드 검사는 transcript 변환 후 적용
-- 음성 원본 보관: **24시간 후 자동 삭제, transcript 만 영구** (M6 프라이버시 최소화)
-- 면책 카피: 마이크 권한 동의 화면에 *"녹음은 본인만 듣고, 24시간 후 자동으로 사라져요"* 명시
+영감 타이머는 PRD 4.4·UserGuide 기능 2 원안 그대로 — *"딱 5분만 쏟아내고, 강제로 닫힙니다"* 텍스트 기반.
+
+> **음성 2분 스피치는 출시 이후로 보류 (2026-05-22 사용자 결정)** — MVP 범위에서 제외. 사용자 베타 피드백 + 운영 데이터 확인 후 Phase 5+ 에서 재검토. 본문 위·아래 STEP 표·MVP 범위·11.0-F 트랙 모두 동일 적용.
 
 ### 4.5 🌿 공명의 정원 — F-RES-001 ~ F-RES-005
 
@@ -242,8 +238,6 @@ Meaning Flow는 전 세계 INTP·INTJ·INFJ·INFP 사용자의 뇌 작동 방식
 | OpenAI Moderation | 무료 | $0 |
 | Sentry | Developer | $0 |
 | **합계 (텍스트 MVP)** | | **약 $64/월 (~9만원)** |
-| _(선택) STEP 2-G 음성 — 디바이스 STT_ | _OS 내장_ | _+$0/월_ |
-| _(선택) STEP 2-G 음성 — Supabase Storage 24h 캐시_ | _2MB×6000회_ | _+$0.3/월_ |
 
 ---
 
@@ -289,7 +283,7 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 - 2분 마이크로 변환기
 - 70% 완료 버튼
 - 생각 보관함
-- 영감 타이머 — **텍스트 5분** (Phase 2 기본) + **음성 2분 스피치** (Phase 2-G STEP, 디바이스 STT, 원본 24h 자동 삭제)
+- 영감 타이머 — **텍스트 5분** (PRD 원안)
 - 내일의 첫 단추 + 이불 촉감 모드
 - 의미 일기
 - **익명 공명방** (게시·읽기·공명·번역·신고)
@@ -300,6 +294,7 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 ### 8.2 MVP 제외 (V2.0+ — PRD 8.2)
 
 - 프랑스어·독일어 UI (Phase 5+) — 일본어는 Phase 1로 격상됨 (2026-05-22)
+- **음성 2분 스피치** (출시 이후 Phase 5+ 재검토 — 2026-05-22 결정)
 - 연도별 회고 (Year in Review)
 - AI 기반 동적 프롬프트 생성
 - 위젯 (홈 화면 첫 단추)
@@ -360,6 +355,21 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 | 1-D | 온보딩 (두 자아 선택 + 조합 닉네임) + anonymous auth + profiles 저장 | 3-step 진행 → 닉네임 확정 → DevDashboard 진입 | ✅ 2026-05-22 |
 | 1-E | 🌅 점화 모드 + ☀️ 실행 모드 (첫 단추 + 2분 변환기 + 70% 버튼) | tasks CRUD + 4칩 토글 + 70% 우대 + 모바일 검증 | ✅ 2026-05-22 |
 
+### 10.4 Phase 3 STEP 분해 (2026-05-22 사용자 승인)
+
+**이번 세션 범위**: 3-A + 3-B + 3-C (게시·피드·공명 액션 1 cycle). 3-D~3-G 는 별도 세션.
+
+| STEP | 내용 | 외부 의존 | 상태 |
+|------|------|----------|------|
+| 3-0 | **M3 차단 마이그레이션** — `resonance_posts` 의 `user_id` 컬럼이 client SELECT 노출되지 않도록 VIEW `resonance_feed` 추가 + RPC `get_resonance_count(post_id)`·`has_resonated(post_id)`·`toggle_resonance(post_id)` 추가 + `reports` 3회 누적 시 status='hidden' trigger (자해 1회는 즉시 pending_review) | — | ✅ 2026-05-22 (`20260522_phase3_resonance_view_rpc_trigger.sql` — **사용자가 Supabase Studio 에 수동 적용 필요**) |
+| 3-A | **공명방 게시** — Edge Function `resonance_publish` (OpenAI Moderation → INSERT, 키 없으면 mock pass) + client `publishToGarden` + EveningScreen 저장 후 share=true 시 게시. 차단 시 일기는 본인에게 보존 + 부드러운 안내 카피 | OpenAI key (mock 으로 동작) | ✅ 2026-05-22 |
+| 3-B | **공명방 피드 (GardenScreen)** — `resonance_feed` VIEW 시간순 20개 + 더 보기 + 필터 칩(전세계/조합/언어) + 진입 면책 카피 + 5개국 mock 데이터 | — | ✅ 2026-05-22 |
+| 3-C | **공명 액션 `🌿 공명해요`** — `toggle_resonance` RPC (optimistic UI) + `has_resonated`·`get_resonance_count` + 작성자에게는 합계만 | — | ✅ 2026-05-22 |
+| 3-D | **번역** `🌍 번역` 버튼 — Edge Function `translate_post` (캐시 우선 → DeepL → Google 폴백 → INSERT). 월 100회 한도 카운터 | DeepL + Google key | ⏸ 다음 세션 |
+| 3-E | **신고** — `reports` insert + 사유 4종 + 3회 hidden trigger (3-0 에서 미리) + 자해 우선 큐 | — | ⏸ 다음 세션 |
+| 3-F | **위기 자원 + 면책 카피** — 전 화면 면책 카피 + 자해 키워드 모달 (KR 1577-0199 / US 988 / JP 0120-279-338) | — | ⏸ 다음 세션 (출시 게이트) |
+| 3-G | **1일 1회 합산 공명 알림** — Expo Notifications + Supabase cron | Expo Push 인증 | ⏸ Phase 4 |
+
 ### 10.3 Phase 2 STEP 분해 (2026-05-22 사용자 승인)
 
 | STEP | 내용 | 검증 기준 | 상태 |
@@ -370,7 +380,7 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 | 2-D | 🌙 NightTimer — **텍스트 5분 카운트다운** (가로 진행바 + start/pause/reset + 강제 종료 카피 + 결과물 보관함 담기) | 5:00→0:00 자동, 일시정지 정확 | ✅ 2026-05-22 |
 | 2-E | 🌙 NightFirst — 내일의 첫 단추 (4 옵션 + 직접 입력) → `tasks.scheduled_for=내일` | DB row + 다음 morning 진입 시 표시 | ✅ 2026-05-22 |
 | 2-F | 🌙 NightBlanket — 이불 모드 (Animated 호흡 4초 들숨/4초 날숨 + 정적 카피) | 시각 확인 | ✅ 2026-05-22 |
-| 2-G | 🌙 NightTimer 음성 모드 — **2분 스피치** (디바이스 STT, 마이크 권한, 원본 24h 자동 삭제, 면책 카피) | 권한 동의 → 녹음 → STT transcript 저장 → 24h 후 원본 삭제 | ⏸ **Phase 2 텍스트 완료 후 별도 STEP** |
+| ~~2-G~~ | ~~🌙 NightTimer 음성 모드 — 2분 스피치~~ | — | ❌ **출시 이후 보류 (2026-05-22 사용자 결정)**. Phase 5+ 베타 피드백 후 재검토 |
 
 > Phase 1~6 의 외부 키(SUPABASE / DEEPL / OPENAI_MODERATION / EAS / SENTRY) 발급 체크리스트는 사용자가 별도 관리.
 
@@ -380,7 +390,13 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 
 **핵심 메시지**: **Phase 1 전체 완료 + GitHub push 완료** (2026-05-22). Expo SDK 54 + NativeWind v4 + Supabase (10 테이블 + RLS 16 + GRANT) + supabase-js + i18n (한·영·일 3언어, 모바일 ko/en/ja 3-cycle 토글) + Anonymous Auth + Onboarding (두 자아 + 6 조합 닉네임) + 🌅 점화·☀️ 실행 화면 (tasks CRUD + 2분 마이크로 변환 + 70% 우대) + 🌆 통합(dusk 그레이)·🌙 착륙(다크) 모드 분리 + 모바일(iPhone Expo Go) 검증 통과. 일본어는 Phase 5에서 Phase 1으로 격상 — 1차 초안 작성, native 검수는 Phase 4 베타 전 출시 게이트. **GitHub**: https://github.com/mirr0505-maker/meaning-flow (Private).
 
-**Phase 2 완료 (2026-05-22)**: STEP 2-A~2-F 텍스트 기반 통합·착륙 모드 실구현 + 빌드 검증 (tsc 0 · npm test 9/9 · expo export 475 모듈, +14 from Phase 1). 공명방 토글은 `shared_to_resonance` 컬럼 저장만 (실 게시는 Phase 3). 영감 타이머는 텍스트 5분 (PRD 원안). 음성 2분 스피치는 별도 STEP 2-G 로 분리 — 디바이스 STT + 원본 24h 자동 삭제 + 마이크 권한 면책 카피.
+**Phase 2 완료 (2026-05-22)**: STEP 2-A~2-F 텍스트 기반 통합·착륙 모드 실구현 + 빌드 검증 (tsc 0 · npm test 9/9 · expo export 475 모듈, +14 from Phase 1). 공명방 토글은 `shared_to_resonance` 컬럼 저장만 (실 게시는 Phase 3). 영감 타이머는 텍스트 5분 (PRD 원안). **음성 2분 스피치 (구 STEP 2-G) 는 출시 이후로 보류** — 2026-05-22 사용자 결정, Phase 5+ 베타 피드백 후 재검토.
+
+**Phase 3 1차 사이클 완료 (2026-05-22)**: STEP 3-0 (M3 차단 마이그레이션) + 3-A (게시 Edge Function) + 3-B (GardenScreen 피드) + 3-C (공명 액션) + i18n garden.* ko/en/ja 전체. 빌드 검증 (tsc 0 · npm test 10/10 · expo export). **실 검증 통과 (2026-05-22 로컬호스트)**: ① 게시 ✅ / ② 정원 표시 ✅ / ③ 공명 토글 ✅ / ④ 필터 3종 ✅ / ⑤ OpenAI Moderation 차단 + 일기 보존 ✅ / ⑦ 공명 해제 ✅. OpenAI key + Supabase Edge Function deploy + 마이그레이션 적용 모두 사용자 측 완료.
+
+**검증 중 발견된 fix (2026-05-22)**: Edge Function 의 INSERT 가 service_role 대신 user JWT (supaUser) 로 동작하도록 변경 — `SUPABASE_SERVICE_ROLE_KEY` 자동 주입 누락 시에도 RLS `resonance_posts_self_insert` 정책으로 INSERT 통과. moderation_score 같은 server-only 필드는 Edge Function 안에서만 채워지므로 client 우회 불가, M4 정신 유지.
+
+3-D 번역 · 3-E 신고 · 3-F 위기 자원 · 3-G 알림은 다음 세션.
 
 **백로그 정리 (2026-05-22)**:
 - B-1 NativeWind `flex-1` 조사 — 설정·버전 조합은 호환 정상. 원인 1순위 = Metro 캐시 (`--clear` 누락) ([11.0-F](#110-f-별도-트랙-2026-05-22-발견-추후-처리)).
@@ -394,8 +410,9 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 |------|---------|------|
 | NativeWind `flex-1` 모바일 누락 원인 디버깅 | ★ | ✅ **2026-05-22 조사 완료**. 결론: **설정·버전 조합은 모두 호환 정상** — NativeWind 4.2.4 는 Expo SDK 54 (Reanimated 4.1.1 + React 19 + RN 0.81) 호환 패치 포함 (v4.2.0+ Reanimated v4 patch). `babel.config.js` `["babel-preset-expo", { jsxImportSource: "nativewind" }] + "nativewind/babel"` 및 `metro.config.js withNativeWind(..., { input: "./global.css" })` 모두 공식 권장 그대로. **실제 원인 가설 (NativeWind v4 troubleshooting 공식 문서 기준 우선순위)**: ① **Metro 캐시** (`npx expo start --clear` 미실행 시 className → style 매핑 stale) → 90% 케이스 해결, ② **동적 className 분기**(`className={"flex-1 " + (cond ? "A" : "B")}`)의 일부 케이스에서 정적 분석 누락, ③ ScrollView `contentContainerStyle` 와 `className` 의 우선순위 충돌, ④ Reanimated/Worklets 플러그인 중복 시 컴파일 누락. **권장 처치**: (a) 다음 모바일 검증 전 `--clear` 강제, (b) 동적 분기보다 `clsx`/`twMerge` 같은 유틸 고려는 보류 (의존성 추가 부담), (c) 정적 className 우선 작성. **현재 코드 영향**: `Onboarding.tsx:57` 의 inline `style={{ flex: 1, ... }}` 한 곳만 임시 보강 — 캐시 클린 후 재검증해서 inline 제거 가능. Phase 2 신규 코드는 모두 정적 className 만 사용 → 정상 동작 예상 |
 | 영어 · **일본어** 카피 native 검수 | ★★★ **출시 게이트** | 2026-05-22 사용자 결정 — native 검수 없이 출시 불가. 베타(Phase 4) 진입 전 필수. 영어는 1차 다듬기 완료, 일본어는 1차 초안(`ja.json` `_status` 필드로 표시). PRD 7.2 정서 결 + UserGuide 톤 기준. 일본어가 가장 위험 — 경어·간접·시적 톤 검증 어려움. **검수 워크플로**: ① 영어 native (또는 검수 도구) → ② 일본 native (지인·crowdsourcing·유료 서비스 중 사용자 선택) → ③ 베타 사용자 피드백 |
-| **Phase 2-G 음성 입력 STEP** | ★★ | 2026-05-22 사용자 결정 — Phase 2 텍스트 완료 후 별도 STEP. 2분 스피치, 디바이스 STT (`react-native-voice` 또는 후속 대체), 원본 24h 자동 삭제, transcript 만 영구. 마이크 권한 면책 카피 *"녹음은 본인만 듣고, 24시간 후 자동으로 사라져요"* 필수. M4 자해 검사는 transcript 변환 후 동일 흐름 적용. `thought_vault` 또는 신규 `vault_audio` 테이블 스키마 변경 필요 |
-| **PRD `.docx` 갱신** | ★★ | 2026-05-22 결정으로 blueprint.md 만 1차 반영. PRD v1.1 .docx 는 1차 소스라 별도 v1.2 리비전으로 음성 모드·24h 보관·면책 카피·STEP 2-G 등 명시 후 git commit. 사용자가 docx 편집기에서 직접 작성 또는 메인 세션이 markdown 으로 초안 작성 후 사용자 변환 |
+| ~~Phase 2-G 음성 입력 STEP~~ | ❌ 출시 이후 | 2026-05-22 사용자 결정 — **출시 이후로 보류**. 베타 피드백 + 운영 비용 데이터 확인 후 Phase 5+ 에서 재검토. M4 검사·24h 보관·면책 카피·STT 비용 등 부담이 MVP 적합성 대비 큼 |
+| **PRD `.docx` 갱신** | ★★ | 2026-05-22 결정으로 blueprint.md 만 1차 반영. PRD v1.1 .docx 는 1차 소스라 별도 v1.2 리비전으로 일본어 Phase 1 격상·음성 보류·STEP 2-G 제외 등 명시 후 git commit. 사용자가 docx 편집기에서 직접 작성 또는 메인 세션이 markdown 으로 초안 작성 후 사용자 변환 |
+| **공명방 같은 user 의 하루 중복 게시 제한** | ★ | 2026-05-22 실 검증 ⑥ 에서 발견 — 같은 사용자가 같은 글을 여러 번 흘려보내면 정원에 같은 글이 여러 행. 정책 결정 필요: (a) `resonance_posts` 에 `UNIQUE(user_id, date)` 추가 → 하루 1회만 (reflections 와 정합), (b) Edge Function 에서 "이미 오늘 게시했어요" 안내 후 update, (c) 그대로 두기. UX 안전상 (a) 권장 |
 | 다크모드 UX 전체 검토 | ✅ 2026-05-22 | `app/src/lib/theme.ts` `modeColors(dark)` helper 추출 + MorningScreen·DayScreen 에 dark prop 전파. night 모드에서 호출 시 카드·글자·placeholder 색이 모두 다크 톤(`bg-night-bg2` / `text-night-ink` / `text-night-soft` / `text-night-muted` 등)으로 자동 전환. day-soft 같은 모드 전용 강조 카드는 라이트 유지 |
 | 데스크탑 웹 가로폭 변동 | ◐ 부분 완료 | App.tsx max-width 440px 컨테이너로 해결. 모바일에선 viewport <440 이라 자동 처리 |
 
