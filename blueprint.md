@@ -356,7 +356,7 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 
 ## 11. 현재 진척 상태 (2026-05-21 갱신)
 
-**핵심 메시지**: **Phase 1 전체 완료** (2026-05-22). Expo SDK 54 + NativeWind v4 + Supabase (10 테이블 + RLS 16 + GRANT) + supabase-js + i18n (한·영·일 3언어, 모바일 ko/en/ja 토글) + Anonymous Auth + Onboarding (두 자아 + 6 조합 닉네임) + 🌅 점화·☀️ 실행 화면 (tasks CRUD + 2분 마이크로 변환 + 70% 우대) + 🌆 통합·🌙 착륙 placeholder + 모바일(iPhone Expo Go) 검증 통과. 일본어는 Phase 5에서 Phase 1으로 격상 (2026-05-22) — 1차 초안 작성, native 검수는 Phase 4 베타 전 게이트. 다음 단계는 백로그 정리 또는 Phase 2 (통합/착륙 실제 구현 — 의미 일기 + 생각 보관함 + 5분 타이머 + 이불 모드).
+**핵심 메시지**: **Phase 1 전체 완료 + GitHub push 완료** (2026-05-22). Expo SDK 54 + NativeWind v4 + Supabase (10 테이블 + RLS 16 + GRANT) + supabase-js + i18n (한·영·일 3언어, 모바일 ko/en/ja 3-cycle 토글) + Anonymous Auth + Onboarding (두 자아 + 6 조합 닉네임) + 🌅 점화·☀️ 실행 화면 (tasks CRUD + 2분 마이크로 변환 + 70% 우대) + 🌆 통합(dusk 그레이)·🌙 착륙(다크) 모드 분리 + 모바일(iPhone Expo Go) 검증 통과. 일본어는 Phase 5에서 Phase 1으로 격상 — 1차 초안 작성, native 검수는 Phase 4 베타 전 출시 게이트. **GitHub**: https://github.com/mirr0505-maker/meaning-flow (Private). 다음 세션 후보: Phase 2 (통합/착륙 실제 구현 — 의미 일기 + 생각 보관함 + 5분 타이머 + 이불 모드) 또는 백로그 정리.
 
 ### 11.0-F 별도 트랙 (2026-05-22 발견, 추후 처리)
 
@@ -565,10 +565,13 @@ npm install i18next react-i18next expo-localization
 
 ## 부록 B. 다음 액션
 
-1. ✅ `blueprint.md` (이 문서) + [`CLAUDE.md`](CLAUDE.md) 작성
-2. ✅ Phase 1 진입 결정 — Supabase 유지, STEP 1-A 착수
-3. ✅ Phase 1 **STEP 1-A** — Expo SDK 54 + NativeWind v4 + 디자인 토큰 이식 완료 (11.0)
-4. ⏳ Phase 1 **STEP 1-B** 착수 전 결정:
-   - Supabase 계정/프로젝트 생성 (리전: `ap-northeast-2` 서울 권장 — 글로벌 페르소나 고려)
-   - `SUPABASE_URL` / `SUPABASE_ANON_KEY` 발급
-   - PRD 5.1 의 10 테이블 + 5.2 의 RLS 정책을 마이그레이션 SQL 로 1차 작성
+1. ✅ `blueprint.md` + `CLAUDE.md` 작성 (2026-05-21)
+2. ✅ Phase 1 STEP 1-A~E 전체 완료 (2026-05-21~22)
+3. ✅ 일본어 1차 초안 추가 + Phase 1 격상 결정 반영 (2026-05-22)
+4. ✅ git init + GitHub push (https://github.com/mirr0505-maker/meaning-flow) (2026-05-22)
+5. ⏳ **다음 세션 후보** (사용자 결정):
+   - **A. Phase 2 진입** — 🌆 통합 (의미 일기 + 공명방 진입) + 🌙 착륙 (생각 보관함·5분 타이머·내일의 첫 단추·이불 모드)
+   - **B. 백로그 정리** ([blueprint.md 11.0-F](#11-0-f-별도-트랙-2026-05-22-발견-추후-처리))
+     - NativeWind `flex-1` 모바일 누락 근본 원인 (★)
+     - 영어·일본어 native 검수 (★★★ 출시 게이트, Phase 4 베타 전)
+   - **C. EAS Build 셋업** — develop build로 실기기 검증 (PRD 6.1 EAS Production)
