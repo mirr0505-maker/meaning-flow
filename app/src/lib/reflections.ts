@@ -31,6 +31,26 @@ export async function fetchTodayReflection(userId: string): Promise<Reflection |
   return (data as Reflection | null) ?? null;
 }
 
+// 🚀 Phase 4 UI/UX STEP 3 — 의미 일기 아카이브 (본인 시간순)
+// 사용자 결정 2026-05-23: 30일 후에도 본인 흐름 다시 볼 수 있게.
+// M6: 본인만 read (RLS).  PRD 7.3: 20개+더보기 패턴 (무한 스크롤 X).
+export async function fetchMyReflections(args: {
+  userId: string;
+  cursorDate?: string;          // ISO date — 이전 페이지 마지막 row 의 date (이보다 과거)
+  pageSize?: number;             // 기본 20
+}): Promise<Reflection[]> {
+  let q = supabase
+    .from("reflections")
+    .select("id, date, reflection_text, language, shared_to_resonance")
+    .eq("user_id", args.userId)
+    .order("date", { ascending: false })
+    .limit(args.pageSize ?? 20);
+  if (args.cursorDate) q = q.lt("date", args.cursorDate);
+  const { data, error } = await q;
+  if (error) throw error;
+  return (data ?? []) as Reflection[];
+}
+
 // upsert — user_id + date 유니크 키. 같은 날 재저장 시 같은 row 갱신.
 // text 는 호출 전 trim() + 200자 가드 통과 가정 (UI 에서 maxLength=200).
 export async function saveTodayReflection(args: {

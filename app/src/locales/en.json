@@ -5,7 +5,139 @@
   "_reviewNotes": "Phase 1-E 까지 메인 세션 1차 다듬기 완료. Phase 3 완료 후 영어 native 검수 필수. docs/i18n-review-workflow.md 참조.",
   "app": {
     "name": "Meaning Flow",
+    "brand": "Meaning Flow",
     "subtitle": "STEP 1-A tokens · 1-B Supabase · 1-C i18n · 1-D onboarding · 1-E flow"
+  },
+  "nav": {
+    "home":   "Home",
+    "flow":   "Flow",
+    "review": "Review"
+  },
+  "home": {
+    "greetingMorning":  "{{nick}} · morning is here",
+    "greetingDay":      "{{nick}} · flowing slowly",
+    "greetingEvening":  "{{nick}} · time to integrate the day",
+    "greetingNight":    "{{nick}} · the landing night",
+    "currentSection":   "It's {{mode}} time now",
+    "currentHintMorning": "Last night's first button is waiting",
+    "currentHintDay":     "Start with one thing",
+    "currentHintEvening": "Let today's line drift",
+    "currentHintNight":   "Move your thoughts aside before sleep",
+    "enterMode":        "Go to {{mode}} →",
+    "todayFlowSection": "Today's flow",
+    "inTraitSection":   "Today's IN trait",
+    "dailySection":     "Today's note",
+    "daily": {
+      "infp": {
+        "0":  "One meaningful line today — that's a big step.",
+        "1":  "If your feeling says yes first, you can follow it.",
+        "2":  "If there's one thing you want to reach today, that's the path.",
+        "3":  "Your depth can reveal itself slowly. That's enough.",
+        "4":  "Remember the small honest moment that stayed today.",
+        "5":  "You don't have to find meaning in everything. One is enough.",
+        "6":  "What you feel is sometimes more accurate than data.",
+        "7":  "The moment you were most yourself today — keep it.",
+        "8":  "You see depth, not surface. Stay as you are today.",
+        "9":  "Staying quietly is also a form of flowing.",
+        "10": "Your small line may be great comfort to someone.",
+        "11": "Slow is okay. Depth needs time.",
+        "12": "If you gave heart to one thing today, that's enough.",
+        "13": "The value you see is real. Keep flowing."
+      },
+      "infj": {
+        "0":  "Your depth sees one layer further than others.",
+        "1":  "If you met one thing in today's silence, that's enough.",
+        "2":  "Trust your intuition as it is.",
+        "3":  "Write down today's pattern in one line.",
+        "4":  "Quiet insight shines after time.",
+        "5":  "What you foresaw will unfold, slowly.",
+        "6":  "Don't let the small signal you saw today drift away.",
+        "7":  "Your gaze becomes a mirror for others.",
+        "8":  "If you read one heart today, that's a big thing.",
+        "9":  "You who draws the future — just place one dot today.",
+        "10": "Your silence isn't heavy. It's deep.",
+        "11": "Leave today's vision as a small note.",
+        "12": "You don't have to say what you feel. You already know.",
+        "13": "Today's insight becomes tomorrow's path."
+      },
+      "intp": {
+        "0":  "Today's 'why?' becomes tomorrow's answer.",
+        "1":  "Leaving something undismantled is also a form of analysis.",
+        "2":  "Your questions reach places others don't see.",
+        "3":  "Follow one hypothesis to the end. You don't know where it leads.",
+        "4":  "What didn't unravel today is tomorrow's joy.",
+        "5":  "Your thinking is a spiral, not a line. That's normal.",
+        "6":  "It's okay to leave what you don't understand as is.",
+        "7":  "Leave one question that came up today in your notes.",
+        "8":  "You don't need all answers. Good questions matter more.",
+        "9":  "Don't lose the joy of analysis. That's your strength.",
+        "10": "Focusing on one thing today is enough.",
+        "11": "Your 'why?' makes the world one layer deeper.",
+        "12": "You who simplify the complex — stay as you are today.",
+        "13": "One small knot untied today is also progress."
+      },
+      "intj": {
+        "0":  "Even if you drew nothing, the design in your mind is in progress.",
+        "1":  "What you couldn't do today leaves room for tomorrow's refinement.",
+        "2":  "Your plan grows in invisible time.",
+        "3":  "Set the big picture aside for a moment. Just place one dot.",
+        "4":  "Today's small step builds the whole structure.",
+        "5":  "The completeness in your head and the progress in reality move at different speeds.",
+        "6":  "Finishing one thing today moves the system forward.",
+        "7":  "Your vision is hard for others to catch up. Unfold it slowly.",
+        "8":  "Strategy isn't complete without action. Place one dot today.",
+        "9":  "Your silence is just a signal that you're planning.",
+        "10": "Today's inefficiency is learning for tomorrow's efficiency.",
+        "11": "Your structural thinking becomes a guide for others.",
+        "12": "Imperfect progress is still progress.",
+        "13": "The line you drew today is tomorrow's blueprint."
+      },
+      "unknown": {
+        "0":  "You have your own flow. That's enough.",
+        "1":  "If you put your heart in one thing today, that's a start.",
+        "2":  "Small steps add up to a path.",
+        "3":  "Remember just one thing you saw today.",
+        "4":  "You're flowing at your own pace.",
+        "5":  "What you didn't do today remains as tomorrow's possibility.",
+        "6":  "If one line is hard, start with one word.",
+        "7":  "Where you stand still is also part of the flow.",
+        "8":  "Today this is enough.",
+        "9":  "Slow doesn't mean stopped. You're flowing.",
+        "10": "Your one line reaches someone.",
+        "11": "One small decision today is a start enough.",
+        "12": "Flowing as yourself — that's the fastest path.",
+        "13": "You're flowing well today too. Remember that."
+      }
+    }
+  },
+  "review": {
+    "tabs": {
+      "diary":  "Diary",
+      "vault":  "Vault",
+      "firsts": "Firsts",
+      "tasks":  "Done"
+    },
+    "placeholder": "See you soon. This screen will be filled in the next update.",
+    "vault": {
+      "eyebrow":  "Thought Vault",
+      "title":    "Locked thoughts",
+      "intro":    "Words you moved aside when your mind wouldn't stop at night.",
+      "empty":    "Still empty. Even one word in night mode is enough.",
+      "from5min": "5-min inspiration"
+    },
+    "firsts": {
+      "eyebrow":  "Tomorrow's first button",
+      "title":    "Small starts you booked",
+      "intro":    "One thing you scheduled to meet tomorrow morning. Frequently used ones return as options.",
+      "empty":    "No first button booked yet. Try scheduling one in night mode.",
+      "lastUsed": "Last — {{date}}"
+    },
+    "tasks": {
+      "eyebrow":  "Things that flowed",
+      "title":    "Things you let go on past days",
+      "intro":    "Done at 70%, done fully — all were enough.",
+      "empty":    "Nothing has flowed yet. Starting with one thing is enough."
+    }
   },
   "health": {
     "ok": "Supabase connected",
@@ -21,20 +153,45 @@
     "night":   { "label": "🌙 Landing  22–02",     "name": "Landing" }
   },
   "footer": { "tokenSource": "Tokens: src/tokens.css → app/tailwind.config.js" },
-  "lang":   { "ko": "한국어", "en": "English", "ja": "日本語" },
+  "lang":   { "ko": "한국어", "en": "English", "ja": "日本語", "select": "Select language" },
   "onboarding": {
     "brand": "MEANING FLOW",
     "intro": {
+      "helps": "Some of those felt like you. This app may reach you.",
       "title": "You're not lazy.\nJust an engine\nthat runs on different fuel.",
       "body": "This app won't make you more productive.\nInstead it asks two things, and starts slowly.",
       "row1": { "title": "You when alone", "desc": "How you are with the door closed" },
       "row2": { "title": "You with others","desc": "Your role among people" },
       "row3": { "title": "Your combination","desc": "The name this app calls you" }
     },
+    "inTraits": {
+      "eyebrow":  "Am I an IN type?",
+      "title":    "Does any of this feel familiar?",
+      "subtitle": "Tap whatever feels like you. Even one is enough.",
+      "hint":     "Pick at least one to flow forward.",
+      "ready":    "{{count}} picked. Shall we continue?",
+      "idea_flood":          "My brain is on a booster — ideas never stop",
+      "perfectionism_block": "My hands don't move until the simulation in my head is done",
+      "depth_first":         "I'd rather find one meaningful line than make small talk",
+      "solo_charge":         "Being around people drains me",
+      "meaning_fuel":        "I need a clear \"why\" to move",
+      "pattern_sight":       "I see the lines between the dots",
+      "simulation_block":    "I freeze because I've already imagined the outcome",
+      "low_meaning_block":   "I can't bring myself to do meaningless work"
+    },
     "pickSolo":  { "title": "With the door closed and alone,", "subtitle": "who are you?",                "tag": "Alone · Solo" },
     "pickSocial":{ "title": "Among people,",                   "subtitle": "what role do you play?",    "tag": "With others · Social" },
     "actions": { "start": "Let's start", "next": "Next self", "done": "See my combination", "back": "Back", "unknown": "Not sure about my MBTI" },
-    "result":  { "tag": "Your combination", "lead": "You are,", "enter": "Enter the flow", "saving": "Saving…", "saveError": "Failed to save profile" }
+    "result":  {
+      "tag":          "Your combination",
+      "lead":         "You are,",
+      "enter":        "Enter the flow",
+      "saving":       "Saving…",
+      "saveError":    "Failed to save profile",
+      "noCombo":      "A space of your own",
+      "editLabel":    "Is there a name you'd rather use? (input)",
+      "editHint":     "Leave it blank to use the auto-generated name above."
+    }
   },
   "mbti": {
     "infp": { "titleSolo": "Following deep meaning",  "titleSocial": "Quietly empathising",      "desc": "Feeling and value first, words second" },
@@ -64,16 +221,29 @@
       "identityTail": ""
     },
     "day": {
-      "lead": "Just one thing now",
+      "lead": "Today's flow",
+      "focusSection": "Focus now",
+      "focusBadge": "NOW",
+      "doneSection": "Flowed today",
+      "emptyHint": "Start with one thing. Even a small one is enough.",
       "addPlaceholder": "Write one thing to do",
-      "add": "Start this",
+      "add": "Add",
       "microTitle": "Wait — can you start this in 2 minutes?",
       "microBody": "Breaking it into a smaller step lets your body move before your brain simulates.",
       "microOpt1": "Just 2 minutes",
       "microOpt2": "Pick up one thing",
       "microOpt3": "Just sit down at the spot",
       "microUse": "Start with this step",
+      "microUseCustom": "Start with this step",
+      "microCustomPlaceholder": "Write your own — e.g. open PowerPoint, call the lead",
       "microSkip": "Start as is",
+      "subLabel": "Sub-steps (up to 3, leave blank if none)",
+      "subPlaceholder1": "e.g. open the folder",
+      "subPlaceholder2": "e.g. write the first line only",
+      "subPlaceholder3": "e.g. one quick call to the lead",
+      "subHint": "Edit the sub-steps to fit your task. Empty ones are skipped.",
+      "subConfirm": "Add",
+      "subSkip": "Just the main task",
       "done70": "70% done",
       "done100": "Fully done",
       "done70Hint": "That's enough for today",
@@ -85,6 +255,7 @@
       "body": "Reflection and Resonance Garden open in Phase 2.",
       "tabs": {
         "journal": "TODAY'S LINE",
+        "archive": "MY FLOW",
         "garden":  "GARDEN"
       },
       "eyebrow": "ONE LINE FOR TODAY",
@@ -99,6 +270,8 @@
       "saving": "Drifting…",
       "savedShared": "Your line drifted into the garden.",
       "savedPrivate": "Today's one line is safely kept.",
+      "savedUpdated": "Your garden line has been gently updated.",
+      "duplicateKept": "The garden line stays. Today's one line is safely yours.",
       "editAgain": "Edit again",
       "question": {
         "infpIntj": "The moment you were most yourself today —\nwill it still mean something a year from now?",
@@ -151,7 +324,7 @@
         "afterCopy": "That's enough. Your tomorrow self\nwill handle the rest better."
       },
       "first": {
-        "lead": "Pick one 2-minute thing\nto do the moment you wake up.",
+        "lead": "Pick a 2-minute thing\nto do the moment you wake up. (up to 3)",
         "opt": {
           "water":   "Drink a glass of water",
           "stretch": "One stretch",
@@ -159,6 +332,14 @@
           "custom":  "Type your own"
         },
         "customPlaceholder": "e.g. open the window, one line of inbox",
+        "fullPlaceholder":   "Tomorrow's slots are full",
+        "customLabel":   "Write your own",
+        "slotCount":     "{{current}}/{{max}}",
+        "totalUsed":     "×{{count}} so far",
+        "pastSection":   "Past first buttons",
+        "emptyHint":     "Nothing yet. These are gentle starters.",
+        "noticeDuplicate": "That button is already reserved.",
+        "noticeFull":      "Tomorrow's 3 slots are full. Free one first.",
         "reserve": "Reserve — see you tomorrow",
         "saving": "Reserving…",
         "doneBtn": "Reserved",
@@ -221,6 +402,13 @@
       "notice_en":        "These numbers are free 24/7. In immediate danger, call your local emergency number (911 in the US).",
       "notice_ja":        "上記の番号は無料です。すぐ命の危険があるときは、119(救急)に連絡してください。"
     },
+    "duplicateToday": {
+      "title":          "There's already a line in the garden from today",
+      "intro":          "One line per day flows. Would you like to update it with your new one?",
+      "existingLabel":  "Currently in the garden:",
+      "overwrite":      "Update it",
+      "keep":           "Keep it as is"
+    },
     "translate": {
       "translateBtn":     "Translate",
       "showOriginal":     "Show original",
@@ -247,6 +435,204 @@
       "yesterday":    "yesterday",
       "daysAgo":      "{{d}}d ago",
       "longAgo":      "long ago"
+    }
+  },
+  "safety": {
+    "writeTime": {
+      "title":     "Wait — please pause for a moment.",
+      "intro":     "We noticed some heavy words in today's line. If you're struggling right now, a quick call below may help. Your journal is safely kept.",
+      "closeOnly": "I'm okay, close"
+    }
+  },
+  "notifications": {
+    "toggleLabel":            "Dawn resonance digest",
+    "toggleDescOn":           "At 6 AM, a quiet note about yesterday's resonance count",
+    "toggleDescOff":          "Not now",
+    "permissionDeniedTitle":  "Notification permission needed",
+    "permissionDeniedBody":   "Please enable notifications in device settings and try again"
+  },
+  "locked": {
+    "eyebrow":          "Beta · 30 days",
+    "title":            "The 30 days flowed\nwith you.",
+    "body":             "Thank you for being here at the very first stretch of Meaning Flow. What shape did these 30 days take for you?",
+    "expiredAt":        "Beta ended: {{date}}",
+    "exportLabel":      "Export my data",
+    "exportDesc":       "Download all of your journal entries, thoughts, and garden lines as JSON. Only your own data is included.",
+    "exportBtn":        "Export as JSON",
+    "exportErrorTitle": "Couldn't export",
+    "notifyLabel":      "Be notified on full release",
+    "notifyDesc":       "We'll reach out personally when Meaning Flow launches officially. Beta participants will have warm benefits waiting.",
+    "dataKept":         "Your journal stays safely yours. It'll be here on the day we meet again."
+  },
+  "consent": {
+    "eyebrow":       "Before we begin",
+    "title":         "How we handle your data",
+    "intro":         "Meaning Flow uses the tools below. You can decline anything that isn't required, anytime.",
+    "required":      "REQUIRED",
+    "supabase":      {
+      "label":       "Data storage (Supabase)",
+      "desc":        "Your journal, thoughts, and garden lines are kept securely under your account only. Other users cannot read them."
+    },
+    "sentry":        {
+      "label":       "Error tracking (Sentry)",
+      "desc":        "Helps us fix issues quickly. Your journal content is never sent."
+    },
+    "posthog":       {
+      "label":       "Usage analytics (PostHog)",
+      "desc":        "Anonymous stats only, to see which features help. Does not identify you personally."
+    },
+    "privacyLink":   "Read full privacy policy",
+    "continue":      "Agree and continue",
+    "changeLater":   "You can change optional settings anytime in Settings."
+  },
+  "diary": {
+    "eyebrow":     "My flow",
+    "title":       "The lines you've sent so far",
+    "intro":       "Only you can see this review. Lines you sent to the garden, and ones you kept private — all here.",
+    "empty":       "Still empty. Start with today's one line.",
+    "loadError":   "Couldn't load your flow.",
+    "more":        "More",
+    "loadingMore": "Loading…",
+    "endOfList":   "You've reached the beginning.",
+    "sharedBadge": "shared to garden"
+  },
+  "about": {
+    "menuLabel":     "The Meaning Flow story",
+    "menuDesc":      "Why we built it, what we hope reaches you — read again whenever it feels heavy.",
+    "menuAction":    "Read the story",
+    "title":         "The Meaning Flow story",
+    "whySection":    "Why",
+    "whyTitle":      "You're not lazy.\nJust an engine that runs on different fuel.",
+    "whyBody":       "This is a todo app made to help IN-type people start and finish. For those who can't start because perfection blocks them. For those whose brains have a booster and never stop generating ideas. We wanted to make a place where you can flow without whipping yourself.",
+    "promiseSection":"Two promises",
+    "promise1Title": "📍 No pressure",
+    "promise1Body":  "No streaks, no \"X completed this month\" counters. The 70% completion button is designed more prominently than 100%. \"Today this is enough.\"",
+    "promise2Title": "📍 Your flow is yours",
+    "promise2Body":  "Your journal and thought vault — only you can read them (Row Level Security). Garden posts are anonymous. Operators don't read your text directly either.",
+    "inTraitsSection":"IN-type traits",
+    "inTraitsIntro": "If even one of these feels like you, this app may reach you.",
+    "dualSelfSection":"The dual-self system",
+    "dualSelfBody":  "Solo you and Social you — both are you. MBTI here isn't a diagnostic tool, just a starting point for conversation. Identity isn't fixed; it flows. You can pick again anytime in Settings.",
+    "closing":       "Slowly, at your own pace."
+  },
+  "identity": {
+    "section":           "My identity",
+    "editLabel":         "Revisit · Edit my identity",
+    "editDesc":          "You can refine IN traits, dual selves, and your name anytime. Identity isn't fixed.",
+    "editAction":        "Edit",
+    "title":             "My identity",
+    "nicknameSection":   "Name",
+    "inTraitsSection":   "IN traits",
+    "dualSelfSection":   "Dual selves (optional)",
+    "save":              "Save",
+    "saveError":         "Saving failed. Please try again shortly.",
+    "snsSection":        "Linked SNS (for reference)",
+    "snsNoName":         "(no name provided)",
+    "snsHint":           "This is the name shown by your SNS account. Has no effect on the nickname inside the app."
+  },
+  "login": {
+    "brand":        "MEANING FLOW",
+    "headline":     "A gentle to-do\nfor slow people.",
+    "subhead":      "Start with Google or Apple.",
+    "googleStart":  "Continue with Google",
+    "appleStart":   "Continue with Apple",
+    "googleSignUp": "Sign up with Google",
+    "appleSignUp":  "Sign up with Apple",
+    "or":           "OR",
+    "signUpLink":   "New here? Sign up",
+    "signUpHeading":"Welcome to Meaning Flow",
+    "signUpTitle":  "Welcome ✨",
+    "signUpDesc":   "A gentle to-do for the IN type — 30-day free beta after sign-up. Sign in from anywhere with the same SNS to access the same data.",
+    "cancel":       "Close",
+    "errorTitle":   "Couldn't finish signing in",
+    "differentProvider": {
+      "title":  "⚠ Different SNS from your sign-up",
+      "body":   "You originally signed up with {{first}}.\n\nTo use the same data, sign back in with {{first}}. If you want to use both, sign in with {{first}} first, then link {{current}} from [Settings → Account].",
+      "ok":     "OK — back to sign-in"
+    }
+  },
+  "providerName": {
+    "google": "Google",
+    "apple":  "Apple"
+  },
+  "settings": {
+    "title":   "Settings",
+    "legal": {
+      "section":  "Legal",
+      "tos":      "Terms of Service",
+      "privacy":  "Privacy Policy"
+    },
+    "analytics": {
+      "section":     "Analytics tools",
+      "sentry": {
+        "label":     "Error tracking (Sentry)",
+        "desc":      "Helps us fix issues quickly. Your journal content is never sent."
+      },
+      "posthog": {
+        "label":     "Usage analytics (PostHog)",
+        "desc":      "Anonymous stats only, to see which features help. Does not identify you personally."
+      },
+      "restartNote": "Changes take effect on next app launch."
+    },
+    "dataExport": {
+      "section":     "My data",
+      "label":       "Export my data",
+      "desc":        "Download all of your journal entries, thoughts, garden lines, and tasks as JSON. Only your own data is included.",
+      "btn":         "Export as JSON",
+      "errorTitle":  "Couldn't export",
+      "error": {
+        "auth":      "Your session expired. Please try again.",
+        "network":   "Network is unreachable. Please try again shortly.",
+        "unknown":   "Something unexpected happened."
+      }
+    },
+    "account": {
+      "link": {
+        "section":           "Account linking",
+        "desc":              "If you change or lose your device, your journal stays safely yours.",
+        "google": {
+          "btn":             "Link Google account",
+          "linked":          "✓ Google linked"
+        },
+        "apple": {
+          "btn":             "Link Apple account",
+          "linked":          "✓ Apple linked"
+        },
+        "errorTitle":        "Couldn't link",
+        "error": {
+          "cancelled":       "Linking cancelled",
+          "auth":            "Your session expired. Please try again.",
+          "network":         "Network is unreachable. Please try again shortly.",
+          "unknown":         "Something unexpected happened."
+        }
+      },
+      "section":           "Account",
+      "logoutLabel":       "Sign out",
+      "logoutDesc":        "Sign out on this device. Your data stays safe — sign back in to return.",
+      "logoutBtn":         "Sign out",
+      "logoutConfirmTitle": "Sign out now?",
+      "logoutConfirmBody": "Your data will be safe. Sign in with the same account anytime to come back.",
+      "logoutConfirmBtn":  "Yes, sign out",
+      "loggingOut":        "See you soon…",
+      "logoutErrorTitle":  "Couldn't finish signing out",
+      "logoutError":       { "network": "Please try again in a moment." },
+      "deleteLabel":       "Withdraw from membership",
+      "deleteDesc":        "All of your journal entries, thought vault, and garden lines will be permanently deleted. This cannot be undone.",
+      "deleteBtn":         "Withdraw now",
+      "confirm1Title":     "Are you sure you want to delete?",
+      "confirm1Body":      "Deleting removes every journal entry, thought, and garden line. This action is permanent.",
+      "confirm1Continue":  "Continue",
+      "confirm2Title":     "Last confirmation.",
+      "confirm2Body":      "Pressing delete now will permanently remove everything. You cannot undo this.",
+      "confirm2Delete":    "Permanently delete now",
+      "deleting":          "Deleting...",
+      "deleteErrorTitle":  "Couldn't delete",
+      "deleteError": {
+        "auth":            "Your session expired. Please try again.",
+        "server":          "We can't process this right now. Please try again shortly.",
+        "network":         "Network is unreachable. Please try again shortly."
+      },
+      "cancel":            "Cancel"
     }
   }
 }

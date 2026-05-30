@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meaning Flow — Privacy Policy</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main>
+    <nav class="topbar">
+      <a href="./index.html">&larr; Meaning Flow</a>
+      <span class="lang">
+        <a href="./privacy-ko.html">한국어</a> ·
+        <a href="./privacy-en.html" class="active">English</a>
+      </span>
+    </nav>
+
+    <h1>Privacy Policy</h1>
+    <p class="meta">Meaning Flow Privacy Policy · Effective 2026-05-29 · Last revised 2026-05-29</p>
+
+    <p>Meaning Flow ("the Company") values the privacy of its Members and complies with the Personal Information Protection Act of the Republic of Korea, GDPR, APPI, and other applicable regulations. This Policy explains what personal information we collect, how we use, store, and dispose of it.</p>
+
+    <h2>1. Categories of Personal Information Collected</h2>
+
+    <h3>1.1 Collected automatically at sign-up</h3>
+    <ul>
+      <li>SNS authentication information — user identifier (UID), email, and display name from Google or Apple (where shared by the provider)</li>
+      <li>When Apple "Hide my email" is used — a Private Relay-style virtual email (privaterelay.appleid.com)</li>
+    </ul>
+
+    <h3>1.2 Entered by the Member during use</h3>
+    <ul>
+      <li>Dual-self identity (Solo / Social MBTI, chosen from 16 types each)</li>
+      <li>IN traits (one or more of 8 traits)</li>
+      <li>Nickname (auto-generated or user-entered, up to 30 characters)</li>
+      <li>Daily reflection (single-line journal, up to 200 characters) — visible to the Member only</li>
+      <li>Action-mode tasks and sub-tasks (up to 100 characters)</li>
+      <li>First buttons (a 2-minute action reserved for the next morning)</li>
+      <li>Thought vault (prefrontal-cortex offload)</li>
+      <li>Resonance Garden posts (only when the "Send to garden" toggle is selected) — posted anonymously</li>
+    </ul>
+
+    <h3>1.3 Automatically generated / collected</h3>
+    <ul>
+      <li>Unique user identifier (UUID) — assigned by Supabase</li>
+      <li>Sign-up time and last sign-in time</li>
+      <li>Device info (OS, app version) — only when analytics consent is on</li>
+      <li>Error logs via Sentry — only when consent is on (reflection content is never included)</li>
+      <li>Usage statistics via PostHog — only when consent is on (event names and metadata only, never the body of user content)</li>
+    </ul>
+
+    <h3>1.4 Information we do NOT collect</h3>
+    <ul>
+      <li>Real name, national ID number, phone number, address</li>
+      <li>Location (GPS, etc.)</li>
+      <li>Contacts, photo library, calendar, or other on-device app data</li>
+      <li>Advertising identifiers (IDFA / GAID)</li>
+    </ul>
+
+    <h2>2. Methods of Collection</h2>
+    <ul>
+      <li>Automatically via the OAuth response when a Member signs in with SNS</li>
+      <li>Directly entered by the Member within the app</li>
+      <li>Analytics tools (Sentry, PostHog) — only when the Member explicitly toggles consent on</li>
+    </ul>
+
+    <h2>3. Purposes of Collection</h2>
+    <ul>
+      <li>Member identification and authentication</li>
+      <li>Providing the Service (To-Do features, reflections, Resonance Garden, etc.)</li>
+      <li>Resonance Garden moderation (blocking inappropriate content)</li>
+      <li>Automatic surfacing of crisis resources when self-harm keywords are detected</li>
+      <li>Service quality improvement (when consent is on)</li>
+      <li>Error tracking and debugging (when consent is on)</li>
+      <li>Compliance with legal obligations and dispute response</li>
+    </ul>
+
+    <h2>4. Retention and Use Period</h2>
+    <ul>
+      <li>Member data is retained until membership withdrawal.</li>
+      <li>Upon withdrawal, all of the Member's data is permanently deleted immediately (irrecoverable). Some information may be retained separately for the period required by applicable law (e.g., dispute records) and then disposed of.</li>
+      <li>Resonance Garden posts written by a Member are also permanently deleted upon withdrawal (cascading via author user_id).</li>
+      <li>Aggregated, anonymized statistics that cannot identify an individual may be retained separately for Service improvement.</li>
+    </ul>
+
+    <h2>5. Third-Party Disclosure</h2>
+    <p>The Company does not provide or sell Member personal information to external third parties without the Member's consent, except in the following cases:</p>
+    <ul>
+      <li>When the Member has given prior consent</li>
+      <li>When required by law (e.g., court order)</li>
+    </ul>
+
+    <h2>6. Outsourcing of Personal Information Processing</h2>
+    <p>The Company outsources processing to the following parties within the scope necessary to operate the Service. All processors handle Member personal information securely under processing agreements or equivalent terms.</p>
+
+    <table>
+      <thead>
+        <tr><th>Processor</th><th>Outsourced task</th><th>Items processed</th><th>Storage region</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Supabase Inc. (USA)</td>
+          <td>Database hosting, authentication, file storage</td>
+          <td>Member identifier, email, all user-entered data</td>
+          <td>Republic of Korea (Seoul region)</td>
+        </tr>
+        <tr>
+          <td>Google LLC (USA)</td>
+          <td>OAuth authentication</td>
+          <td>Google account identifier, email</td>
+          <td>USA</td>
+        </tr>
+        <tr>
+          <td>Apple Inc. (USA)</td>
+          <td>Sign in with Apple authentication</td>
+          <td>Apple account identifier, email (including Private Relay)</td>
+          <td>USA</td>
+        </tr>
+        <tr>
+          <td>OpenAI L.L.C. (USA)</td>
+          <td>Resonance Garden moderation</td>
+          <td>Text submitted for garden posting (checked only, not stored)</td>
+          <td>USA</td>
+        </tr>
+        <tr>
+          <td>DeepL SE (Germany)</td>
+          <td>On-demand translation</td>
+          <td>Text the Member requests to translate (not stored)</td>
+          <td>EU</td>
+        </tr>
+        <tr>
+          <td>Google Cloud Translation (optional fallback)</td>
+          <td>Translation if DeepL is unavailable</td>
+          <td>Same as above</td>
+          <td>USA</td>
+        </tr>
+        <tr>
+          <td>Sentry (Functional Software, Inc.)</td>
+          <td>Error tracking (when consent is on)</td>
+          <td>User identifier, error-time stack, device info. <strong>Reflection content and other user content are never included.</strong></td>
+          <td>USA</td>
+        </tr>
+        <tr>
+          <td>PostHog, Inc. (USA)</td>
+          <td>Usage analytics (when consent is on)</td>
+          <td>User identifier, event names, metadata. <strong>Reflection content and other user content are never included.</strong></td>
+          <td>USA or EU</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>7. Member Rights</h2>
+    <p>Members may exercise the following rights at any time:</p>
+    <ul>
+      <li><strong>Access</strong> — View all your own data. Available as JSON via [Settings → Export my data].</li>
+      <li><strong>Rectification</strong> — Identity (MBTI, nickname, IN traits), reflections, and other entries can be edited directly.</li>
+      <li><strong>Erasure</strong> — Permanently delete your data via [Settings → Withdraw from membership] (GDPR Art. 17 — Right to be Forgotten).</li>
+      <li><strong>Data Portability</strong> — Export your data as JSON via the export feature (GDPR Art. 20).</li>
+      <li><strong>Withdrawal of Consent</strong> — Toggle Sentry/PostHog consent off at any time.</li>
+      <li><strong>Restriction / Objection</strong> — Contact the email address at the bottom of this Policy.</li>
+    </ul>
+
+    <h2>8. Automatic Collection Devices</h2>
+    <p>The Company does not use advertising identifiers, cookies, or web beacons. Analytics tools (Sentry, PostHog) are activated only when the Member explicitly toggles consent on, and data collection stops immediately when the toggle is turned off.</p>
+
+    <h2>9. Protection of Children Under 14</h2>
+    <p>The Company does not allow sign-ups by children under 14. If a sign-up by such a child is identified, the account is deleted immediately and the guardian is notified.</p>
+
+    <h2>10. Security Measures</h2>
+    <p>The Company implements the following measures to protect Member personal information:</p>
+    <ul>
+      <li>All communication encrypted via HTTPS</li>
+      <li>Supabase Row Level Security (RLS) ensures access only to the Member's own data</li>
+      <li>Secret keys (service_role, API keys, JWTs, etc.) are never exposed in the client; they are isolated in Edge Functions or environment variables</li>
+      <li>Resonance Garden posts are exposed through a VIEW that excludes the author user_id column, ensuring anonymity</li>
+      <li>Access permissions are separated, and security is reviewed regularly</li>
+    </ul>
+
+    <h2>11. International Data Transfers</h2>
+    <p>Per Section 6, your data may be stored in the Republic of Korea, the USA, the EU, etc. The Company ensures each processor maintains an adequate level of protection via contract or standard contractual clauses.</p>
+
+    <h2>12. Data Protection Officer</h2>
+    <ul>
+      <li>Email: <a href="mailto:mirr0505@gmail.com">mirr0505@gmail.com</a></li>
+    </ul>
+
+    <h2>13. Revision History</h2>
+    <ul>
+      <li>2026-05-29 — Initial effective date</li>
+    </ul>
+
+    <hr />
+    <p class="footer-note">
+      <a href="./tos-en.html">← See Terms of Service</a>
+    </p>
+  </main>
+</body>
+</html>

@@ -15,7 +15,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.meaningflow.app"
+      "bundleIdentifier": "com.mirr.meaningflow",
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -24,13 +28,15 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.meaningflow.app"
+      "package": "com.mirr.meaningflow"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-localization"
+      "expo-localization",
+      "expo-web-browser",
+      "@sentry/react-native"
     ],
     "extra": {
       "eas": {
@@ -40,6 +46,9 @@
     "runtimeVersion": {
       "policy": "appVersion"
     },
-    "owner": "mirr0505"
+    "owner": "mirr0505",
+    "updates": {
+      "url": "https://u.expo.dev/99e22e91-76e8-450d-ba79-5764f4a7be91"
+    }
   }
 }

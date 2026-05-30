@@ -8,13 +8,23 @@
 //
 // DEV mock: EXPO_PUBLIC_RESONANCE_MOCK=1 → Edge Function 미배포 환경에서도 UI 흐름 검증 가능.
 
+import { track } from "./posthog";
 import { supabase } from "./supabase";
 
 const MOCK = process.env.EXPO_PUBLIC_RESONANCE_MOCK === "1";
 
+export type DuplicateExisting = {
+  id: string;
+  content: string;
+  language: string;
+  created_at: string;
+};
+
 export type PublishResult =
-  | { ok: true; postId: string }
-  | { ok: false; reason: "moderation_blocked" | "moderation_unavailable" | "too_long" | "empty" | "auth" | "network" | "unknown"; messageKey: string; categories?: string[] };
+  | { ok: true; postId: string; updated?: boolean }
+  | { ok: false; reason: "moderation_blocked" | "moderation_unavailable" | "too_long" | "empty" | "auth" | "network" | "unknown"; messageKey: string; categories?: string[] }
+  // 백로그 ⑥ (b): 같은 user/today row 존재 — client 가 "이미 있어요, 수정할까요?" 모달 노출
+  | { ok: false; reason: "duplicate_today"; existing: DuplicateExisting };
 
 export type FeedPost = {
   id: string;
@@ -28,39 +38,48 @@ export type FeedPost = {
 export type FeedFilter = "world" | "same_combo" | "same_language";
 
 // ─── STEP 3-A : 공명방 게시 ───
+// overwrite=true 면 같은 user/today row 를 덮어쓰기 (백로그 ⑥ 정책 b 의 "수정해서 보낼게요" 분기).
 export async function publishToGarden(args: {
   content: string;
   language: string;
   combo_nickname: string;
+  overwrite?: boolean;
 }): Promise<PublishResult> {
   const content = args.content.trim();
   if (!content)               return { ok: false, reason: "empty",    messageKey: "flow.evening.savedPrivate" };
   if (content.length > 200)   return { ok: false, reason: "too_long", messageKey: "flow.evening.charHint" };
 
   if (MOCK) {
-    return { ok: true, postId: "mock-" + Date.now() };
+    return { ok: true, postId: "mock-" + Date.now(), updated: !!args.overwrite };
   }
 
   try {
     const { data, error } = await supabase.functions.invoke<{
       ok: boolean;
       post_id?: string;
+      updated?: boolean;
       error?: string;
       message_key?: string;
       categories?: string[];
+      existing?: DuplicateExisting;
     }>("resonance_publish", { body: args });
 
     if (error)        return { ok: false, reason: "network", messageKey: "garden.networkError" };
     if (!data?.ok) {
       const r = data?.error;
+      if (r === "duplicate_today" && data?.existing) {
+        return { ok: false, reason: "duplicate_today", existing: data.existing };
+      }
       const reason =
         r === "moderation_blocked"     ? "moderation_blocked"     :
         r === "moderation_unavailable" ? "moderation_unavailable" :
         r === "auth_required" || r === "auth_invalid" ? "auth"    :
                                          "unknown";
+      if (reason === "moderation_blocked") track("moderation_blocked");   // M4 빈도 — 본문 X
       return { ok: false, reason, messageKey: data?.message_key ?? "garden.unknownError", categories: data?.categories };
     }
-    return { ok: true, postId: data.post_id! };
+    track("garden_published", { language: args.language });   // M6: 본문 X
+    return { ok: true, postId: data.post_id!, updated: data.updated };
   } catch {
     return { ok: false, reason: "network", messageKey: "garden.networkError" };
   }
@@ -96,6 +115,7 @@ export async function toggleResonance(postId: string): Promise<boolean> {
   if (MOCK) return true;
   const { data, error } = await supabase.rpc("toggle_resonance", { p_post_id: postId });
   if (error) throw error;
+  if (data) track("garden_resonated");   // 켰을 때만 (해제 제외)
   return !!data;
 }
 

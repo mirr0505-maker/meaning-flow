@@ -64,7 +64,7 @@ export function DevDashboard({ profile }: { profile: Profile }) {
           {profile.solo_mbti} × {profile.social_mbti}
         </Text>
         <Text className="text-ink text-lg font-medium mt-1">
-          {t(profile.combo_nickname)}
+          {profile.display_nickname ?? t(profile.combo_nickname ?? "combos.unknown")}
         </Text>
       </View>
 

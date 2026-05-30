@@ -23,6 +23,24 @@ interface RequestBody {
   content: string;
   language: string;
   combo_nickname: string;          // profiles 에서 받아 client 가 같이 보냄 — Edge Function 에서 재검증 가능
+  overwrite?: boolean;             // 백로그 ⑥ 정책 (b): 같은 user/today row 가 이미 있을 때
+                                   // true → UPDATE, false/undefined → duplicate_today 응답으로 사용자에게 확인 (M1: 강박 회피)
+}
+
+// 사용자 timezone 기준 "오늘"의 UTC 시작·끝 boundary 를 계산.
+// DST 전환 날의 23/25h 어긋남은 duplicate 검사 정확도에 큰 영향 없음 (수정 흐름이라 차단 아님).
+function dayBoundariesInTz(tz: string, now: Date = new Date()): { start: Date; end: Date } {
+  const tzFmt = new Intl.DateTimeFormat("en-GB", {
+    timeZone: tz, hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false,
+  });
+  const parts = tzFmt.formatToParts(now);
+  const hh = parseInt(parts.find((p) => p.type === "hour")!.value,   10);
+  const mm = parseInt(parts.find((p) => p.type === "minute")!.value, 10);
+  const ss = parseInt(parts.find((p) => p.type === "second")!.value, 10);
+  const elapsedMs = (hh * 3600 + mm * 60 + ss) * 1000;
+  const start = new Date(now.getTime() - elapsedMs);
+  const end   = new Date(start.getTime() + 24 * 60 * 60 * 1000);
+  return { start, end };
 }
 
 interface OpenAIModerationResponse {
@@ -118,7 +136,50 @@ async function handle(req: Request): Promise<Response> {
     }, 200);   // 200 OK — UI 에서 부드럽게 표시
   }
 
-  // ─── 5. INSERT — user JWT 로 호출 → RLS `resonance_posts_self_insert` (auth.uid() = user_id) 통과
+  // ─── 5. duplicate today 검사 (백로그 ⑥ 정책 b — 강박 회피, 사용자 의지로 수정)
+  //    사용자 timezone 기준 같은 날에 visible row 가 이미 있으면:
+  //      - overwrite=true → 그 row UPDATE (모더레이션은 위에서 통과 검증 끝)
+  //      - overwrite=false/undef → duplicate_today 응답 → client 가 "이미 있어요, 수정할까요?" 모달
+  const { data: prof } = await supaUser
+    .from("profiles")
+    .select("timezone")
+    .eq("id", user.id)
+    .maybeSingle();
+  const tz = (prof as { timezone: string | null } | null)?.timezone ?? "UTC";
+  const { start: dayStart, end: dayEnd } = dayBoundariesInTz(tz);
+
+  const { data: existing } = await supaUser
+    .from("resonance_posts")
+    .select("id, content, language, created_at")
+    .eq("user_id", user.id)
+    .eq("status", "visible")
+    .gte("created_at", dayStart.toISOString())
+    .lt("created_at",  dayEnd.toISOString())
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (existing) {
+    if (body.overwrite) {
+      // 같은 row UPDATE — combo_nickname 은 원본 유지 (mid-day 변경 무시)
+      const { data: updated, error: updErr } = await supaUser
+        .from("resonance_posts")
+        .update({ content, language, moderation_score: modScore })
+        .eq("id", (existing as { id: string }).id)
+        .select("id, created_at")
+        .single();
+      if (updErr) return json({ ok: false, error: "update_failed", detail: updErr.message }, 500);
+      return json({ ok: true, post_id: updated.id, created_at: updated.created_at, updated: true }, 200);
+    }
+    // 안내 응답 — 200 OK + reason. client 가 모달 띄움.
+    return json({
+      ok: false,
+      error: "duplicate_today",
+      existing,
+    }, 200);
+  }
+
+  // ─── 6. INSERT — user JWT 로 호출 → RLS `resonance_posts_self_insert` (auth.uid() = user_id) 통과
   //    M4 핵심 (moderation_score 등 server-only 필드) 은 Edge Function 안에서만 채워지므로
   //    client 가 우회 불가. user JWT INSERT 로 충분.
   const { data, error } = await supaUser

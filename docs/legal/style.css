@@ -1,0 +1,197 @@
+/* 🌿 Meaning Flow Legal Pages — 우리 앱 톤 그대로 (paper-warm + ink) */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #F8F3E9;
+  color: #1A1A1F;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  font-size: 14px;
+}
+
+.topbar a {
+  color: #5C5A53;
+  text-decoration: none;
+}
+
+.topbar a:hover { color: #1A1A1F; }
+
+.topbar .lang a {
+  margin: 0 4px;
+}
+
+.topbar .lang a.active {
+  color: #1A1A1F;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 40px 0 12px;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 24px 0 8px;
+  color: #1A1A1F;
+}
+
+.meta {
+  color: #9A9486;
+  font-size: 13px;
+  margin: 0 0 32px;
+  font-style: italic;
+}
+
+p, ul, ol {
+  font-size: 15px;
+  color: #2C2A24;
+}
+
+ul, ol {
+  padding-left: 24px;
+  margin: 8px 0 16px;
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+a {
+  color: #1A1A1F;
+  text-decoration: underline;
+}
+
+strong {
+  color: #1A1A1F;
+  font-weight: 600;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13.5px;
+  background: #FBF8F1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #E4DFD0;
+  vertical-align: top;
+}
+
+th {
+  background: #EFE9D8;
+  color: #1A1A1F;
+  font-weight: 600;
+}
+
+tr:last-child td { border-bottom: 0; }
+
+hr {
+  border: 0;
+  border-top: 1px solid #E4DFD0;
+  margin: 40px 0 24px;
+}
+
+.footer-note {
+  color: #5C5A53;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* index landing */
+.brand {
+  text-align: center;
+  padding: 48px 0 32px;
+}
+
+.brand h1 {
+  font-size: 36px;
+}
+
+.tagline {
+  color: #5C5A53;
+  margin: 0;
+  font-style: italic;
+}
+
+.legal-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 32px 0;
+}
+
+@media (max-width: 560px) {
+  .legal-links { grid-template-columns: 1fr; }
+}
+
+.card {
+  display: block;
+  padding: 24px;
+  background: #FBF8F1;
+  border: 1px solid #E4DFD0;
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .15s;
+}
+
+.card:hover {
+  border-color: #A89BD0;
+}
+
+.card h2 {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.card p {
+  font-size: 14px;
+  color: #5C5A53;
+  margin: 0;
+}
+
+footer {
+  text-align: center;
+  color: #9A9486;
+  font-size: 13px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid #E4DFD0;
+}

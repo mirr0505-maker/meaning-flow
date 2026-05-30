@@ -299,8 +299,19 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 - AI 기반 동적 프롬프트 생성
 - 위젯 (홈 화면 첫 단추)
 - Apple Watch / Wear OS 연동
-- 수익화
 - '세계의 공명' 큐레이션 기능
+
+### 8.3 출시 시점 포함 — 2026-05-23 사용자 결정 (PRD v1.2 반영 예정)
+
+- **SNS OAuth 로그인 (Google + Apple)** — 이메일 회원가입/로그인은 배제. anonymous 자동 가입 + SettingsScreen 사후 SNS 연결 (M3 능동적 진입). Kakao/LINE 은 MVP 이후로 명확히 분리
+- **30일 베타 access 만료 (MVP 전용)** — 익명 가입 시점부터 30일 카운트. 만료 후 베타 종료 안내 화면 + 데이터는 보존(정식 출시 시 재활성화). 베타 사용자 인센티브(무료 기간 연장 등) 정식 출시 시 적용 권장
+
+### 8.4 정식 출시(post-MVP) 시점 포함 — 2026-05-23 사용자 결정
+
+- **수익화 (구독제)** — MVP 이후 도입. 가격·환불·trial 등 세부는 베타 피드백 + 운영 비용 데이터 확인 후 확정 (App Store IAP + Play Billing, RevenueCat 권장)
+- **iOS 출시** — Apple Developer Program 가입 + Apple Sign In 강제 활성화. MVP 단계엔 Apple Sign In 코드만 셋업(다른 프로젝트 활용)
+- **Kakao 로그인** (한국 사용자 정합) — Supabase Custom OAuth Provider
+- **LINE 로그인** (일본 사용자 정합) — Supabase Custom OAuth Provider
 
 ---
 
@@ -365,10 +376,10 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 | 3-A | **공명방 게시** — Edge Function `resonance_publish` (OpenAI Moderation → INSERT, 키 없으면 mock pass) + client `publishToGarden` + EveningScreen 저장 후 share=true 시 게시. 차단 시 일기는 본인에게 보존 + 부드러운 안내 카피 | OpenAI key (mock 으로 동작) | ✅ 2026-05-22 |
 | 3-B | **공명방 피드 (GardenScreen)** — `resonance_feed` VIEW 시간순 20개 + 더 보기 + 필터 칩(전세계/조합/언어) + 진입 면책 카피 + 5개국 mock 데이터 | — | ✅ 2026-05-22 |
 | 3-C | **공명 액션 `🌿 공명해요`** — `toggle_resonance` RPC (optimistic UI) + `has_resonated`·`get_resonance_count` + 작성자에게는 합계만 | — | ✅ 2026-05-22 |
-| 3-D | **번역** `🌍 번역` 버튼 — Migration `translation_quota` + Edge Function `translate_post` (cache hit→무료 / miss→DeepL→Google→INSERT+quota++) + client `lib/translation.ts` + GardenPostCard 원문↔번역 토글. DEV mock 모드 (DEEPL+GOOGLE 둘 다 없으면 prefix 안내) | DeepL + Google key | ✅ 코드 2026-05-22 / 외부 키·deploy 사용자 측 대기 |
+| 3-D | **번역** `🌍 번역` 버튼 — Migration `translation_quota` + Edge Function `translate_post` (cache hit→무료 / miss→DeepL→Google→INSERT+quota++) + client `lib/translation.ts` + GardenPostCard 원문↔번역 토글. DEV mock 모드 (DEEPL+GOOGLE 둘 다 없으면 prefix 안내) | DeepL + Google key | ✅ 2026-05-22 (DeepL key 등록 + Edge Function deploy + 실 번역 검증 통과, Google 폴백은 Phase 5+ 프·독 출고 때) |
 | 3-E | **신고** — `lib/reports.ts` (submitReport + crisisResourcesFor) + ReportModal (사유 4종 + ⋯ 메뉴 + hiddenFromYou) + 자해 사유 시 위기 자원 모달 자동 노출 + tel: 링크 (KR 1393·1577-0199·1388 / US 988·741741 / JP 0120-279-338·0570-783-556). UNIQUE(post_id,reporter_id) 중복 신고 차단 + auto_hide trigger 활용 | — | ✅ 2026-05-22 |
-| 3-F | **위기 자원 + 면책 카피** — 전 화면 면책 카피 + 입력 시 자해 키워드 검사 모달. 신고 흐름의 위기 자원 (3-E) 와 별개로 *작성 시점* 검사 | — | ⏸ 다음 STEP |
-| 3-G | **1일 1회 합산 공명 알림** — Expo Notifications + Supabase cron | Expo Push 인증 | ⏸ Phase 4 |
+| 3-F | **위기 자원 + 면책 카피** — `lib/safety/selfHarmKeywords.ts` (한/영/일 사전 + `containsSelfHarm`) + `screens/safety/SelfHarmModal.tsx` (본인용, `crisisResourcesFor` 재사용) + EveningScreen 800ms debounce + ack 플래그(같은 세션 1회만). 일기 저장 차단 X (M4). 정원 진입 면책 카피는 [GardenScreen.tsx:77](app/src/screens/GardenScreen.tsx#L77) 기존 노출 그대로 | — | ✅ 2026-05-22 (npm test 22/22 · tsc 0 · 한/영/일 양성·음성·세션리셋 수동 검증 통과) |
+| 3-G | **1일 1회 합산 공명 알림** — Migration `profiles.expo_push_token` + RPC `get_yesterday_resonance_for_user` + view `push_recipients_at_06` (service_role 전용) + ledger `push_sent_ledger` (중복 차단) + Edge Function `daily_resonance_digest` (사용자 timezone 06시 매치 → 어제 합계 → N=0 skip M1 → Expo Push) + pg_cron 매시간 호출 + Supabase Vault `service_role_key` + client `lib/notifications.ts` (register/unregister) + 정원 화면 **알림 토글 카드 (기본 OFF, M3 능동적 진입)** | Expo Push 인증 (EAS Dev Build 시점) | ✅ 2026-05-23 (코드 · 단위 34/34 · typecheck 0 · 마이그레이션 + Edge Function 배포 + Vault 등록 + cron 등록 + 통합 검증 net._http_response 200 ok:true 통과. 디바이스 알림 실 수신은 [11.0-F](#110-f-별도-트랙-2026-05-22-발견-추후-처리) 트랙) |
 
 ### 10.3 Phase 2 STEP 분해 (2026-05-22 사용자 승인)
 
@@ -388,12 +399,14 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 
 ## 11. 현재 진척 상태 (2026-05-22 갱신)
 
-**핵심 메시지**: **Phase 1 + 2 + 3 (게시·피드·공명·번역·신고/위기자원) 완료**. 다음은 STEP 3-F (작성 시점 자해 키워드 모달 + 전 화면 면책) → 3-G (알림) → Phase 4 (베타). Expo SDK 54 + NativeWind v4 + Supabase (10 테이블 + 2 신규 마이그레이션 + RLS + RPC 4 + trigger 1 + VIEW 1) + Anonymous Auth + Onboarding (두 자아 + 6 조합) + 4 모드 (🌅 점화·☀️ 실행·🌆 통합/🌿 공명방·🌙 착륙) + i18n ko/en/ja. **GitHub**: https://github.com/mirr0505-maker/meaning-flow (Private) — 최신 커밋 `ef32297`. **EAS project**: meaning-flow (`99e22e91-76e8-450d-ba79-5764f4a7be91`).
+**핵심 메시지**: **Phase 1 + 2 + 3 전체 완료** (게시·피드·공명·실 번역·신고/위기자원·작성시점 자해 안전·합산 알림 인프라). 다음은 **Phase 4 (베타)** — EAS Dev Build · 일본어 native 검수 · Sentry/PostHog · 디바이스 알림 수신 검증. Expo SDK 54 + NativeWind v4 + Supabase (11 테이블 + 3 신규 마이그레이션 + RLS + RPC 5 + trigger 1 + VIEW 2 + pg_cron + Vault) + Anonymous Auth + Onboarding (두 자아 + 6 조합) + 4 모드 (🌅 점화·☀️ 실행·🌆 통합/🌿 공명방·🌙 착륙) + i18n ko/en/ja. **GitHub**: https://github.com/mirr0505-maker/meaning-flow (Private). **EAS project**: meaning-flow (`99e22e91-76e8-450d-ba79-5764f4a7be91`).
 
 **Phase 3 외부 의존 상태**:
 - ✅ OpenAI Moderation API key 발급 + Supabase secret + Edge Function `resonance_publish` deploy + 실 검증 (5 시나리오 통과, 2026-05-22)
-- ⏳ DeepL Free + Google Translate key 미발급 (사용자 밤에 진행 예정) — 현재 mock 모드 동작
-- ⏸ Sentry / PostHog / Expo Push Cert — Phase 4 직전
+- ✅ DeepL Free key 발급 + Supabase secret `DEEPL_AUTH_KEY` + Edge Function `translate_post` 재배포 + 실 번역 검증 통과 (2026-05-22) — Google Translate 폴백 키는 Phase 5+ 프·독 출고 시 추가
+- ✅ pg_cron + supabase_vault extension 활성화 + service_role key Vault 저장 + 매시간 정각 cron job + Edge Function `daily_resonance_digest` deploy + 통합 검증 net._http_response 200 ok:true (2026-05-23)
+- ⏸ Sentry / PostHog — Phase 4 직전
+- ⏸ Expo Push Cert (APNs/FCM) — EAS Dev Build 트리거 시 사용자 측 `eas credentials` 로 발급. 디바이스 알림 실 수신 검증은 Dev Build 이후
 
 **Phase 2 완료 (2026-05-22)**: STEP 2-A~2-F 텍스트 기반 통합·착륙 모드 실구현 + 빌드 검증 (tsc 0 · npm test 9/9 · expo export 475 모듈, +14 from Phase 1). 공명방 토글은 `shared_to_resonance` 컬럼 저장만 (실 게시는 Phase 3). 영감 타이머는 텍스트 5분 (PRD 원안). **음성 2분 스피치 (구 STEP 2-G) 는 출시 이후로 보류** — 2026-05-22 사용자 결정, Phase 5+ 베타 피드백 후 재검토.
 
@@ -401,7 +414,17 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 
 **검증 중 발견된 fix (2026-05-22)**: Edge Function 의 INSERT 가 service_role 대신 user JWT (supaUser) 로 동작하도록 변경 — `SUPABASE_SERVICE_ROLE_KEY` 자동 주입 누락 시에도 RLS `resonance_posts_self_insert` 정책으로 INSERT 통과. moderation_score 같은 server-only 필드는 Edge Function 안에서만 채워지므로 client 우회 불가, M4 정신 유지.
 
-3-D 번역 · 3-E 신고 · 3-F 위기 자원 · 3-G 알림은 다음 세션.
+**3-F 완료 (2026-05-22)**: `lib/safety/selfHarmKeywords.ts` (한/영/일 보수적 사전, "끝내고 싶다"·"die laughing"·"죽음 회고" 오탐 방지) + `screens/safety/SelfHarmModal.tsx` (본인용 안내, `crisisResourcesFor` 재사용) + EveningScreen 800ms debounce + ack 플래그(세션당 1회). i18n `safety.writeTime.*` ko/en/ja 3개 키 (fr/de 는 M5 원칙대로 빈 객체 유지). 단위 테스트 22/22 pass · tsc 0 · 양성·음성·세션리셋 수동 검증 통과. **M4 정합**: 모달은 안내, 일기 저장 차단 X.
+
+**3-G 완료 (2026-05-23)**: Migration `20260522_phase3g_push_token.sql` (profiles.expo_push_token + RPC `get_yesterday_resonance_for_user` + view `push_recipients_at_06` service_role 전용 + ledger `push_sent_ledger`) + Edge Function `daily_resonance_digest` (cron 호출 → recipients 조회 → 어제 합계 RPC → N=0 skip M1 → Expo Push HTTP API → ledger INSERT) + helper 모듈 분리 (`_helpers.ts` pure: `pushBodyFor` ko/en/ja + `yesterdayInTz` timezone). 클라이언트: `lib/notifications.ts` `register/unregisterPushTokenForProfile` (Expo SDK 54 canonical: Android channel → permission → projectId → token + device timezone) + 정원 화면 **알림 토글 카드 (`PushToggleCard`, 기본 OFF, M3 능동적 진입)** + i18n `notifications.*` ko/en/ja. 인프라: pg_cron 매시간 정각 + supabase_vault 에 service_role key 저장 + Vault 동적 조회로 cron 호출. **검증**: npm test 34/34 (helper pure timezone 6 + 카피 분기 5 + i18n 무결성 1 + 기존 22) · tsc 0 · `cron.job_run_details` succeeded · `net._http_response` status_code 200 ok:true 통과. **디바이스 알림 실 수신은 [11.0-F](#110-f-별도-트랙-2026-05-22-발견-추후-처리) "디바이스 알림 수신 검증" 트랙으로 분리** — EAS Dev Build + APNs/FCM credential 단계와 함께.
+
+**사용자 결정 (2026-05-23)**: OS push 는 PRD F-RES-003 유지하되 기본 OFF + 앱내 토글로 사용자가 능동적으로 ON. "OS push 숫자가 적으면 또 생각만 할거임, 압박을 받을 것 같아" — IN 정서 친화 정합 (M3 능동적 진입 정신 확장).
+
+**사용자 결정 — MVP/정식 출시 분리 (2026-05-23)**: MVP = **완전 무료** 출시. 결제는 **정식 출시 시점**으로 미룸. MVP 출시 = **Android 우선** (Google Play Console $25 일회성). iOS 는 정식 출시 시점 (Apple Developer $99/년 + Apple Sign In 활성화). MVP 베타 = **10명 내외 + 30일 access 만료** (개인별 가입 시점부터, 데이터는 보존, 정식 출시 시 재활성화). MVP 출시 전 **UI/UX 업그레이드 게이트** ★★★ — 워딩·화면 구성 다듬기 필수. **결제 도입 시 베타 사용자 인센티브 권장** (무료 기간 연장 또는 평생 할인 — IN 정서 친화 + 피드백 보상).
+
+**사용자 결정 — 로그인 (2026-05-23, 정정)**: 이메일 회원가입/로그인 **배제**. **SNS OAuth 만** — Google + Apple. **현재 anonymous 자동 가입 유지** (사용자 진입 마찰 최소화, M3 정신). SettingsScreen 에서 SNS 사후 연결 권유 (디바이스 변경 시 데이터 보존). Kakao(한국)·LINE(일본) 은 정식 출시 후. Apple 가이드라인 4.8 은 iOS 출시 시점에 적용 — MVP Android 단계에선 미적용 OK.
+
+**사용자 결정 — Phase 4 진행 방향 (2026-05-23)**: "진행하면서 나머지는 차근차근 설명해주기 바람" — 빠진 항목(ToS, 개인정보 처리방침, 계정 삭제 UI, 첫 부팅 동의 화면, 데이터 export, 연령 제한 등) 은 단계별로 메인 세션이 안내하면서 진행.
 
 **백로그 정리 (2026-05-22)**:
 - B-1 NativeWind `flex-1` 조사 — 설정·버전 조합은 호환 정상. 원인 1순위 = Metro 캐시 (`--clear` 누락) ([11.0-F](#110-f-별도-트랙-2026-05-22-발견-추후-처리)).
@@ -417,9 +440,20 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 | 영어 · **일본어** 카피 native 검수 | ★★★ **출시 게이트** | 2026-05-22 사용자 결정 — native 검수 없이 출시 불가. 베타(Phase 4) 진입 전 필수. 영어는 1차 다듬기 완료, 일본어는 1차 초안(`ja.json` `_status` 필드로 표시). PRD 7.2 정서 결 + UserGuide 톤 기준. 일본어가 가장 위험 — 경어·간접·시적 톤 검증 어려움. **검수 워크플로**: ① 영어 native (또는 검수 도구) → ② 일본 native (지인·crowdsourcing·유료 서비스 중 사용자 선택) → ③ 베타 사용자 피드백 |
 | ~~Phase 2-G 음성 입력 STEP~~ | ❌ 출시 이후 | 2026-05-22 사용자 결정 — **출시 이후로 보류**. 베타 피드백 + 운영 비용 데이터 확인 후 Phase 5+ 에서 재검토. M4 검사·24h 보관·면책 카피·STT 비용 등 부담이 MVP 적합성 대비 큼 |
 | **PRD `.docx` 갱신** | ★★ | 2026-05-22 결정으로 blueprint.md 만 1차 반영. PRD v1.1 .docx 는 1차 소스라 별도 v1.2 리비전으로 일본어 Phase 1 격상·음성 보류·STEP 2-G 제외 등 명시 후 git commit. 사용자가 docx 편집기에서 직접 작성 또는 메인 세션이 markdown 으로 초안 작성 후 사용자 변환 |
-| **공명방 같은 user 의 하루 중복 게시 제한** | ★ | 2026-05-22 실 검증 ⑥ 에서 발견 — 같은 사용자가 같은 글을 여러 번 흘려보내면 정원에 같은 글이 여러 행. 정책 결정 필요: (a) `resonance_posts` 에 `UNIQUE(user_id, date)` 추가 → 하루 1회만 (reflections 와 정합), (b) Edge Function 에서 "이미 오늘 게시했어요" 안내 후 update, (c) 그대로 두기. UX 안전상 (a) 권장 |
+| ~~공명방 같은 user 의 하루 중복 게시 제한~~ | ✅ 2026-05-23 | 2026-05-22 실 검증 ⑥ 에서 발견. **사용자 결정 (2026-05-23) — 정책 (b)**: "강박이라고 봄. 했다가 수정(덮어쓰기) 좋겠음. 이미 있어요 수정할까요? 이런게 좋음". 구현: Edge Function `resonance_publish` body.overwrite 추가 + `dayBoundariesInTz` (사용자 timezone 기준 "오늘") + duplicate SELECT → false 면 `{ok:false, reason:"duplicate_today", existing}` / true 면 UPDATE. Client `PublishResult` 확장. EveningScreen `duplicate_prompt` stage + `DuplicatePromptCard` 카드. i18n `garden.duplicateToday.*` + `flow.evening.{savedUpdated,duplicateKept}` ko/en/ja. npm test 35/35 · tsc 0 · 수동 검증 통과 (정원 update + "그대로 둘게요" 분기) |
 | 다크모드 UX 전체 검토 | ✅ 2026-05-22 | `app/src/lib/theme.ts` `modeColors(dark)` helper 추출 + MorningScreen·DayScreen 에 dark prop 전파. night 모드에서 호출 시 카드·글자·placeholder 색이 모두 다크 톤(`bg-night-bg2` / `text-night-ink` / `text-night-soft` / `text-night-muted` 등)으로 자동 전환. day-soft 같은 모드 전용 강조 카드는 라이트 유지 |
 | 데스크탑 웹 가로폭 변동 | ◐ 부분 완료 | App.tsx max-width 440px 컨테이너로 해결. 모바일에선 viewport <440 이라 자동 처리 |
+| **SNS OAuth — Google ✅ / Apple ⏳ MVP 셋업만 / Kakao·LINE 정식 출시 후** | ★★★ MVP 게이트 (Google), ★★ MVP 셋업 (Apple), ⏸ post-MVP (Kakao·LINE) | 2026-05-23 사용자 결정. **Google ✅ 2026-05-23** 완료: `lib/sns-auth.ts` (linkIdentity + WebBrowser.openAuthSessionAsync + setSession), SettingsScreen "계정 연결" 섹션, i18n `settings.account.link.*` ko/en/ja. Supabase Manual Linking ON + Google Provider 등록 + 실 검증 통과 ("✓ Google 연결됨"). **Apple ⏳ MVP 단계 코드 셋업만** (다른 프로젝트 활용 + 정식 iOS 출시 대비). `expo-apple-authentication` 추가 + sns-auth.ts SnsProvider union 확장 + SettingsScreen 토글 추가. iOS Apple Developer Program 가입은 정식 iOS 출시 시점. **Kakao(한국)·LINE(일본) 정식 출시 후**: Supabase Custom OAuth Provider 등록 + 같은 linkIdentity 패턴 |
+| ~~30일 베타 access 만료 (MVP 전용)~~ | ✅ 2026-05-23 | Migration `20260523_phase4l_mvp_access_expiry.sql` (profiles.mvp_access_expires_at + 기존 row 백필 + 가입 시 NOW()+30일 트리거) + `lib/access.ts` + `LockedScreen.tsx` (정서 카피 + 데이터 export 우선 노출 + 정식 출시 알림 안내) + App.tsx boot() 흐름에 expired phase 추가. i18n `locked.*` ko/en/ja 11개. **수동 검증 통과**: UPDATE 로 만료 시뮬레이션 → 새로고침 → LockedScreen 정상 진입 + 모든 카피 정확. 데이터 보존 (cascade 없음). 정식 출시 시 `UPDATE profiles SET mvp_access_expires_at = NULL` 또는 `+ INTERVAL '...'` 한 줄로 전체 베타 사용자 access 연장 |
+| **MVP 출시 전 UI/UX 업그레이드** | ★★★ MVP 게이트 | 2026-05-23 사용자 결정 — "지금 상태로는 불가". 워딩·화면 구성 다듬기 필요. **메인 세션 가능**: 카피 다듬기, M1·M2 위반 부분 점검, 시각 톤 일관성 검토. **사용자 결정 필요**: 어느 화면이 가장 거슬리나? 어느 워딩이 별로? 새 화면 구성? 베타 사용자 피드백 받고 정밀화 가능. 진행 시 사용자가 화면별로 짚어주면 메인이 다듬는 협업 흐름 |
+| **베타 10명 사용설명서** | ★★ MVP 배포 직전 | 2026-05-23 사용자 결정 — 베타 참가자 배포용 문서. 작성 위치: `docs/beta-user-guide-ko.md`. 포함: 앱 다운로드 방법 (Google Play Internal Testing 링크), 30일 베타 안내, 의미 일기·공명방 사용법, 피드백 전달 채널, 정식 출시 알림 신청 방법, M4 자해 안전 사용법 |
+| **연간 구독 결제 (정식 출시 시점)** | ★★ 정식 출시 게이트 (MVP 이후) | 2026-05-23 사용자 결정 — **MVP 는 무료 출시**. 결제는 정식 출시 시점으로 미룸. **권장 통합**: RevenueCat. **베타 사용자 인센티브 권장**: 무료 기간 연장(+30일) 또는 평생 할인 (IN 정서 친화 + 30일 피드백 보상). **단계**: ① 정식 출시 결정 시 App Store Connect + Play Console product 등록, ② RevenueCat 통합, ③ `react-native-purchases` + 페이월 화면, ④ Supabase `profiles.subscription_status` 컬럼 + RevenueCat webhook, ⑤ trial 기간·환불 정책·미결제 사용자 제한 범위는 베타 피드백 후 확정 |
+| ~~계정 삭제 UI~~ | ✅ 2026-05-23 | Edge Function `account_delete` (user JWT 본인 확인 → service_role `auth.admin.deleteUser` → cascade FK 가 reflections·thought_vault·tasks·resonance_posts·resonances·reports·translation_quota·push_sent_ledger 자동 삭제) + `lib/account.ts` `deleteAccount()` + `SettingsScreen.tsx` (이중 확인 모달 4 stage) + FlowRouter 우상단 ⚙ 진입점 + App.tsx onAccountDeleted=boot 콜백 (재부팅 시 새 anonymous → onboarding). i18n `settings.account.*` ko/en/ja 16개. npm test 36/36 · tsc 0 · 수동 검증 통과 (삭제 → onboarding 진입). Apple 5.1.1(v) + GDPR 17조 충족 |
+| **이용약관(ToS) + 개인정보 처리방침 본문** | ★★★ 출고 게이트 | 변호사 검토 권장. 본문 영역은 사용자 작성(또는 외부 서비스 — Termly/PrivacyPolicies.com 같은 generator), 메인 세션은 골격·항목 체크리스트 제공. 호스팅: Notion 공개 페이지 또는 GitHub Pages. 한·영·일 3개 언어 |
+| ~~첫 부팅 GDPR/APPI 동의 화면~~ | ✅ 2026-05-23 | `lib/consent.ts` (AsyncStorage `consent_v1.{seen,sentry,posthog}`) + `ConsentScreen.tsx` (Supabase 필수 + Sentry/PostHog 선택 토글 기본 OFF, M3 능동적 진입) + App.tsx boot() 흐름에 `phase: "consent"` 우선 분기. i18n `consent.*` ko/en/ja 12개. 정책 변경 시 v1→v2 prefix 로 전체 사용자 재동의. 처리방침 URL 은 4-I 작업 후 활성. npm test 37/37 · tsc 0 · 수동 검증 통과 (재진입 skip 확인) |
+| ~~데이터 export (GDPR 20조)~~ | ✅ 2026-05-23 | `lib/dataExport.ts` (4 테이블 본인 row 동시 fetch + JSON 묶음, schema_version 1) + SettingsScreen "내 데이터" 섹션 + RN 내장 `Share` API (의존성 0). RLS 가 본인 row 만 허용 → client query 로 충분. i18n `settings.dataExport.*` ko/en/ja. npm test 38/38 · tsc 0 · 수동 검증 통과 (task 1개 포함, 다른 비어있음 확인) |
+| **디바이스 알림 실 수신 검증 (3-G 후속)** | ★★ Phase 4 직전 | 3-G 인프라(cron + Edge Function + Vault) 통합 검증 완료(2026-05-23)했으나, **디바이스에 실 알림이 도착하는지는 EAS Development Build + APNs/FCM credential 없이 검증 불가**. Expo Go (SDK 53+) 에선 push 토큰 발급 자체가 미지원. **단계**: ① `eas credentials` 로 iOS APNs key + Android FCM credential 생성, ② `eas build --profile development` 로 dev build, ③ 디바이스 설치 후 정원 화면 알림 토글 ON → 권한 grant → `profiles.expo_push_token` 채워짐 확인, ④ A 게시 + B 공명 + cron 수동 invoke 또는 timezone 06시 매치 → A 잠금화면에 알림 도착 확인, ⑤ M1 검증 (공명 0 인 사용자에게 알림 안 가는지 — `cron.job_run_details` skipped_zero), ⑥ 중복 차단 검증 (`push_sent_ledger`). Phase 4 베타 진입 전 필수 |
+| **포스트-MVP UI/UX 전체 업그레이드 트랙** | ★★★ Phase 4+ | **사용자 결정 (2026-05-22)**: "어느정도 UI/UX가 만들어지면 전체적으로 다시 업그레이드 작업이 필요하다. 일기 기록도 그중 하나임". MVP 흐름 구축(Phase 1~3) 완료 후, 베타 사용자 피드백 + 디자이너 시점 재반영으로 전체 UI/UX 재검토 단계. 디자인 토큰·컴포넌트 라이브러리 골격은 유지하고 **흐름·정보 구조·과거 데이터 노출** 위주로 개선. **현재까지 누적된 포함 항목**: <br/>① **내 일기 아카이브** — 일별 한 줄 일기 시간순 조회 화면. 공명방 게시 여부와 무관(`shared_to_resonance=false` 도 포함, M6 본인 read). 현 MVP 는 같은 날 prefill 만 지원 → 다음 날부터 앱 안에서 사라진 것처럼 보임 ([EveningScreen.tsx:33-50](app/src/screens/EveningScreen.tsx#L33-L50) `fetchTodayReflection` 가 오늘 row 만 가져옴). **사용자 요청**: "매일 매일 일기 즉 오늘을 어떻게 흘려보냈는지 나중에 보면 좋겠음. 보내든 안보내든 내 일기는 봐야함". 방향성: (a) 일별 카드 리스트(한 줄 + 조합 닉네임 + 공명방 게시 마크 작게) — **통계·완료율·스트릭·작성 일수 카운터 표시 금지(M1)**, (b) 정확 시각 X, 날짜만(공명방 익명 원칙 정합), (c) 페이지네이션 20개+더보기(PRD 7.3 재사용), (d) 빈 화면 카피 따뜻하게(M2), (e) 검색·태그는 보류(오버엔지니어링 방지). 데이터: `reflections` 본인 row, RLS 본인 read(추가 마이그레이션 불필요). 위치 후보: 통합 모드 새 탭(`flow.evening.tabs.archive`) 또는 별도 진입점. <br/>② **[베타 피드백에서 발견될 항목 누적]** — Phase 4 사용자 피드백 + 일본 native 검수 결과 반영해 추가 |
 
 ### 11.0-E Phase 1 STEP 1-E 결과물 (2026-05-22)
 

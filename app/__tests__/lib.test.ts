@@ -140,6 +140,25 @@ describe("i18n 키 무결성 — locales 정합 (스모크)", () => {
     }
   });
 
+  it("ko/en/ja 모두 garden.duplicateToday.* + flow.evening.{savedUpdated,duplicateKept} (4-D 정책 b) 키 존재", async () => {
+    const ko = await import("../src/locales/ko.json");
+    const en = await import("../src/locales/en.json");
+    const ja = await import("../src/locales/ja.json");
+    const dupKeys = ["title", "intro", "existingLabel", "overwrite", "keep"];
+    const evKeys  = ["savedUpdated", "duplicateKept"];
+    for (const lang of [ko, en, ja]) {
+      const dup = (lang as any).default.garden.duplicateToday;
+      assert.ok(dup, "garden.duplicateToday namespace 누락");
+      for (const k of dupKeys) {
+        assert.ok(typeof dup[k] === "string" && dup[k].length > 0, `garden.duplicateToday.${k} 누락`);
+      }
+      const ev = (lang as any).default.flow.evening;
+      for (const k of evKeys) {
+        assert.ok(typeof ev[k] === "string" && ev[k].length > 0, `flow.evening.${k} 누락`);
+      }
+    }
+  });
+
   it("ko/en/ja 모두 garden.report.* + garden.crisis.* (Phase 3-E) 키 존재", async () => {
     const ko = await import("../src/locales/ko.json");
     const en = await import("../src/locales/en.json");

@@ -16,18 +16,44 @@ import {
   saveTodayReflection,
   type Reflection,
 } from "../lib/reflections";
-import { publishToGarden, type PublishResult } from "../lib/resonance";
+import { track } from "../lib/posthog";
+import { publishToGarden, type DuplicateExisting, type PublishResult } from "../lib/resonance";
+import { containsSelfHarm } from "../lib/safety/selfHarmKeywords";
+import { SelfHarmModal } from "./safety/SelfHarmModal";
 
 type Stage =
   | { kind: "loading" }
   | { kind: "writing"; text: string; share: boolean; prior: Reflection | null }
   | { kind: "saving" }
   | { kind: "saved"; share: boolean; publish?: PublishResult }
+  // 백로그 ⑥ (b): 같은 user/today row 존재 — 사용자 결정 대기
+  | { kind: "duplicate_prompt"; text: string; share: boolean; existing: DuplicateExisting }
   | { kind: "error"; message: string };
 
 export function EveningScreen({ profile }: { profile: Profile }) {
   const { t, i18n } = useTranslation();
   const [stage, setStage] = useState<Stage>({ kind: "loading" });
+
+  // 🚀 작성 시점 자해 감지 (M4·M7) — 같은 writing 세션에서 한 번만 띄움 (반복 노출 압박 X)
+  const [selfHarmModalVisible, setSelfHarmModalVisible] = useState(false);
+  const [selfHarmAcked, setSelfHarmAcked] = useState(false);
+
+  // text 변경 debounce — 800ms 동안 추가 입력 없으면 키워드 검사
+  useEffect(() => {
+    if (stage.kind !== "writing") return;
+    if (selfHarmAcked) return;
+    const text = stage.text;
+    if (!text.trim()) return;
+    const handle = setTimeout(() => {
+      const lang = i18n.language.split("-")[0] ?? "ko";
+      if (containsSelfHarm(text, lang)) {
+        setSelfHarmModalVisible(true);
+        setSelfHarmAcked(true);
+        track("self_harm_modal_shown", { lang });  // M4 노출 빈도 — 본문 X
+      }
+    }, 800);
+    return () => clearTimeout(handle);
+  }, [stage, i18n.language, selfHarmAcked]);
 
   // 첫 마운트: 오늘 일기 prefill
   useEffect(() => {
@@ -65,6 +91,8 @@ export function EveningScreen({ profile }: { profile: Profile }) {
         language: lang,
         sharedToResonance: share,
       });
+      // M6: 본문 X, 메타데이터만
+      track("reflection_saved", { shared_to_resonance: share, language: lang, char_count: text.length });
 
       // 2. 공명방 게시 — share=true 일 때만
       let publish: PublishResult | undefined;
@@ -74,6 +102,13 @@ export function EveningScreen({ profile }: { profile: Profile }) {
           language: lang,
           combo_nickname: profile.combo_nickname ?? "combos.unknown",
         });
+
+        // 백로그 ⑥ (b): 같은 user/today row 존재 → 사용자 결정 대기 (정원 row 는 아직 안 건드림)
+        if (!publish.ok && publish.reason === "duplicate_today") {
+          setStage({ kind: "duplicate_prompt", text, share, existing: publish.existing });
+          return;
+        }
+
         // 게시 실패 시 shared_to_resonance 컬럼은 false 로 롤백 (실제 게시 안 됐으니)
         if (!publish.ok) {
           await saveTodayReflection({
@@ -91,8 +126,39 @@ export function EveningScreen({ profile }: { profile: Profile }) {
     }
   }
 
+  // 백로그 ⑥ (b): "수정해서 보낼게요" — Edge Function 의 same row UPDATE
+  async function handleOverwrite() {
+    if (stage.kind !== "duplicate_prompt") return;
+    const { text, share } = stage;
+    const lang = i18n.language.split("-")[0] ?? "ko";
+    setStage({ kind: "saving" });
+    try {
+      const publish = await publishToGarden({
+        content: text,
+        language: lang,
+        combo_nickname: profile.combo_nickname ?? "combos.unknown",
+        overwrite: true,
+      });
+      setStage({ kind: "saved", share, publish });
+    } catch (e) {
+      setStage({ kind: "error", message: e instanceof Error ? e.message : String(e) });
+    }
+  }
+
+  // 백로그 ⑥ (b): "그대로 둘게요" — 정원 row 그대로, 일기는 이미 본인에게 저장됨
+  function handleKeepExisting() {
+    if (stage.kind !== "duplicate_prompt") return;
+    // duplicate_today 결과를 SavedView 로 그대로 전달 — 카피 분기에서 "기존 글 유지" 안내
+    setStage({
+      kind: "saved",
+      share: stage.share,
+      publish: { ok: false, reason: "duplicate_today", existing: stage.existing },
+    });
+  }
+
   function handleEditAgain() {
-    // 저장 후 다시 수정 — 오늘 일기 재로딩
+    // 저장 후 다시 수정 — 오늘 일기 재로딩. ack 도 리셋해 새 세션처럼 동작.
+    setSelfHarmAcked(false);
     setStage({ kind: "loading" });
     fetchTodayReflection(profile.id)
       .then((r) =>
@@ -157,6 +223,68 @@ export function EveningScreen({ profile }: { profile: Profile }) {
       {stage.kind === "saved" && (
         <SavedView share={stage.share} publish={stage.publish} onEditAgain={handleEditAgain} />
       )}
+
+      {stage.kind === "duplicate_prompt" && (
+        <DuplicatePromptCard
+          existing={stage.existing}
+          onOverwrite={handleOverwrite}
+          onKeep={handleKeepExisting}
+        />
+      )}
+
+      <SelfHarmModal
+        visible={selfHarmModalVisible}
+        lang={i18n.language}
+        onClose={() => setSelfHarmModalVisible(false)}
+      />
+    </View>
+  );
+}
+
+// 🚀 백로그 ⑥ (b) — 오늘 이미 정원에 보낸 글이 있을 때 부드러운 안내 카드
+function DuplicatePromptCard({
+  existing,
+  onOverwrite,
+  onKeep,
+}: {
+  existing: DuplicateExisting;
+  onOverwrite: () => void;
+  onKeep: () => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <View className="mt-6 rounded-card border border-night-hair bg-dusk-card p-5">
+      <Text className="text-night-ink text-sm font-medium">
+        {t("garden.duplicateToday.title")}
+      </Text>
+      <Text className="text-night-soft text-xs mt-2 leading-relaxed">
+        {t("garden.duplicateToday.intro")}
+      </Text>
+
+      {/* 기존 글 preview */}
+      <View className="mt-4 rounded-card border border-night-hair bg-night-bg3 p-3">
+        <Text className="text-night-muted text-[11px] mb-1">
+          {t("garden.duplicateToday.existingLabel")}
+        </Text>
+        <Text className="text-night-ink text-sm italic" style={{ lineHeight: 22 }}>
+          {existing.content}
+        </Text>
+      </View>
+
+      <Pressable
+        onPress={onOverwrite}
+        className="mt-5 rounded-pill bg-night-ink items-center justify-center"
+        style={{ height: 44 }}
+      >
+        <Text className="text-night-bg text-sm font-medium">
+          {t("garden.duplicateToday.overwrite")}
+        </Text>
+      </Pressable>
+      <Pressable onPress={onKeep} className="mt-3 items-center">
+        <Text className="text-night-muted text-xs underline">
+          {t("garden.duplicateToday.keep")}
+        </Text>
+      </Pressable>
     </View>
   );
 }
@@ -169,9 +297,12 @@ function SavedView({
 
   // 결과 카피 결정
   let headlineKey: string;
-  if (!share)                       headlineKey = "flow.evening.savedPrivate";
-  else if (publish?.ok)             headlineKey = "flow.evening.savedShared";
-  else {
+  if (!share)                                          headlineKey = "flow.evening.savedPrivate";
+  else if (publish?.ok && publish.updated)             headlineKey = "flow.evening.savedUpdated";
+  else if (publish?.ok)                                headlineKey = "flow.evening.savedShared";
+  else if (publish && !publish.ok && publish.reason === "duplicate_today") {
+                                                       headlineKey = "flow.evening.duplicateKept";
+  } else {
     const r = publish?.reason;
     headlineKey =
       r === "moderation_blocked"     ? "garden.moderationBlocked"     :
@@ -181,7 +312,9 @@ function SavedView({
                                        "garden.unknownError";
   }
 
-  const blocked = share && publish && !publish.ok;
+  const blocked =
+    share && publish && !publish.ok &&
+    publish.reason !== "duplicate_today"; // duplicateKept 는 본인 결정으로 유지, 차단 안내 X
 
   return (
     <View className="mt-6 items-center">

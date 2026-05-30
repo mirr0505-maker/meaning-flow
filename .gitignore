@@ -19,7 +19,16 @@ Thumbs.db
 *.swp
 
 # Claude Code local settings (personal)
-.claude/settings.local.json
+.claude/
+
+# iOS crash reports (개인정보 가능성 + 임시 파일)
+*.ips
+
+# Expo build logs (임시)
+**/export-log.txt
+
+# Root level expo fragment (e:\meaningflow\app/app.json 만 사용)
+/app.json
 
 # Build output
 dist/
@@ -32,3 +41,7 @@ _MeaningFlow_*.txt
 # Expo / Metro
 .expo/
 .metro-health-check*
+
+# Apple Sign In / 기타 비밀키 (절대 git 에 올리지 말 것)
+secrets/
+*.p8

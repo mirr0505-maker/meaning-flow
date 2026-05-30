@@ -7,10 +7,11 @@ import { useTranslation } from "react-i18next";
 import { Pressable, Text, View } from "react-native";
 
 import type { Profile } from "../../lib/profiles";
+import { DiaryArchiveScreen } from "../DiaryArchiveScreen";
 import { EveningScreen } from "../EveningScreen";
 import { GardenScreen } from "../GardenScreen";
 
-type SubTab = "journal" | "garden";
+type SubTab = "journal" | "archive" | "garden";
 
 export function EveningTabs({ profile }: { profile: Profile }) {
   const { t } = useTranslation();
@@ -18,9 +19,9 @@ export function EveningTabs({ profile }: { profile: Profile }) {
 
   return (
     <View>
-      {/* sub-tab — 2 칩, evening 톤 */}
-      <View className="px-6 mb-4 flex-row" style={{ gap: 6 }}>
-        {(["journal", "garden"] as SubTab[]).map((s) => {
+      {/* sub-tab — 3 칩. 헤더와 충돌 방지 상단 패딩 */}
+      <View className="px-6 pt-3 mb-4 flex-row" style={{ gap: 6 }}>
+        {(["journal", "archive", "garden"] as SubTab[]).map((s) => {
           const on = s === tab;
           return (
             <Pressable
@@ -41,6 +42,7 @@ export function EveningTabs({ profile }: { profile: Profile }) {
       </View>
 
       {tab === "journal" && <EveningScreen profile={profile} />}
+      {tab === "archive" && <DiaryArchiveScreen userId={profile.id} />}
       {tab === "garden"  && <GardenScreen  profile={profile} />}
     </View>
   );

@@ -10,6 +10,7 @@ import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import type { Profile } from "../lib/profiles";
 import { fetchFeed, type FeedFilter, type FeedPost } from "../lib/resonance";
 import { GardenPostCard } from "./garden/GardenPostCard";
+import { PushToggleCard } from "./garden/PushToggleCard";
 
 const PAGE_SIZE = 20;
 
@@ -77,6 +78,9 @@ export function GardenScreen({ profile }: { profile: Profile }) {
           {t("garden.disclaimer")}
         </Text>
       </View>
+
+      {/* 알림 토글 — M3 능동적 진입: 기본 OFF, 사용자가 의지로 ON */}
+      <PushToggleCard userId={profile.id} />
 
       {/* 필터 칩 — 3개 */}
       <View className="flex-row mb-4" style={{ gap: 6 }}>

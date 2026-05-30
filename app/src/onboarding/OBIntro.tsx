@@ -11,6 +11,15 @@ export function OBIntro() {
       <Text className="text-mute text-xs tracking-widest mb-5">
         {t("onboarding.brand")}
       </Text>
+
+      {/* IN 특성 선택 직후 안내 — 사용자에게 닿았음을 부드럽게 전함 */}
+      <View className="rounded-card border border-evening bg-evening-soft p-3.5 mb-5 flex-row items-center">
+        <Text style={{ fontSize: 18, marginRight: 10 }}>🌿</Text>
+        <Text className="text-ink text-sm flex-1 leading-relaxed">
+          {t("onboarding.intro.helps")}
+        </Text>
+      </View>
+
       <Text className="text-ink text-3xl font-normal leading-snug">
         {t("onboarding.intro.title")}
       </Text>

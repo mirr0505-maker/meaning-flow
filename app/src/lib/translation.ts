@@ -6,6 +6,7 @@
 //
 // DEV mock: EXPO_PUBLIC_TRANSLATE_MOCK=1 → Edge Function 미배포 환경에서도 UI 검증 가능
 
+import { track } from "./posthog";
 import { supabase } from "./supabase";
 
 const MOCK = process.env.EXPO_PUBLIC_TRANSLATE_MOCK === "1";
@@ -75,14 +76,21 @@ export async function fetchTranslation(args: {
                                      "unknown";
       return { ok: false, reason, messageKey: data?.message_key ?? "garden.translate.unknownError", quota: data?.quota };
     }
-    return {
-      ok: true,
+    const result = {
+      ok: true as const,
       text:       data.translated_text!,
       provider:   data.provider as TranslateProvider,
       cache:      !!data.cache,
       sourceLang: data.source_lang ?? "??",
       quota:      data.quota,
     };
+    track("garden_translated", {
+      source_language: result.sourceLang,
+      target_language: args.targetLang,
+      provider:        result.provider,
+      cache:           result.cache,
+    });
+    return result;
   } catch {
     return { ok: false, reason: "network", messageKey: "garden.translate.networkError" };
   }

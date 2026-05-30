@@ -1,5 +1,5 @@
 // 🚀 🌅 점화 모드 (Morning / Ignition) — PRD 4.1
-// 어젯밤 예약한 첫 단추 카드 + 정체성 (조합 닉네임) + 스킵 옵션
+// Phase 4 UI/UX v2 (2026-05-24): 첫 단추 최대 3개 stack (어젯밤 예약된 1~3개 카드)
 // dark prop: night 모드에서 호출 시 다크 톤 카드/글자
 
 import { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
 import type { Profile } from "../lib/profiles";
-import { fetchTodaysFirstTask, updateTaskStatus, type Task } from "../lib/tasks";
+import { fetchTodaysFirstTasks, updateTaskStatus, type Task } from "../lib/tasks";
 import { modeColors } from "../lib/theme";
 
 type Loadable<T> = { state: "loading" } | { state: "ok"; value: T } | { state: "error"; message: string };
@@ -15,32 +15,35 @@ type Loadable<T> = { state: "loading" } | { state: "ok"; value: T } | { state: "
 export function MorningScreen({ profile, dark = false }: { profile: Profile; dark?: boolean }) {
   const { t } = useTranslation();
   const c = modeColors(dark);
-  const [task, setTask] = useState<Loadable<Task | null>>({ state: "loading" });
+  const [tasks, setTasks] = useState<Loadable<Task[]>>({ state: "loading" });
 
   useEffect(() => {
     let cancelled = false;
-    fetchTodaysFirstTask(profile.id)
-      .then((v) => !cancelled && setTask({ state: "ok", value: v }))
-      .catch((e) => !cancelled && setTask({ state: "error", message: e instanceof Error ? e.message : String(e) }));
+    fetchTodaysFirstTasks(profile.id)
+      .then((v) => !cancelled && setTasks({ state: "ok", value: v }))
+      .catch((e) => !cancelled && setTasks({ state: "error", message: e instanceof Error ? e.message : String(e) }));
     return () => { cancelled = true; };
   }, [profile.id]);
 
   async function handleSkip(id: string) {
-    setTask({ state: "loading" });
+    if (tasks.state !== "ok") return;
+    const next = tasks.value.filter((task) => task.id !== id);
+    setTasks({ state: "ok", value: next });
     try {
       await updateTaskStatus(id, "skipped");
-      setTask({ state: "ok", value: null });
     } catch (e) {
-      setTask({ state: "error", message: e instanceof Error ? e.message : String(e) });
+      setTasks({ state: "error", message: e instanceof Error ? e.message : String(e) });
     }
   }
 
   async function handleStart(id: string) {
+    if (tasks.state !== "ok") return;
+    const next = tasks.value.filter((task) => task.id !== id);
+    setTasks({ state: "ok", value: next });
     try {
       await updateTaskStatus(id, "done_full");
-      setTask({ state: "ok", value: null });
     } catch (e) {
-      setTask({ state: "error", message: e instanceof Error ? e.message : String(e) });
+      setTasks({ state: "error", message: e instanceof Error ? e.message : String(e) });
     }
   }
 
@@ -48,41 +51,45 @@ export function MorningScreen({ profile, dark = false }: { profile: Profile; dar
     <View className="px-6 pt-2 pb-6">
       {/* 정체성 카드 — 조합 닉네임 */}
       <View className={`rounded-card border p-5 mb-4 ${c.cardBg} ${c.cardBorder}`}>
-        <Text className={`${c.mute} text-xs tracking-widest mb-2`}>
+        <Text className={`${c.mute} text-sm tracking-widest mb-2`}>
           {profile.solo_mbti} × {profile.social_mbti}
         </Text>
         <Text className={`${c.ink} text-xl font-medium`}>
-          {t("flow.morning.identityLead")}{t(profile.combo_nickname)}{t("flow.morning.identityTail")}
+          {t("flow.morning.identityLead")}
+          {profile.display_nickname ?? t(profile.combo_nickname ?? "combos.unknown")}
+          {t("flow.morning.identityTail")}
         </Text>
       </View>
 
       {/* 어젯밤 첫 단추 */}
-      <Text className={`${c.mute} text-xs ml-1 mb-1.5`}>{t("flow.morning.lead")}</Text>
+      <Text className={`${c.mute} text-sm ml-1 mb-2`}>{t("flow.morning.lead")}</Text>
       <Text className={`${c.ink} text-2xl font-medium ml-1 mb-4`}>{t("flow.morning.headline")}</Text>
 
-      {task.state === "loading" && (
+      {tasks.state === "loading" && (
         <View className={`rounded-card border p-6 items-center ${c.cardBg} ${c.cardBorder}`}>
           <ActivityIndicator color={dark ? "#C9C5DE" : "#5C5A53"} />
         </View>
       )}
 
-      {task.state === "error" && (
+      {tasks.state === "error" && (
         <View className="rounded-card bg-evening-soft p-4">
           <Text className="text-ink text-sm font-medium">{t("flow.loadError")}</Text>
-          <Text className="text-ink-soft text-xs mt-1">{task.message}</Text>
+          <Text className="text-ink-soft text-xs mt-1">{tasks.message}</Text>
         </View>
       )}
 
-      {task.state === "ok" && !task.value && (
+      {tasks.state === "ok" && tasks.value.length === 0 && (
         <View className={`rounded-card border p-5 ${c.cardBg} ${c.cardBorder}`}>
-          <Text className={`${c.ink} text-base font-medium`}>{t("flow.morning.emptyLead")}</Text>
-          <Text className={`${c.inkSoft} text-sm mt-2 leading-relaxed`}>{t("flow.morning.emptyBody")}</Text>
+          <Text className={`${c.ink} text-lg font-medium`}>{t("flow.morning.emptyLead")}</Text>
+          <Text className={`${c.inkSoft} text-base mt-2 leading-relaxed`}>{t("flow.morning.emptyBody")}</Text>
         </View>
       )}
 
-      {task.state === "ok" && task.value && (
-        <FirstButtonCard task={task.value} onStart={handleStart} onSkip={handleSkip} dark={dark} />
-      )}
+      {tasks.state === "ok" && tasks.value.map((task) => (
+        <View key={task.id} className="mb-3">
+          <FirstButtonCard task={task} onStart={handleStart} onSkip={handleSkip} dark={dark} />
+        </View>
+      ))}
     </View>
   );
 }
@@ -97,14 +104,14 @@ function FirstButtonCard({ task, onStart, onSkip, dark }: {
       <View className="absolute left-0 top-0 bottom-0 w-1 bg-morning" />
 
       <View className="flex-row items-center mb-5">
-        <View className="w-12 h-12 rounded-card bg-morning-soft items-center justify-center mr-3">
-          <Text className="text-2xl">💧</Text>
+        <View className="w-14 h-14 rounded-card bg-morning-soft items-center justify-center mr-3">
+          <Text className="text-3xl">💧</Text>
         </View>
         <View className="flex-1">
-          <Text className={`${c.mute} text-xs tracking-widest`}>2 MIN</Text>
-          <Text className={`${c.ink} text-base font-medium mt-0.5`}>{task.title}</Text>
+          <Text className={`${c.mute} text-sm tracking-widest`}>2 MIN</Text>
+          <Text className={`${c.ink} text-lg font-medium mt-0.5`}>{task.title}</Text>
           {task.micro_action && (
-            <Text className={`${c.inkSoft} text-xs mt-0.5`}>{task.micro_action}</Text>
+            <Text className={`${c.inkSoft} text-sm mt-1`}>{task.micro_action}</Text>
           )}
         </View>
       </View>
@@ -112,12 +119,12 @@ function FirstButtonCard({ task, onStart, onSkip, dark }: {
       <Pressable
         onPress={() => onStart(task.id)}
         className={"rounded-pill items-center justify-center " + (dark ? "bg-night-ink" : "bg-ink")}
-        style={{ height: 48 }}
+        style={{ height: 52 }}
       >
-        <Text className={(dark ? "text-night-bg" : "text-paper-warm") + " text-sm font-medium"}>{t("flow.morning.start")}</Text>
+        <Text className={(dark ? "text-night-bg" : "text-paper-warm") + " text-base font-medium"}>{t("flow.morning.start")}</Text>
       </Pressable>
       <Pressable onPress={() => onSkip(task.id)} className="mt-3 items-center">
-        <Text className={`${c.mute} text-xs underline`}>{t("flow.morning.skip")}</Text>
+        <Text className={`${c.mute} text-sm underline`}>{t("flow.morning.skip")}</Text>
       </Pressable>
     </View>
   );
