@@ -16,19 +16,19 @@ export type InTraitKey =
 
 export type InTrait = {
   key: InTraitKey;
-  emoji: string;
+  iconName: string;
 };
 
 // 8개 IN 특성. 순서는 사용자가 가장 공감하기 쉬운 순서로 (뇌 부스터 → 완벽주의 → 깊이 ...)
 export const IN_TRAITS: InTrait[] = [
-  { key: "idea_flood",          emoji: "🧠" },
-  { key: "perfectionism_block", emoji: "🌀" },
-  { key: "depth_first",         emoji: "🔍" },
-  { key: "solo_charge",         emoji: "🪟" },
-  { key: "meaning_fuel",        emoji: "🎯" },
-  { key: "pattern_sight",       emoji: "🌌" },
-  { key: "simulation_block",    emoji: "💭" },
-  { key: "low_meaning_block",   emoji: "📚" },
+  { key: "idea_flood",          iconName: "bulb-outline" },
+  { key: "perfectionism_block", iconName: "infinite-outline" },
+  { key: "depth_first",         iconName: "search-outline" },
+  { key: "solo_charge",         iconName: "leaf-outline" },
+  { key: "meaning_fuel",        iconName: "compass-outline" },
+  { key: "pattern_sight",       iconName: "sparkles-outline" },
+  { key: "simulation_block",    iconName: "eye-outline" },
+  { key: "low_meaning_block",   iconName: "book-outline" },
 ];
 
 // i18n 키 헬퍼 — onboarding.inTraits.{key} 패턴

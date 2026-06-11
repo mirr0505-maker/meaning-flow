@@ -16,9 +16,9 @@ const PAGE_SIZE = 20;
 
 const FILTERS: FeedFilter[] = ["world", "same_combo", "same_language"];
 
-// 언어 코드 → 국기 (PRD 7.3)
-const FLAG: Record<string, string> = {
-  ko: "🇰🇷", en: "🇺🇸", ja: "🇯🇵", fr: "🇫🇷", de: "🇩🇪",
+// 언어 코드 → 회색 텍스트 배지
+const LANG_TEXT: Record<string, string> = {
+  ko: "KO", en: "EN", ja: "JA", fr: "FR", de: "DE",
 };
 
 export function GardenScreen({ profile }: { profile: Profile }) {
@@ -130,7 +130,7 @@ export function GardenScreen({ profile }: { profile: Profile }) {
               <GardenPostCard
                 key={p.id}
                 post={p}
-                flag={FLAG[p.language] ?? "🌍"}
+                flag={LANG_TEXT[p.language] ?? "ALL"}
                 isOwnLang={p.language === sl}
                 selfLang={sl}
               />

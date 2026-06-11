@@ -4,6 +4,7 @@
 
 import { useTranslation } from "react-i18next";
 import { Pressable, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { IN_TRAITS, labelKey, type InTraitKey } from "../lib/inTraits";
 
@@ -48,7 +49,13 @@ export function OBInTraits({
                 (on ? "border-ink bg-paper" : "border-hair bg-paper-warm")
               }
             >
-              <Text style={{ fontSize: 22, marginRight: 12 }}>{trait.emoji}</Text>
+              <View style={{ width: 28, alignItems: "center", marginRight: 10 }}>
+                <Ionicons
+                  name={trait.iconName as any}
+                  size={22}
+                  color={on ? "#1A1A1F" : "#9A9486"}
+                />
+              </View>
               <Text className={(on ? "text-ink font-medium" : "text-ink-soft") + " flex-1 text-sm leading-relaxed"}>
                 {t(labelKey(trait.key))}
               </Text>

@@ -3,13 +3,14 @@
 
 import { useTranslation } from "react-i18next";
 import { Pressable, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 export type NavTab = "home" | "flow" | "review";
 
-const ITEMS: { key: NavTab; emoji: string; labelKey: string }[] = [
-  { key: "home",   emoji: "🏠", labelKey: "nav.home" },
-  { key: "flow",   emoji: "🌊", labelKey: "nav.flow" },
-  { key: "review", emoji: "📓", labelKey: "nav.review" },
+const ITEMS: { key: NavTab; icon: keyof typeof Ionicons.glyphMap; labelKey: string }[] = [
+  { key: "home",   icon: "home-outline", labelKey: "nav.home" },
+  { key: "flow",   icon: "water-outline", labelKey: "nav.flow" },
+  { key: "review", icon: "book-outline", labelKey: "nav.review" },
 ];
 
 const NAV_BG       = "#FBF8F1";    // 더 밝은 paper
@@ -51,7 +52,7 @@ export function BottomNav({
               backgroundColor: on ? ACTIVE_BG : "transparent",
             }}
           >
-            <Text style={{ fontSize: 20, marginBottom: 2 }}>{item.emoji}</Text>
+            <Ionicons name={item.icon} size={20} color={on ? TEXT_ON : TEXT_OFF} style={{ marginBottom: 2 }} />
             <Text
               style={{
                 fontSize: 11,

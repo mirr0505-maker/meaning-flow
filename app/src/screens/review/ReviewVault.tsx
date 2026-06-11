@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Text, View } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
 import { fetchVault, type Thought } from "../../lib/thoughtVault";
 
@@ -52,7 +53,10 @@ export function ReviewVault({ userId }: { userId: string }) {
               {new Date(th.captured_at).toLocaleDateString(localeCode, { month: "short", day: "numeric" })}
             </Text>
             {th.source === "inspiration_5min" && (
-              <Text className="text-leaf text-[10px] ml-2">⏱ {t("review.vault.from5min")}</Text>
+              <View className="flex-row items-center ml-2">
+                <Feather name="clock" size={10} color="#7FA37F" style={{ marginRight: 2 }} />
+                <Text className="text-leaf text-[10px]">{t("review.vault.from5min")}</Text>
+              </View>
             )}
           </View>
           <Text className="text-ink text-sm leading-relaxed">{th.thought_text}</Text>

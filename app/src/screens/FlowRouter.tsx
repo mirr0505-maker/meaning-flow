@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { StatusBar } from "expo-status-bar";
+import { Feather } from "@expo/vector-icons";
 
 import type { Profile } from "../lib/profiles";
 import { currentMode, type Mode } from "../lib/timeOfDay";
@@ -21,11 +22,11 @@ import { SettingsScreen } from "./SettingsScreen";
 import { EveningTabs } from "./evening/EveningTabs";
 
 const MODES: Mode[] = ["morning", "day", "evening", "night"];
-const MODE_EMOJI: Record<Mode, string> = {
-  morning: "🌅",
-  day:     "☀️",
-  evening: "🌆",
-  night:   "🌙",
+const MODE_ICON: Record<Mode, keyof typeof Feather.glyphMap> = {
+  morning: "sunrise",
+  day:     "sun",
+  evening: "sunset",
+  night:   "moon",
 };
 const MODE_ACCENT: Record<Mode, string> = {
   morning: "#E6C58A",
@@ -127,7 +128,7 @@ export function FlowRouter({ profile, onAccountDeleted }: {
                       borderColor: chipBorder,
                     }}
                   >
-                    <Text style={{ fontSize: 18, marginBottom: 2 }}>{MODE_EMOJI[m]}</Text>
+                    <Feather name={MODE_ICON[m]} size={18} color={chipTextColor} style={{ marginBottom: 4 }} />
                     <Text
                       style={{
                         fontSize: 11,

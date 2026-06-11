@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 import { IN_TRAITS, labelKey } from "../lib/inTraits";
+import { Ionicons } from "@expo/vector-icons";
 
 export function AboutScreen({ onClose }: { onClose: () => void }) {
   const { t } = useTranslation();
@@ -65,7 +66,9 @@ export function AboutScreen({ onClose }: { onClose: () => void }) {
         <View className="mb-6">
           {IN_TRAITS.map((trait) => (
             <View key={trait.key} className="rounded-card border border-night-hair bg-night-bg2 p-3 mb-1.5 flex-row items-center">
-              <Text style={{ fontSize: 18, marginRight: 10 }}>{trait.emoji}</Text>
+              <View style={{ width: 24, alignItems: "center", marginRight: 8 }}>
+                <Ionicons name={trait.iconName as any} size={18} color="#A6A3B3" />
+              </View>
               <Text className="text-night-ink text-xs flex-1 leading-relaxed">
                 {t(labelKey(trait.key))}
               </Text>

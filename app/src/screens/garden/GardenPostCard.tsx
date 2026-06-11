@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { getResonanceCount, hasResonated, toggleResonance, type FeedPost } from "../../lib/resonance";
 import { fetchTranslation, type TranslateResult } from "../../lib/translation";
@@ -83,7 +84,9 @@ export function GardenPostCard({ post, flag, isOwnLang, selfLang }: {
     <View className="rounded-card border border-night-hair bg-night-bg2 p-4 mb-3">
       {/* eyebrow — 국기 + 조합 닉네임 + 대략적 시각 + ⋯ 신고 */}
       <View className="flex-row items-center mb-2">
-        <Text style={{ fontSize: 14 }}>{flag}</Text>
+        <View className="bg-night-bg3 border border-night-hair rounded px-1.5 py-0.5">
+          <Text className="text-night-muted text-[10px] font-semibold">{flag}</Text>
+        </View>
         <Text className="text-night-muted text-[11px] tracking-wide ml-2 flex-1" numberOfLines={1}>
           {t(post.combo_nickname)}
         </Text>
@@ -125,11 +128,19 @@ export function GardenPostCard({ post, flag, isOwnLang, selfLang }: {
             {translation === "loading" ? (
               <ActivityIndicator color="#7E7E92" size="small" />
             ) : (
-              <Text className="text-night-soft text-[11px]">
-                {translation && translation.ok
-                  ? `📄 ${t("garden.translate.showOriginal")}`
-                  : `🌍 ${t("garden.translate.translateBtn")}`}
-              </Text>
+              <View className="flex-row items-center">
+                <Ionicons
+                  name={translation && translation.ok ? "document-text-outline" : "globe-outline"}
+                  size={12}
+                  color="#A6A3B3"
+                  style={{ marginRight: 4 }}
+                />
+                <Text className="text-night-soft text-[11px]">
+                  {translation && translation.ok
+                    ? t("garden.translate.showOriginal")
+                    : t("garden.translate.translateBtn")}
+                </Text>
+              </View>
             )}
           </Pressable>
           {/* provider · cache 표시 */}
@@ -155,14 +166,20 @@ export function GardenPostCard({ post, flag, isOwnLang, selfLang }: {
           onPress={handleToggle}
           disabled={pending || resonated === null}
           className={
-            "rounded-pill border px-3 py-1.5 " +
+            "rounded-pill border px-3 py-1.5 flex-row items-center " +
             (resonated
-              ? "bg-leaf/30 border-leaf"
-              : "border-night-hair")
+              ? "bg-leaf/20 border-leaf"
+              : "border-night-hair bg-transparent")
           }
         >
+          <Ionicons
+            name={resonated ? "leaf" : "leaf-outline"}
+            size={12}
+            color={resonated ? "#7FA37F" : "#A6A3B3"}
+            style={{ marginRight: 4 }}
+          />
           <Text className={(resonated ? "text-leaf-soft" : "text-night-soft") + " text-xs"}>
-            🌿 {t(resonated ? "garden.resonated" : "garden.resonate")}
+            {t(resonated ? "garden.resonated" : "garden.resonate")}
           </Text>
         </Pressable>
         <Text className="text-night-muted text-[11px] ml-3">

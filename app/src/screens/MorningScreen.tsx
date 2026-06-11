@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
 import type { Profile } from "../lib/profiles";
 import { fetchTodaysFirstTasks, updateTaskStatus, type Task } from "../lib/tasks";
@@ -113,7 +114,7 @@ function FirstButtonCard({ task, onStart, onSkip, dark }: {
 
       <View className="flex-row items-center mb-5">
         <View className="w-14 h-14 rounded-card bg-morning-soft items-center justify-center mr-3">
-          <Text className="text-3xl">💧</Text>
+          <Feather name="droplet" size={28} color="#D8A06A" />
         </View>
         <View className="flex-1">
           <Text className={`${c.mute} text-sm tracking-widest`}>2 MIN</Text>

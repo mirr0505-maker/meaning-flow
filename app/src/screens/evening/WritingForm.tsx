@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Pressable, Switch, Text, TextInput, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { MAX_REFLECTION_LEN } from "../../lib/reflections";
 
 export function WritingForm({
@@ -62,9 +63,17 @@ export function WritingForm({
           thumbColor={share ? "#FBF8F1" : "#7E7E92"}
         />
         <View className="flex-1 ml-3">
-          <Text className={(share ? "text-ink" : "text-night-ink") + " text-sm font-medium"}>
-            🌿 {t("flow.evening.shareLabel")}
-          </Text>
+          <View className="flex-row items-center">
+            <Ionicons
+              name="leaf-outline"
+              size={14}
+              color={share ? "#7FA37F" : "#A6A3B3"}
+              style={{ marginRight: 4 }}
+            />
+            <Text className={(share ? "text-ink" : "text-night-ink") + " text-sm font-medium"}>
+              {t("flow.evening.shareLabel")}
+            </Text>
+          </View>
           <Text className={(share ? "text-ink-soft" : "text-night-soft") + " text-xs mt-0.5"}>
             {share ? t("flow.evening.shareDescOn") : t("flow.evening.shareDescOff")}
           </Text>

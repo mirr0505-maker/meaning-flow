@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, Text, TextInput, View } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
 import { addThought, fetchVault, removeThought, type Thought } from "../../lib/thoughtVault";
 
@@ -67,9 +68,11 @@ export function NightVault({ userId }: { userId: string }) {
               (locked ? "bg-night-soft border-night-soft" : "bg-night-bg3 border-night-hair")
             }
           >
-            <Text className={(locked ? "text-night-bg" : "text-night-muted") + " text-xs"}>
-              {locked ? "🔒" : "🔓"}
-            </Text>
+            <Feather
+              name={locked ? "lock" : "unlock"}
+              size={13}
+              color={locked ? "#14151C" : "#A6A3B3"}
+            />
           </View>
           <View className="flex-1">
             <Text className="text-night-muted text-[10px] tracking-widest font-medium">
@@ -156,9 +159,17 @@ export function NightVault({ userId }: { userId: string }) {
         }
         style={{ height: 50 }}
       >
-        <Text className={(locked ? "text-night-soft" : "text-night-bg") + " text-sm font-medium"}>
-          🔒 {locked ? t("flow.night.vault.locked") : t("flow.night.vault.lockBtn")}
-        </Text>
+        <View className="flex-row items-center justify-center">
+          <Feather
+            name={locked ? "lock" : "unlock"}
+            size={14}
+            color={locked ? "#7E7E92" : "#14151C"}
+            style={{ marginRight: 6 }}
+          />
+          <Text className={(locked ? "text-night-soft" : "text-night-bg") + " text-sm font-medium"}>
+            {locked ? t("flow.night.vault.locked") : t("flow.night.vault.lockBtn")}
+          </Text>
+        </View>
       </Pressable>
 
       {error && (

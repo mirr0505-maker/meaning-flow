@@ -4,17 +4,18 @@
 
 import { useTranslation } from "react-i18next";
 import { Pressable, Text, View } from "react-native";
+import { Feather, Ionicons } from "@expo/vector-icons";
 
 import { dailyMessageKey } from "../lib/dailyMessage";
 import { IN_TRAITS, labelKey, type InTraitKey } from "../lib/inTraits";
 import { type Profile } from "../lib/profiles";
 import { currentMode, type Mode } from "../lib/timeOfDay";
 
-const MODE_EMOJI: Record<Mode, string> = {
-  morning: "🌅",
-  day:     "☀️",
-  evening: "🌆",
-  night:   "🌙",
+const MODE_ICON: Record<Mode, keyof typeof Feather.glyphMap> = {
+  morning: "sunrise",
+  day:     "sun",
+  evening: "sunset",
+  night:   "moon",
 };
 
 const MODE_ORDER: Mode[] = ["morning", "day", "evening", "night"];
@@ -74,9 +75,12 @@ export function HomeScreen({
 
       {/* 현재 모드 안내 카드 */}
       <View className="mt-6 rounded-card border border-hair bg-paper p-5">
-        <Text className="text-ink text-lg font-medium mb-2">
-          {t("home.currentSection", { mode: `${MODE_EMOJI[mode]} ${t(`modes.${mode}.name`)}` })}
-        </Text>
+        <View className="flex-row items-center mb-2">
+          <Feather name={MODE_ICON[mode]} size={20} color="#1A1A1F" style={{ marginRight: 6 }} />
+          <Text className="text-ink text-lg font-medium">
+            {t("home.currentSection", { mode: t(`modes.${mode}.name`) })}
+          </Text>
+        </View>
         <Text className="text-ink-soft text-base leading-relaxed mb-4">
           {t(currentHintKey)}
         </Text>
@@ -104,7 +108,13 @@ export function HomeScreen({
               onPress={() => onGoToMode(m)}
               className="flex-row items-center py-2.5"
             >
-              <Text style={{ fontSize: 22, marginRight: 12 }}>{MODE_EMOJI[m]}</Text>
+              <View style={{ width: 28, alignItems: "center", marginRight: 10 }}>
+                <Feather
+                  name={MODE_ICON[m]}
+                  size={20}
+                  color={active ? "#1A1A1F" : "#9A9486"}
+                />
+              </View>
               <Text className={(active ? "text-ink font-medium" : "text-ink-soft") + " text-base flex-1"}>
                 {t(`modes.${m}.name`)}
               </Text>
@@ -134,7 +144,9 @@ export function HomeScreen({
             {t("home.inTraitSection")}
           </Text>
           <View className="rounded-card border border-hair bg-paper p-5 flex-row items-center">
-            <Text style={{ fontSize: 28, marginRight: 14 }}>{traitObj.emoji}</Text>
+            <View style={{ width: 36, alignItems: "center", marginRight: 12 }}>
+              <Ionicons name={traitObj.iconName as any} size={28} color="#1A1A1F" />
+            </View>
             <Text className="text-ink text-base flex-1 leading-relaxed">
               {t(labelKey(traitObj.key))}
             </Text>

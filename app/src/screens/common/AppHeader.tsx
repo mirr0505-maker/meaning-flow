@@ -7,6 +7,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, Pressable, Text, View } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
 import { type Profile } from "../../lib/profiles";
 
@@ -62,7 +63,7 @@ export function AppHeader({
           className="rounded-pill items-center justify-center"
           style={{ width: 32, height: 32 }}
         >
-          <Text className={dark ? "text-night-ink" : "text-ink"} style={{ fontSize: 16 }}>⚙</Text>
+          <Feather name="settings" size={18} color={dark ? "#FBF8F1" : "#1A1A1F"} />
         </Pressable>
         <Pressable
           onPress={() => setLangOpen(true)}
@@ -70,7 +71,7 @@ export function AppHeader({
           className="rounded-pill items-center justify-center"
           style={{ width: 32, height: 32 }}
         >
-          <Text style={{ fontSize: 16 }}>🌐</Text>
+          <Feather name="globe" size={18} color={dark ? "#FBF8F1" : "#1A1A1F"} />
         </Pressable>
       </View>
 
