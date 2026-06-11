@@ -6,12 +6,11 @@
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, Pressable, Switch, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 
 import type { Profile } from "../lib/profiles";
 import {
   fetchTodayReflection,
-  MAX_REFLECTION_LEN,
   questionKeyForComboKey,
   saveTodayReflection,
   type Reflection,
@@ -20,6 +19,10 @@ import { track } from "../lib/posthog";
 import { publishToGarden, type DuplicateExisting, type PublishResult } from "../lib/resonance";
 import { containsSelfHarm } from "../lib/safety/selfHarmKeywords";
 import { SelfHarmModal } from "./safety/SelfHarmModal";
+
+import { DuplicatePromptCard } from "./evening/DuplicatePromptCard";
+import { SavedView } from "./evening/SavedView";
+import { WritingForm } from "./evening/WritingForm";
 
 type Stage =
   | { kind: "loading" }
@@ -241,185 +244,4 @@ export function EveningScreen({ profile }: { profile: Profile }) {
   );
 }
 
-// 🚀 백로그 ⑥ (b) — 오늘 이미 정원에 보낸 글이 있을 때 부드러운 안내 카드
-function DuplicatePromptCard({
-  existing,
-  onOverwrite,
-  onKeep,
-}: {
-  existing: DuplicateExisting;
-  onOverwrite: () => void;
-  onKeep: () => void;
-}) {
-  const { t } = useTranslation();
-  return (
-    <View className="mt-6 rounded-card border border-night-hair bg-dusk-card p-5">
-      <Text className="text-night-ink text-sm font-medium">
-        {t("garden.duplicateToday.title")}
-      </Text>
-      <Text className="text-night-soft text-xs mt-2 leading-relaxed">
-        {t("garden.duplicateToday.intro")}
-      </Text>
 
-      {/* 기존 글 preview */}
-      <View className="mt-4 rounded-card border border-night-hair bg-night-bg3 p-3">
-        <Text className="text-night-muted text-[11px] mb-1">
-          {t("garden.duplicateToday.existingLabel")}
-        </Text>
-        <Text className="text-night-ink text-sm italic" style={{ lineHeight: 22 }}>
-          {existing.content}
-        </Text>
-      </View>
-
-      <Pressable
-        onPress={onOverwrite}
-        className="mt-5 rounded-pill bg-night-ink items-center justify-center"
-        style={{ height: 44 }}
-      >
-        <Text className="text-night-bg text-sm font-medium">
-          {t("garden.duplicateToday.overwrite")}
-        </Text>
-      </Pressable>
-      <Pressable onPress={onKeep} className="mt-3 items-center">
-        <Text className="text-night-muted text-xs underline">
-          {t("garden.duplicateToday.keep")}
-        </Text>
-      </Pressable>
-    </View>
-  );
-}
-
-// 🚀 저장 후 결과 표시 — share OFF / share ON 성공 / share ON 모더레이션 차단 분기
-function SavedView({
-  share, publish, onEditAgain,
-}: { share: boolean; publish?: PublishResult; onEditAgain: () => void }) {
-  const { t } = useTranslation();
-
-  // 결과 카피 결정
-  let headlineKey: string;
-  if (!share)                                          headlineKey = "flow.evening.savedPrivate";
-  else if (publish?.ok && publish.updated)             headlineKey = "flow.evening.savedUpdated";
-  else if (publish?.ok)                                headlineKey = "flow.evening.savedShared";
-  else if (publish && !publish.ok && publish.reason === "duplicate_today") {
-                                                       headlineKey = "flow.evening.duplicateKept";
-  } else {
-    const r = publish?.reason;
-    headlineKey =
-      r === "moderation_blocked"     ? "garden.moderationBlocked"     :
-      r === "moderation_unavailable" ? "garden.moderationDown"        :
-      r === "network"                ? "garden.networkError"          :
-      r === "auth"                   ? "garden.authError"             :
-                                       "garden.unknownError";
-  }
-
-  const blocked =
-    share && publish && !publish.ok &&
-    publish.reason !== "duplicate_today"; // duplicateKept 는 본인 결정으로 유지, 차단 안내 X
-
-  return (
-    <View className="mt-6 items-center">
-      <Text className="text-night-soft italic text-sm text-center" style={{ lineHeight: 22 }}>
-        {t(headlineKey)}
-      </Text>
-      {blocked && (
-        <Text className="text-night-muted text-[11px] text-center mt-2" style={{ lineHeight: 18 }}>
-          {t("garden.reflectionPreserved")}
-        </Text>
-      )}
-      <Pressable onPress={onEditAgain} className="mt-4">
-        <Text className="text-night-muted text-xs underline">
-          {t("flow.evening.editAgain")}
-        </Text>
-      </Pressable>
-    </View>
-  );
-}
-
-function WritingForm({
-  text,
-  share,
-  onTextChange,
-  onShareChange,
-  onSubmit,
-}: {
-  text: string;
-  share: boolean;
-  onTextChange: (v: string) => void;
-  onShareChange: (v: boolean) => void;
-  onSubmit: () => void;
-}) {
-  const { t } = useTranslation();
-  const canSubmit = text.trim().length > 0;
-
-  return (
-    <View>
-      {/* 입력 카드 */}
-      <View
-        className="mt-5 rounded-card border border-night-hair bg-dusk-card p-5"
-        style={{ minHeight: 180 }}
-      >
-        <TextInput
-          multiline
-          value={text}
-          onChangeText={onTextChange}
-          maxLength={MAX_REFLECTION_LEN}
-          placeholder={t("flow.evening.placeholder")}
-          placeholderTextColor="#9A9486"
-          style={{
-            fontSize: 17,
-            lineHeight: 27,
-            minHeight: 130,
-            color: "#E8E6E0",
-            textAlignVertical: "top",
-          }}
-        />
-        <View className="flex-row justify-between items-center border-t border-night-hair pt-3 mt-2">
-          <Text className="text-night-muted text-xs">
-            {text.length} / {MAX_REFLECTION_LEN}
-          </Text>
-          <Text className="text-night-muted text-xs">{t("flow.evening.charHint")}</Text>
-        </View>
-      </View>
-
-      {/* 공명방 토글 — 기본 OFF (M3) */}
-      <View
-        className={
-          "mt-4 rounded-card border p-4 flex-row items-center " +
-          (share ? "border-evening bg-evening-soft" : "border-night-hair")
-        }
-      >
-        <Switch
-          value={share}
-          onValueChange={onShareChange}
-          trackColor={{ false: "#2D2E3A", true: "#B8829C" }}
-          thumbColor={share ? "#FBF8F1" : "#7E7E92"}
-        />
-        <View className="flex-1 ml-3">
-          <Text className={(share ? "text-ink" : "text-night-ink") + " text-sm font-medium"}>
-            🌿 {t("flow.evening.shareLabel")}
-          </Text>
-          <Text className={(share ? "text-ink-soft" : "text-night-soft") + " text-xs mt-0.5"}>
-            {share ? t("flow.evening.shareDescOn") : t("flow.evening.shareDescOff")}
-          </Text>
-        </View>
-      </View>
-
-      {/* 면책 카피 (M7) — 공명방 토글 ON 시만 노출 */}
-      {share && (
-        <Text className="text-night-muted text-[11px] mt-2 ml-1 leading-relaxed">
-          {t("flow.evening.shareDisclaimer")}
-        </Text>
-      )}
-
-      {/* 저장 */}
-      <Pressable
-        disabled={!canSubmit}
-        onPress={onSubmit}
-        className={"mt-5 rounded-pill items-center justify-center bg-night-ink" + (!canSubmit ? " opacity-30" : "")}
-        style={{ height: 52 }}
-      >
-        <Text className="text-night-bg text-base font-medium">{t("flow.evening.submit")}</Text>
-      </Pressable>
-    </View>
-  );
-}

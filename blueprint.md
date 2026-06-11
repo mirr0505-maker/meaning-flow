@@ -397,9 +397,10 @@ Phase 1(RN/Expo) 마이그레이션 시 이 토큰을 NativeWind config 로 1:1 
 
 ---
 
-## 11. 현재 진척 상태 (2026-05-22 갱신)
+## 11. 현재 진척 상태 (2026-06-11 갱신)
 
-**핵심 메시지**: **Phase 1 + 2 + 3 전체 완료** (게시·피드·공명·실 번역·신고/위기자원·작성시점 자해 안전·합산 알림 인프라). 다음은 **Phase 4 (베타)** — EAS Dev Build · 일본어 native 검수 · Sentry/PostHog · 디바이스 알림 수신 검증. Expo SDK 54 + NativeWind v4 + Supabase (11 테이블 + 3 신규 마이그레이션 + RLS + RPC 5 + trigger 1 + VIEW 2 + pg_cron + Vault) + Anonymous Auth + Onboarding (두 자아 + 6 조합) + 4 모드 (🌅 점화·☀️ 실행·🌆 통합/🌿 공명방·🌙 착륙) + i18n ko/en/ja. **GitHub**: https://github.com/mirr0505-maker/meaning-flow (Private). **EAS project**: meaning-flow (`99e22e91-76e8-450d-ba79-5764f4a7be91`).
+**핵심 메시지**: **아침 점화 모드 태스크 완료 표시 개선 완료** (2026-06-11). 완료/스킵된 첫 단추가 화면에서 사라지지 않고 `✓ 완료됨` / `건너뜀` 상태 배지 및 반투명(`opacity-60`) 피드백과 함께 발화 영역에 머무르도록 개선했습니다. tsc 타입체크 통과 및 49개 단위 테스트 전체 통과 확인.
+**이전 핵심 메시지**: **Phase 1 + 2 + 3 전체 완료** (게시·피드·공명·실 번역·신고/위기자원·작성시점 자해 안전·합산 알림 인프라). 다음은 **Phase 4 (베타)** — EAS Dev Build · 일본어 native 검수 · Sentry/PostHog · 디바이스 알림 수신 검증. Expo SDK 54 + NativeWind v4 + Supabase (11 테이블 + 3 신규 마이그레이션 + RLS + RPC 5 + trigger 1 + VIEW 2 + pg_cron + Vault) + Anonymous Auth + Onboarding (두 자아 + 6 조합) + 4 모드 (🌅 점화·☀️ 실행·🌆 통합/🌿 공명방·🌙 착륙) + i18n ko/en/ja. **GitHub**: https://github.com/mirr0505-maker/meaning-flow (Private). **EAS project**: meaning-flow (`99e22e91-76e8-450d-ba79-5764f4a7be91`).
 
 **Phase 3 외부 의존 상태**:
 - ✅ OpenAI Moderation API key 발급 + Supabase secret + Edge Function `resonance_publish` deploy + 실 검증 (5 시나리오 통과, 2026-05-22)
@@ -657,7 +658,8 @@ npm install i18next react-i18next expo-localization
 2. ✅ Phase 1 STEP 1-A~E 전체 완료 (2026-05-21~22)
 3. ✅ 일본어 1차 초안 추가 + Phase 1 격상 결정 반영 (2026-05-22)
 4. ✅ git init + GitHub push (https://github.com/mirr0505-maker/meaning-flow) (2026-05-22)
-5. ⏳ **다음 세션 후보** (사용자 결정):
+5. ✅ 아침 점화 모드 태스크 완료 표시 개선 (2026-06-11)
+6. ⏳ **다음 세션 후보** (사용자 결정):
    - **A. Phase 2 진입** — 🌆 통합 (의미 일기 + 공명방 진입) + 🌙 착륙 (생각 보관함·5분 타이머·내일의 첫 단추·이불 모드)
    - **B. 백로그 정리** ([blueprint.md 11.0-F](#11-0-f-별도-트랙-2026-05-22-발견-추후-처리))
      - NativeWind `flex-1` 모바일 누락 근본 원인 (★)

@@ -48,7 +48,6 @@ export async function fetchTodaysFirstTasks(userId: string): Promise<Task[]> {
     .eq("source", "night_first")
     .is("parent_id", null)
     .eq("scheduled_for", todayISO())
-    .eq("status", "pending")
     .order("created_at", { ascending: true })
     .limit(3);
   if (error) throw error;

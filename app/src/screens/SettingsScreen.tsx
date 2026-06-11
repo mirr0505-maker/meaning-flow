@@ -6,7 +6,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, Alert, Linking, Modal, Platform, Pressable, ScrollView, Share, Switch, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Linking, Platform, Pressable, ScrollView, Share, Switch, Text, View } from "react-native";
 
 import { deleteAccount, logoutAccount } from "../lib/account";
 import { readConsent, saveConsent } from "../lib/consent";
@@ -15,6 +15,8 @@ import { getLinkedProviders, linkProviderToCurrentUser, type SnsProvider } from 
 
 import { AboutScreen } from "./AboutScreen";
 import { IdentityEditScreen } from "./IdentityEditScreen";
+import { DeleteConfirmModal, type DeletePhase } from "./settings/DeleteConfirmModal";
+import { LogoutConfirmModal, type LogoutPhase } from "./settings/LogoutConfirmModal";
 
 // 4-I: GitHub Pages 호스팅 완료 (2026-05-29). repo: mirr0505-maker/meaning-flow-legal
 const TOS_URL = "https://mirr0505-maker.github.io/meaning-flow-legal/tos-ko.html";
@@ -26,8 +28,8 @@ export function SettingsScreen({ userId, onClose, onAccountDeleted }: {
   onAccountDeleted: () => void;
 }) {
   const { t } = useTranslation();
-  const [confirmPhase, setConfirmPhase] = useState<"hidden" | "first" | "final" | "deleting" | "error">("hidden");
-  const [logoutPhase,  setLogoutPhase]  = useState<"hidden" | "confirm" | "out" | "error">("hidden");
+  const [confirmPhase, setConfirmPhase] = useState<DeletePhase>("hidden");
+  const [logoutPhase,  setLogoutPhase]  = useState<LogoutPhase>("hidden");
   const [errMsg, setErrMsg] = useState<string | null>(null);
   const [logoutErr, setLogoutErr] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
@@ -374,174 +376,24 @@ export function SettingsScreen({ userId, onClose, onAccountDeleted }: {
         </Pressable>
       </ScrollView>
 
-      {/* 확인 모달 — 이중 확인 (M1: 강박 X, 단 되돌릴 수 없음 명시) */}
-      <Modal
+      {/* 이중 확인 회원 탈퇴 모달 */}
+      <DeleteConfirmModal
         visible={confirmPhase !== "hidden"}
-        transparent
-        animationType="fade"
-        onRequestClose={() => confirmPhase !== "deleting" && setConfirmPhase("hidden")}
-      >
-        <Pressable
-          onPress={() => confirmPhase !== "deleting" && setConfirmPhase("hidden")}
-          className="flex-1 items-center justify-center"
-          style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
-        >
-          <Pressable
-            onPress={(e) => e.stopPropagation()}
-            className="rounded-card bg-night-bg2 border border-night-hair p-5 mx-4"
-            style={{ width: "100%", maxWidth: 360 }}
-          >
-            {confirmPhase === "first" && (
-              <View>
-                <Text className="text-night-ink text-base font-medium">
-                  {t("settings.account.confirm1Title")}
-                </Text>
-                <Text className="text-night-soft text-xs mt-2 leading-relaxed">
-                  {t("settings.account.confirm1Body")}
-                </Text>
-                <Pressable
-                  onPress={() => setConfirmPhase("final")}
-                  className="mt-5 rounded-pill border border-night-soft items-center justify-center"
-                  style={{ height: 44 }}
-                >
-                  <Text className="text-night-soft text-sm">
-                    {t("settings.account.confirm1Continue")}
-                  </Text>
-                </Pressable>
-                <Pressable onPress={() => setConfirmPhase("hidden")} className="mt-3 items-center">
-                  <Text className="text-night-muted text-xs underline">
-                    {t("settings.account.cancel")}
-                  </Text>
-                </Pressable>
-              </View>
-            )}
+        phase={confirmPhase}
+        errMsg={errMsg}
+        onCancel={() => setConfirmPhase("hidden")}
+        onContinue={() => setConfirmPhase("final")}
+        onDelete={handleDelete}
+      />
 
-            {confirmPhase === "final" && (
-              <View>
-                <Text className="text-night-ink text-base font-medium">
-                  {t("settings.account.confirm2Title")}
-                </Text>
-                <Text className="text-night-soft text-xs mt-2 leading-relaxed">
-                  {t("settings.account.confirm2Body")}
-                </Text>
-                <Pressable
-                  onPress={handleDelete}
-                  className="mt-5 rounded-pill bg-night-ink items-center justify-center"
-                  style={{ height: 44 }}
-                >
-                  <Text className="text-night-bg text-sm font-medium">
-                    {t("settings.account.confirm2Delete")}
-                  </Text>
-                </Pressable>
-                <Pressable onPress={() => setConfirmPhase("hidden")} className="mt-3 items-center">
-                  <Text className="text-night-muted text-xs underline">
-                    {t("settings.account.cancel")}
-                  </Text>
-                </Pressable>
-              </View>
-            )}
-
-            {confirmPhase === "deleting" && (
-              <View className="items-center py-4">
-                <ActivityIndicator color="#C9C5DE" />
-                <Text className="text-night-soft text-xs mt-3">
-                  {t("settings.account.deleting")}
-                </Text>
-              </View>
-            )}
-
-            {confirmPhase === "error" && (
-              <View>
-                <Text className="text-night-ink text-sm font-medium">
-                  {t("settings.account.deleteErrorTitle")}
-                </Text>
-                <Text className="text-night-muted text-xs mt-2">{errMsg}</Text>
-                <Pressable
-                  onPress={() => setConfirmPhase("hidden")}
-                  className="mt-4 rounded-pill border border-night-hair items-center justify-center"
-                  style={{ height: 40 }}
-                >
-                  <Text className="text-night-soft text-xs">
-                    {t("settings.account.cancel")}
-                  </Text>
-                </Pressable>
-              </View>
-            )}
-          </Pressable>
-        </Pressable>
-      </Modal>
-
-      {/* 로그아웃 confirm — 단일 확인 (계정 삭제와 달리 되돌릴 수 있음 → 가벼운 톤) */}
-      <Modal
+      {/* 로그아웃 확인 모달 */}
+      <LogoutConfirmModal
         visible={logoutPhase !== "hidden"}
-        transparent
-        animationType="fade"
-        onRequestClose={() => logoutPhase !== "out" && setLogoutPhase("hidden")}
-      >
-        <Pressable
-          onPress={() => logoutPhase !== "out" && setLogoutPhase("hidden")}
-          className="flex-1 items-center justify-center"
-          style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
-        >
-          <Pressable
-            onPress={(e) => e.stopPropagation()}
-            className="rounded-card bg-night-bg2 border border-night-hair p-5 mx-4"
-            style={{ width: "100%", maxWidth: 360 }}
-          >
-            {logoutPhase === "confirm" && (
-              <View>
-                <Text className="text-night-ink text-base font-medium">
-                  {t("settings.account.logoutConfirmTitle")}
-                </Text>
-                <Text className="text-night-soft text-xs mt-2 leading-relaxed">
-                  {t("settings.account.logoutConfirmBody")}
-                </Text>
-                <Pressable
-                  onPress={handleLogout}
-                  className="mt-5 rounded-pill bg-night-ink items-center justify-center"
-                  style={{ height: 44 }}
-                >
-                  <Text className="text-night-bg text-sm font-medium">
-                    {t("settings.account.logoutConfirmBtn")}
-                  </Text>
-                </Pressable>
-                <Pressable onPress={() => setLogoutPhase("hidden")} className="mt-3 items-center">
-                  <Text className="text-night-muted text-xs underline">
-                    {t("settings.account.cancel")}
-                  </Text>
-                </Pressable>
-              </View>
-            )}
-
-            {logoutPhase === "out" && (
-              <View className="items-center py-4">
-                <ActivityIndicator color="#C9C5DE" />
-                <Text className="text-night-soft text-xs mt-3">
-                  {t("settings.account.loggingOut")}
-                </Text>
-              </View>
-            )}
-
-            {logoutPhase === "error" && (
-              <View>
-                <Text className="text-night-ink text-sm font-medium">
-                  {t("settings.account.logoutErrorTitle")}
-                </Text>
-                <Text className="text-night-muted text-xs mt-2">{logoutErr}</Text>
-                <Pressable
-                  onPress={() => setLogoutPhase("hidden")}
-                  className="mt-4 rounded-pill border border-night-hair items-center justify-center"
-                  style={{ height: 40 }}
-                >
-                  <Text className="text-night-soft text-xs">
-                    {t("settings.account.cancel")}
-                  </Text>
-                </Pressable>
-              </View>
-            )}
-          </Pressable>
-        </Pressable>
-      </Modal>
+        phase={logoutPhase}
+        logoutErr={logoutErr}
+        onCancel={() => setLogoutPhase("hidden")}
+        onLogout={handleLogout}
+      />
     </View>
   );
 }

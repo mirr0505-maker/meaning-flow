@@ -10,11 +10,13 @@ import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
 import { fetchMyReflections, type Reflection } from "../lib/reflections";
+import { modeColors } from "../lib/theme";
 
 const PAGE_SIZE = 20;
 
-export function DiaryArchiveScreen({ userId }: { userId: string }) {
+export function DiaryArchiveScreen({ userId, dark = false }: { userId: string; dark?: boolean }) {
   const { t, i18n } = useTranslation();
+  const c = modeColors(dark);
   const [items, setItems] = useState<Reflection[] | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -56,13 +58,13 @@ export function DiaryArchiveScreen({ userId }: { userId: string }) {
 
   return (
     <View className="px-6 pt-2 pb-6">
-      <Text className="text-mute text-xs tracking-widest mb-3">
+      <Text className={c.mute + " text-xs tracking-widest mb-3"}>
         {t("diary.eyebrow")}
       </Text>
-      <Text className="text-ink text-base font-medium mb-1">
+      <Text className={c.ink + " text-base font-medium mb-1"}>
         {t("diary.title")}
       </Text>
-      <Text className="text-mute text-[11px] mb-5 leading-relaxed italic">
+      <Text className={c.mute + " text-[11px] mb-5 leading-relaxed italic"}>
         {t("diary.intro")}
       </Text>
 
@@ -71,14 +73,14 @@ export function DiaryArchiveScreen({ userId }: { userId: string }) {
       )}
 
       {err && (
-        <View className="rounded-card border border-hair bg-paper p-4">
-          <Text className="text-ink text-sm">{t("diary.loadError")}</Text>
-          <Text className="text-mute text-xs mt-1">{err}</Text>
+        <View className={`rounded-card border p-4 ${c.cardBorder} ${c.cardBg}`}>
+          <Text className={c.ink + " text-sm"}>{t("diary.loadError")}</Text>
+          <Text className={c.mute + " text-xs mt-1"}>{err}</Text>
         </View>
       )}
 
       {items && items.length === 0 && (
-        <Text className="text-mute text-xs italic text-center py-12 leading-relaxed">
+        <Text className={c.mute + " text-xs italic text-center py-12 leading-relaxed"}>
           {t("diary.empty")}
         </Text>
       )}
@@ -86,16 +88,16 @@ export function DiaryArchiveScreen({ userId }: { userId: string }) {
       {items && items.length > 0 && (
         <View>
           {items.map((r) => (
-            <View key={r.id} className="rounded-card border border-hair bg-paper p-4 mb-2.5">
+            <View key={r.id} className={`rounded-card border p-4 mb-2.5 ${c.cardBorder} ${c.cardBg}`}>
               <View className="flex-row items-center mb-2">
-                <Text className="text-mute text-[11px]">
+                <Text className={c.mute + " text-[11px]"}>
                   {new Date(r.date).toLocaleDateString(localeCode, { year: "numeric", month: "long", day: "numeric" })}
                 </Text>
                 {r.shared_to_resonance && (
-                  <Text className="text-leaf text-[10px] ml-2">🌿 {t("diary.sharedBadge")}</Text>
+                  <Text className="text-leaf style-[10px] ml-2">🌿 {t("diary.sharedBadge")}</Text>
                 )}
               </View>
-              <Text className="text-ink text-sm italic leading-relaxed">
+              <Text className={c.ink + " text-sm italic leading-relaxed"}>
                 {r.reflection_text ?? "—"}
               </Text>
             </View>
@@ -105,16 +107,16 @@ export function DiaryArchiveScreen({ userId }: { userId: string }) {
             <Pressable
               onPress={handleMore}
               disabled={loadingMore}
-              className="mt-3 rounded-pill border border-hair bg-paper items-center justify-center"
+              className={`mt-3 rounded-pill border items-center justify-center ${c.cardBorder} ${c.cardBg}`}
               style={{ height: 44 }}
             >
-              <Text className="text-ink-soft text-xs">
+              <Text className={c.inkSoft + " text-xs"}>
                 {loadingMore ? t("diary.loadingMore") : t("diary.more")}
               </Text>
             </Pressable>
           )}
           {!hasMore && items.length > 0 && (
-            <Text className="text-mute text-[11px] text-center mt-4 italic">
+            <Text className={c.mute + " text-[11px] text-center mt-4 italic"}>
               {t("diary.endOfList")}
             </Text>
           )}

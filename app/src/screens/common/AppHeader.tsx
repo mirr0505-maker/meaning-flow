@@ -20,10 +20,12 @@ export function AppHeader({
   profile,
   onPressIdentity,
   onPressSettings,
+  dark = false,
 }: {
   profile: Profile;
   onPressIdentity: () => void;
   onPressSettings: () => void;
+  dark?: boolean;
 }) {
   const { t, i18n } = useTranslation();
   const [langOpen, setLangOpen] = useState(false);
@@ -38,7 +40,7 @@ export function AppHeader({
   return (
     <View
       className="px-5 flex-row items-center"
-      style={{ paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: "#E8E0D0" }}
+      style={{ paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: dark ? "rgba(255,255,255,0.15)" : "#E8E0D0" }}
     >
       {/* 좌측 — 🌿 + 닉네임 (탭 → IdentityEdit 단축) */}
       <Pressable
@@ -47,7 +49,7 @@ export function AppHeader({
         className="flex-1 flex-row items-center pr-3"
       >
         <Text style={{ fontSize: 16, marginRight: 8 }}>🌿</Text>
-        <Text className="text-ink text-sm font-medium" numberOfLines={1} style={{ flexShrink: 1 }}>
+        <Text className={(dark ? "text-night-ink" : "text-ink") + " text-sm font-medium"} numberOfLines={1} style={{ flexShrink: 1 }}>
           {nickname}
         </Text>
       </Pressable>
@@ -60,7 +62,7 @@ export function AppHeader({
           className="rounded-pill items-center justify-center"
           style={{ width: 32, height: 32 }}
         >
-          <Text className="text-ink" style={{ fontSize: 16 }}>⚙</Text>
+          <Text className={dark ? "text-night-ink" : "text-ink"} style={{ fontSize: 16 }}>⚙</Text>
         </Pressable>
         <Pressable
           onPress={() => setLangOpen(true)}

@@ -42,7 +42,7 @@ export function EveningTabs({ profile }: { profile: Profile }) {
       </View>
 
       {tab === "journal" && <EveningScreen profile={profile} />}
-      {tab === "archive" && <DiaryArchiveScreen userId={profile.id} />}
+      {tab === "archive" && <DiaryArchiveScreen userId={profile.id} dark={true} />}
       {tab === "garden"  && <GardenScreen  profile={profile} />}
     </View>
   );

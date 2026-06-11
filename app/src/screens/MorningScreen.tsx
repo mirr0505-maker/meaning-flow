@@ -27,7 +27,9 @@ export function MorningScreen({ profile, dark = false }: { profile: Profile; dar
 
   async function handleSkip(id: string) {
     if (tasks.state !== "ok") return;
-    const next = tasks.value.filter((task) => task.id !== id);
+    const next = tasks.value.map((task) =>
+      task.id === id ? { ...task, status: "skipped" as const } : task
+    );
     setTasks({ state: "ok", value: next });
     try {
       await updateTaskStatus(id, "skipped");
@@ -38,7 +40,9 @@ export function MorningScreen({ profile, dark = false }: { profile: Profile; dar
 
   async function handleStart(id: string) {
     if (tasks.state !== "ok") return;
-    const next = tasks.value.filter((task) => task.id !== id);
+    const next = tasks.value.map((task) =>
+      task.id === id ? { ...task, status: "done_full" as const } : task
+    );
     setTasks({ state: "ok", value: next });
     try {
       await updateTaskStatus(id, "done_full");
@@ -99,8 +103,12 @@ function FirstButtonCard({ task, onStart, onSkip, dark }: {
 }) {
   const { t } = useTranslation();
   const c = modeColors(dark);
+  const isDone = task.status === "done_full" || task.status === "done_70";
+  const isSkipped = task.status === "skipped";
+  const isFinished = isDone || isSkipped;
+
   return (
-    <View className={`rounded-card border p-5 overflow-hidden ${c.cardBg} ${c.cardBorder}`}>
+    <View className={`rounded-card border p-5 overflow-hidden ${c.cardBg} ${c.cardBorder} ${isFinished ? "opacity-60" : ""}`}>
       <View className="absolute left-0 top-0 bottom-0 w-1 bg-morning" />
 
       <View className="flex-row items-center mb-5">
@@ -116,16 +124,38 @@ function FirstButtonCard({ task, onStart, onSkip, dark }: {
         </View>
       </View>
 
-      <Pressable
-        onPress={() => onStart(task.id)}
-        className={"rounded-pill items-center justify-center " + (dark ? "bg-night-ink" : "bg-ink")}
-        style={{ height: 52 }}
-      >
-        <Text className={(dark ? "text-night-bg" : "text-paper-warm") + " text-base font-medium"}>{t("flow.morning.start")}</Text>
-      </Pressable>
-      <Pressable onPress={() => onSkip(task.id)} className="mt-3 items-center">
-        <Text className={`${c.mute} text-sm underline`}>{t("flow.morning.skip")}</Text>
-      </Pressable>
+      {isDone && (
+        <View
+          className="rounded-pill items-center justify-center bg-morning-soft"
+          style={{ height: 52 }}
+        >
+          <Text className="text-morning text-base font-semibold">✓ {t("flow.morning.done")}</Text>
+        </View>
+      )}
+
+      {isSkipped && (
+        <View
+          className={`rounded-pill items-center justify-center ${dark ? "bg-night-bg3" : "bg-hair-soft"}`}
+          style={{ height: 52 }}
+        >
+          <Text className={`${c.mute} text-base font-semibold`}>{t("flow.morning.skipped")}</Text>
+        </View>
+      )}
+
+      {!isFinished && (
+        <>
+          <Pressable
+            onPress={() => onStart(task.id)}
+            className={"rounded-pill items-center justify-center " + (dark ? "bg-night-ink" : "bg-ink")}
+            style={{ height: 52 }}
+          >
+            <Text className={(dark ? "text-night-bg" : "text-paper-warm") + " text-base font-medium"}>{t("flow.morning.start")}</Text>
+          </Pressable>
+          <Pressable onPress={() => onSkip(task.id)} className="mt-3 items-center">
+            <Text className={`${c.mute} text-sm underline`}>{t("flow.morning.skip")}</Text>
+          </Pressable>
+        </>
+      )}
     </View>
   );
 }

@@ -215,6 +215,8 @@
       "headline": "Today's first button",
       "start": "Start",
       "skip": "Skip for today",
+      "done": "Done",
+      "skipped": "Skipped",
       "emptyLead": "No first button scheduled from last night",
       "emptyBody": "That's okay. You'll schedule tomorrow's in evening mode.",
       "identityLead": "Today, flow as ",

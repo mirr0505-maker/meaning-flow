@@ -14,6 +14,7 @@ let SentryRef: typeof import("@sentry/react-native") | null = null;
 
 export async function initSentryIfConsented(): Promise<void> {
   if (initialized) return;
+  if (__DEV__)     return;          // 로컬 개발 환경에서는 Sentry 할당량 소모 방지
   if (!DSN)        return;          // 키 없으면 no-op (DEV 친화)
 
   const consent = await readConsent();

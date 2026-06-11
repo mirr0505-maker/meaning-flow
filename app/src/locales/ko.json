@@ -222,6 +222,8 @@
       "headline": "오늘의 첫 단추",
       "start": "시작하기",
       "skip": "오늘은 건너뛸게요",
+      "done": "완료됨",
+      "skipped": "건너뜀",
       "emptyLead": "어젯밤 예약한 첫 단추가 없어요",
       "emptyBody": "괜찮아요. 저녁 모드에서 내일의 첫 단추를 예약하게 됩니다.",
       "identityLead": "오늘, ",
